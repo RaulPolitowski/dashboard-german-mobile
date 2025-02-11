@@ -15,44 +15,44 @@ export const OperationsSection = () => {
 
         <TabsContent value="budgets" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="p-4 bg-indigo-800 text-white">
+            <Card className="p-4 bg-emerald-500 text-white border-none">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="text-indigo-200">Total de Orçamentos</p>
+                  <p className="text-white/90">Total de Orçamentos</p>
                   <h3 className="text-2xl font-bold">158</h3>
-                  <p className="text-sm text-indigo-200">+12% vs. mês anterior</p>
+                  <p className="text-sm text-white/90">+12% vs. mês anterior</p>
                 </div>
-                <BarChart className="h-6 w-6 text-indigo-200" />
+                <BarChart className="h-6 w-6 text-white" />
               </div>
             </Card>
-            <Card className="p-4 bg-emerald-800 text-white">
+            <Card className="p-4 bg-blue-500 text-white border-none">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="text-emerald-200">Taxa de Conversão</p>
+                  <p className="text-white/90">Taxa de Conversão</p>
                   <h3 className="text-2xl font-bold">68%</h3>
-                  <p className="text-sm text-emerald-200">+5% vs. mês anterior</p>
+                  <p className="text-sm text-white/90">+5% vs. mês anterior</p>
                 </div>
-                <LineChart className="h-6 w-6 text-emerald-200" />
+                <LineChart className="h-6 w-6 text-white" />
               </div>
             </Card>
-            <Card className="p-4 bg-violet-800 text-white">
+            <Card className="p-4 bg-emerald-500 text-white border-none">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="text-violet-200">Valor Médio</p>
+                  <p className="text-white/90">Valor Médio</p>
                   <h3 className="text-2xl font-bold">R$ 2.850</h3>
-                  <p className="text-sm text-violet-200">+8% vs. mês anterior</p>
+                  <p className="text-sm text-white/90">+8% vs. mês anterior</p>
                 </div>
-                <DollarSign className="h-6 w-6 text-violet-200" />
+                <DollarSign className="h-6 w-6 text-white" />
               </div>
             </Card>
-            <Card className="p-4 bg-rose-800 text-white">
+            <Card className="p-4 bg-amber-500 text-white border-none">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="text-rose-200">Tempo Médio Aprovação</p>
+                  <p className="text-white/90">Tempo Médio Aprovação</p>
                   <h3 className="text-2xl font-bold">3.2 dias</h3>
-                  <p className="text-sm text-rose-200">-1 dia vs. mês anterior</p>
+                  <p className="text-sm text-white/90">-1 dia vs. mês anterior</p>
                 </div>
-                <Clock className="h-6 w-6 text-rose-200" />
+                <Clock className="h-6 w-6 text-white" />
               </div>
             </Card>
           </div>
@@ -68,12 +68,12 @@ export const OperationsSection = () => {
                   </div>
                   <span className="font-semibold text-emerald-600">82</span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                <div className="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <Clock className="text-yellow-600" />
+                    <Clock className="text-amber-600" />
                     <span>Em Análise</span>
                   </div>
-                  <span className="font-semibold text-yellow-600">45</span>
+                  <span className="font-semibold text-amber-600">45</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-rose-50 rounded-lg">
                   <div className="flex items-center gap-3">
@@ -89,18 +89,18 @@ export const OperationsSection = () => {
               <h3 className="text-lg font-semibold mb-4">Distribuição por Categoria</h3>
               <div className="flex items-center justify-around h-48">
                 <div className="text-center">
-                  <PieChart className="h-32 w-32 mx-auto text-indigo-600" />
+                  <PieChart className="h-32 w-32 mx-auto text-blue-600" />
                   <div className="mt-4 space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 bg-indigo-600 rounded-full"></span>
+                      <span className="w-3 h-3 bg-emerald-500 rounded-full"></span>
                       <span>Produtos (45%)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 bg-emerald-600 rounded-full"></span>
+                      <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
                       <span>Serviços (35%)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 bg-violet-600 rounded-full"></span>
+                      <span className="w-3 h-3 bg-amber-500 rounded-full"></span>
                       <span>Projetos (20%)</span>
                     </div>
                   </div>

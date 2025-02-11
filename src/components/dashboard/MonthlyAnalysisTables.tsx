@@ -55,6 +55,7 @@ export const MonthlyAnalysisTables = () => {
 
       <FinancialAnalysisTable 
         monthlyData={monthlyData}
+        selectedYear={selectedYear}
         calculateMarginChange={calculateMarginChange}
         getYearOverYearComparison={getYearOverYearComparison}
       />

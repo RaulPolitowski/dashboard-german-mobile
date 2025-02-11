@@ -20,7 +20,7 @@ export const FinancialMetrics = () => {
           </div>
         </Card>
 
-        <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-orange-500 border-none">
+        <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-rose-500 border-none">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-white/90">Despesas Totais</p>
@@ -33,7 +33,7 @@ export const FinancialMetrics = () => {
           </div>
         </Card>
 
-        <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-rose-500 border-none">
+        <Card className="p-4 hover:shadow-lg transition-all cursor-pointer bg-blue-500 border-none">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-white/90">Resultado do Mês</p>
