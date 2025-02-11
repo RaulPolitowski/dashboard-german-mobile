@@ -8,7 +8,7 @@ const data = [
   { name: "Infraestrutura", value: 18000 },
 ];
 
-const COLORS = ["#1A1F2C", "#403E43", "#8E9196", "#1EA5E9"];
+const COLORS = ["#0EA5E9", "#2563EB", "#3B82F6", "#60A5FA"];
 
 export const ExpensesDistributionChart = () => {
   const total = data.reduce((sum: number, item) => sum + item.value, 0);
@@ -35,13 +35,13 @@ export const ExpensesDistributionChart = () => {
               const value = payload[0].value as number;
               const percentage = ((value / total) * 100).toFixed(1);
               return (
-                <div className="rounded-lg border bg-background p-2 shadow-sm">
+                <div className="rounded-lg bg-[#0A0F1E] border border-[#2563EB]/30 p-2 shadow-xl">
                   <div className="grid gap-2">
                     <div className="flex flex-col">
-                      <span className="text-[0.70rem] uppercase text-muted-foreground">
+                      <span className="text-[0.70rem] uppercase text-gray-400">
                         {payload[0].name}
                       </span>
-                      <span className="font-bold text-muted-foreground">
+                      <span className="font-bold text-[#2563EB]">
                         R$ {value.toLocaleString()} ({percentage}%)
                       </span>
                     </div>
