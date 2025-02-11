@@ -112,6 +112,18 @@ export const WeeklySalesChart = () => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       
+      const calculateDayTotal = () => {
+        const totals = timeRanges.reduce((acc, range) => {
+          const rangeData = data[range.id];
+          return {
+            value: acc.value + (rangeData?.value || 0),
+            transactions: acc.transactions + (rangeData?.transactions || 0)
+          };
+        }, { value: 0, transactions: 0 });
+        
+        return totals;
+      };
+      
       return (
         <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
           <p className="font-medium text-gray-700 mb-2">{label}</p>
@@ -119,20 +131,26 @@ export const WeeklySalesChart = () => {
             <div className="space-y-3">
               {timeRanges.map((range) => {
                 const rangeData = data[range.id];
+                if (!rangeData) return null;
+                
                 return (
                   <div key={range.id} className="border-b border-gray-100 pb-2 last:border-0">
                     <p className="text-sm font-medium text-gray-600">{range.label}</p>
                     <div className="grid grid-cols-2 gap-2 mt-1">
                       <p className="text-sm text-gray-600">
-                        Valor: <span className="font-medium text-[#6366F1]">R$ {rangeData.value.toLocaleString()}</span>
+                        Valor: <span className="font-medium text-[#6366F1]">
+                          R$ {rangeData.value?.toLocaleString() || '0'}
+                        </span>
                       </p>
                       <p className="text-sm text-gray-600">
-                        Vendas: <span className="font-medium text-[#6366F1]">{rangeData.transactions}</span>
+                        Vendas: <span className="font-medium text-[#6366F1]">
+                          {rangeData.transactions || 0}
+                        </span>
                       </p>
                     </div>
                     <p className="text-sm text-gray-600">
                       Ticket Médio: <span className="font-medium text-[#6366F1]">
-                        R$ {Math.round(rangeData.value / rangeData.transactions).toLocaleString()}
+                        R$ {rangeData.transactions ? Math.round(rangeData.value / rangeData.transactions).toLocaleString() : '0'}
                       </span>
                     </p>
                   </div>
@@ -143,12 +161,12 @@ export const WeeklySalesChart = () => {
                 <div className="grid grid-cols-2 gap-2 mt-1">
                   <p className="text-sm text-gray-600">
                     Valor: <span className="font-medium text-emerald-600">
-                      R$ {timeRanges.reduce((acc, range) => acc + data[range.id].value, 0).toLocaleString()}
+                      R$ {calculateDayTotal().value.toLocaleString()}
                     </span>
                   </p>
                   <p className="text-sm text-gray-600">
                     Vendas: <span className="font-medium text-emerald-600">
-                      {timeRanges.reduce((acc, range) => acc + data[range.id].transactions, 0)}
+                      {calculateDayTotal().transactions}
                     </span>
                   </p>
                 </div>
@@ -157,21 +175,28 @@ export const WeeklySalesChart = () => {
           ) : (
             <div>
               <div className="mt-2">
-                <p className="text-sm text-gray-600">
-                  Valor Total: <span className="font-medium text-[#6366F1]">
-                    R$ {data[selectedRange].value.toLocaleString()}
-                  </span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Vendas: <span className="font-medium text-[#6366F1]">
-                    {data[selectedRange].transactions}
-                  </span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Ticket Médio: <span className="font-medium text-[#6366F1]">
-                    R$ {Math.round(data[selectedRange].value / data[selectedRange].transactions).toLocaleString()}
-                  </span>
-                </p>
+                {data[selectedRange] ? (
+                  <>
+                    <p className="text-sm text-gray-600">
+                      Valor Total: <span className="font-medium text-[#6366F1]">
+                        R$ {data[selectedRange].value?.toLocaleString() || '0'}
+                      </span>
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Vendas: <span className="font-medium text-[#6366F1]">
+                        {data[selectedRange].transactions || 0}
+                      </span>
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Ticket Médio: <span className="font-medium text-[#6366F1]">
+                        R$ {data[selectedRange].transactions ? 
+                          Math.round(data[selectedRange].value / data[selectedRange].transactions).toLocaleString() : '0'}
+                      </span>
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-600">Dados não disponíveis</p>
+                )}
               </div>
             </div>
           )}
