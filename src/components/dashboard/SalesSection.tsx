@@ -4,6 +4,7 @@ import { Card } from "../ui/card";
 import { SalesEvolutionChart } from "../charts/SalesEvolutionChart";
 import { PaymentMethodChart } from "../charts/PaymentMethodChart";
 import { PaymentMethodTable } from "../charts/PaymentMethodTable";
+import { WeeklySalesChart } from "../charts/WeeklySalesChart";
 
 export const SalesSection = () => {
   return (
@@ -55,6 +56,8 @@ export const SalesSection = () => {
           <SalesEvolutionChart />
         </div>
       </Card>
+
+      <WeeklySalesChart />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="p-4 md:p-6">
