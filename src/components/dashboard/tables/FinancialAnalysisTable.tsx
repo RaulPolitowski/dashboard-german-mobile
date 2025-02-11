@@ -1,4 +1,3 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
 import { Card } from "../../ui/card";
 import { ArrowDown, ArrowUp } from "lucide-react";
@@ -8,12 +7,14 @@ type FinancialAnalysisTableProps = {
   monthlyData: MonthlyData[];
   calculateMarginChange: (currentRevenue: number, currentExpenses: number, prevRevenue: number, prevExpenses: number) => number;
   getYearOverYearComparison: (currentData: MonthlyData, monthIndex: number) => any;
+  selectedYear: string;
 };
 
 export const FinancialAnalysisTable = ({ 
   monthlyData, 
   calculateMarginChange,
-  getYearOverYearComparison 
+  getYearOverYearComparison,
+  selectedYear
 }: FinancialAnalysisTableProps) => {
   return (
     <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 backdrop-blur-sm border border-[#6366F1]/20">
@@ -43,10 +44,22 @@ export const FinancialAnalysisTable = ({
               
               const comparison = getYearOverYearComparison(month, index);
               const tooltipContent = comparison ? `
-                Comparativo Ano Anterior:
-                Receita: ${comparison.revenueChange >= 0 ? '+' : ''}${comparison.revenueChange.toFixed(1)}%
-                Despesas: ${comparison.expensesChange >= 0 ? '+' : ''}${comparison.expensesChange.toFixed(1)}%
-                Resultado: ${((result - (comparison.lastYearData.revenue - comparison.lastYearData.expenses)) / Math.abs(comparison.lastYearData.revenue - comparison.lastYearData.expenses) * 100).toFixed(1)}%
+                Comparativo com ${Number(selectedYear) - 1}:
+                
+                Receita:
+                ${comparison.revenueChange >= 0 ? '+' : ''}${comparison.revenueChange.toFixed(1)}%
+                Atual: R$ ${month.revenue.toLocaleString()}
+                Anterior: R$ ${comparison.lastYearData.revenue.toLocaleString()}
+
+                Despesas:
+                ${comparison.expensesChange >= 0 ? '+' : ''}${comparison.expensesChange.toFixed(1)}%
+                Atual: R$ ${month.expenses.toLocaleString()}
+                Anterior: R$ ${comparison.lastYearData.expenses.toLocaleString()}
+
+                Resultado:
+                Atual: R$ ${result.toLocaleString()}
+                Anterior: R$ ${(comparison.lastYearData.revenue - comparison.lastYearData.expenses).toLocaleString()}
+                Variação: ${((result - (comparison.lastYearData.revenue - comparison.lastYearData.expenses)) / Math.abs(comparison.lastYearData.revenue - comparison.lastYearData.expenses) * 100).toFixed(1)}%
               ` : 'Dados do ano anterior não disponíveis';
 
               return (

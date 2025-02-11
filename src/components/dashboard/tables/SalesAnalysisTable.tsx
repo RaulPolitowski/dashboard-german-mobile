@@ -1,4 +1,3 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
 import { Card } from "../../ui/card";
 import { MonthlyData } from "../data/monthlyAnalysisData";
@@ -31,10 +30,22 @@ export const SalesAnalysisTable = ({
             {monthlyData.map((month, index) => {
               const comparison = getYearOverYearComparison(month, index);
               const tooltipContent = comparison ? `
-                Comparativo Ano Anterior:
-                Vendas: ${comparison.salesChange >= 0 ? '+' : ''}${comparison.salesChange.toFixed(1)}%
-                Quantidade: ${((month.transactions - comparison.lastYearData.transactions) / comparison.lastYearData.transactions * 100).toFixed(1)}%
-                Ticket Médio: ${(((month.sales / month.transactions) - (comparison.lastYearData.sales / comparison.lastYearData.transactions)) / (comparison.lastYearData.sales / comparison.lastYearData.transactions) * 100).toFixed(1)}%
+                Comparativo com ${Number(selectedYear) - 1}:
+                
+                Vendas:
+                ${comparison.salesChange >= 0 ? '+' : ''}${comparison.salesChange.toFixed(1)}%
+                Atual: R$ ${month.sales.toLocaleString()}
+                Anterior: R$ ${comparison.lastYearData.sales.toLocaleString()}
+
+                Quantidade:
+                Atual: ${month.transactions}
+                Anterior: ${comparison.lastYearData.transactions}
+                Variação: ${((month.transactions - comparison.lastYearData.transactions) / comparison.lastYearData.transactions * 100).toFixed(1)}%
+
+                Ticket Médio:
+                Atual: R$ ${Math.round(month.sales / month.transactions).toLocaleString()}
+                Anterior: R$ ${Math.round(comparison.lastYearData.sales / comparison.lastYearData.transactions).toLocaleString()}
+                Variação: ${(((month.sales / month.transactions) - (comparison.lastYearData.sales / comparison.lastYearData.transactions)) / (comparison.lastYearData.sales / comparison.lastYearData.transactions) * 100).toFixed(1)}%
               ` : 'Dados do ano anterior não disponíveis';
 
               return (
