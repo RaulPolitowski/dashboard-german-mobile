@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Card } from "../ui/card";
 
@@ -10,8 +11,26 @@ const paymentData = [
 ];
 
 export const PaymentMethodTable = () => {
+  const [period, setPeriod] = useState('month');
+
+  const totalAmount = paymentData.reduce((acc, curr) => acc + curr.amount, 0);
+  const totalTransactions = paymentData.reduce((acc, curr) => acc + curr.transactions, 0);
+  const averageTicket = Math.round(totalAmount / totalTransactions);
+
   return (
     <Card className="p-4">
+      <div className="flex justify-end mb-4">
+        <select 
+          value={period}
+          onChange={(e) => setPeriod(e.target.value)}
+          className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
+        >
+          <option value="day">Hoje</option>
+          <option value="month">Este mês</option>
+          <option value="year">Este ano</option>
+        </select>
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -34,6 +53,27 @@ export const PaymentMethodTable = () => {
           ))}
         </TableBody>
       </Table>
+
+      <div className="mt-6 grid grid-cols-3 gap-4">
+        <div className="p-4 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-400/5 border border-blue-500/20">
+          <p className="text-sm text-gray-600">Total em Vendas</p>
+          <p className="text-xl font-bold text-blue-600">
+            R$ {totalAmount.toLocaleString()}
+          </p>
+        </div>
+        <div className="p-4 rounded-lg bg-gradient-to-br from-violet-500/10 to-violet-400/5 border border-violet-500/20">
+          <p className="text-sm text-gray-600">Total de Transações</p>
+          <p className="text-xl font-bold text-violet-600">
+            {totalTransactions}
+          </p>
+        </div>
+        <div className="p-4 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-400/5 border border-emerald-500/20">
+          <p className="text-sm text-gray-600">Ticket Médio Geral</p>
+          <p className="text-xl font-bold text-emerald-600">
+            R$ {averageTicket.toLocaleString()}
+          </p>
+        </div>
+      </div>
     </Card>
   );
 };

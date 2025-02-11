@@ -37,9 +37,14 @@ export const SalesRanking = () => {
                 <p className="text-sm text-gray-500">{seller.transactions} vendas</p>
               </div>
             </div>
-            <p className="text-lg font-bold text-[#6366F1]">
-              R$ {seller.sales.toLocaleString()}
-            </p>
+            <div className="text-right">
+              <p className="text-lg font-bold text-[#6366F1]">
+                R$ {seller.sales.toLocaleString()}
+              </p>
+              <p className="text-sm text-gray-600">
+                Ticket médio: R$ {Math.round(seller.sales / seller.transactions).toLocaleString()}
+              </p>
+            </div>
           </div>
         </div>
       ))}

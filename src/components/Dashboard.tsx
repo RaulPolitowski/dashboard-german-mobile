@@ -17,15 +17,15 @@ const Dashboard = () => {
         <TabsList>
           <TabsTrigger value="financial" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
             <Wallet className="w-4 h-4 mr-2" />
-            Financeiro
+            Gestão Financeira
           </TabsTrigger>
           <TabsTrigger value="sales" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
             <TrendingUp className="w-4 h-4 mr-2" />
-            Vendas
+            Análise de Vendas
           </TabsTrigger>
           <TabsTrigger value="ranking" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
             <Medal className="w-4 h-4 mr-2" />
-            Ranking
+            Performance
           </TabsTrigger>
         </TabsList>
 

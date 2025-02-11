@@ -1,5 +1,5 @@
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const data = [
   { name: 'Cartão de Crédito', value: 450000 },
@@ -8,31 +8,35 @@ const data = [
   { name: 'Dinheiro', value: 50000 },
 ];
 
-const COLORS = ['#6366F1', '#10B981', '#F59E0B', '#EF4444'];
-
 export const PaymentMethodChart = () => {
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <PieChart>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          innerRadius={60}
-          outerRadius={80}
-          fill="#8884d8"
-          paddingAngle={5}
-          dataKey="value"
-        >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
+      <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+        <XAxis 
+          dataKey="name" 
+          tick={{ fill: '#6b7280' }}
+          axisLine={{ stroke: '#e5e7eb' }}
+        />
+        <YAxis 
+          tick={{ fill: '#6b7280' }}
+          axisLine={{ stroke: '#e5e7eb' }}
+          tickFormatter={(value) => `R$ ${(value / 1000)}k`}
+        />
         <Tooltip
           formatter={(value: number) => `R$ ${value.toLocaleString()}`}
+          contentStyle={{
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            border: '1px solid #e5e7eb',
+            borderRadius: '0.5rem',
+          }}
         />
-        <Legend />
-      </PieChart>
+        <Bar 
+          dataKey="value" 
+          fill="#6366F1"
+          radius={[4, 4, 0, 0]}
+        />
+      </BarChart>
     </ResponsiveContainer>
   );
 };
