@@ -1,7 +1,9 @@
-
 import { ArrowDown, ArrowUp, ChartBar, ChartLine, ChartPie, DollarSign, Package, Percent, TrendingUp, User, Wallet } from "lucide-react";
 import { Card } from "./ui/card";
 import { TransactionDialog } from "./TransactionDialog";
+import { SalesEvolutionChart } from "./charts/SalesEvolutionChart";
+import { ExpensesDistributionChart } from "./charts/ExpensesDistributionChart";
+import { CashFlowChart } from "./charts/CashFlowChart";
 
 const Dashboard = () => {
   return (
@@ -150,8 +152,8 @@ const Dashboard = () => {
               <ChartLine className="w-5 h-5 text-primary" />
             </div>
           </div>
-          <div className="h-[300px] flex items-center justify-center text-gray-500">
-            Gráfico de Evolução das Vendas
+          <div className="h-[300px]">
+            <SalesEvolutionChart />
           </div>
         </Card>
 
@@ -160,8 +162,25 @@ const Dashboard = () => {
             <h3 className="text-lg font-semibold text-secondary">Distribuição de Despesas</h3>
             <ChartPie className="w-5 h-5 text-secondary" />
           </div>
-          <div className="h-[300px] flex items-center justify-center text-gray-500">
-            Gráfico de Distribuição de Despesas
+          <div className="h-[300px]">
+            <ExpensesDistributionChart />
+          </div>
+        </Card>
+
+        <Card className="col-span-1 lg:col-span-2 p-6 bg-gradient-to-br from-white/80 to-white/50 backdrop-blur-sm border border-primary-light/20">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-primary">Fluxo de Caixa</h3>
+            <div className="flex items-center gap-2">
+              <select className="px-2 py-1 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="3">Últimos 3 meses</option>
+                <option value="6">Últimos 6 meses</option>
+                <option value="12">Último ano</option>
+              </select>
+              <ChartBar className="w-5 h-5 text-primary" />
+            </div>
+          </div>
+          <div className="h-[300px]">
+            <CashFlowChart />
           </div>
         </Card>
       </div>
