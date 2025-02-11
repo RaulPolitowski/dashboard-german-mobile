@@ -18,6 +18,7 @@ const data = [
 export const ExpensesDistributionChart = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("current");
   const total = data.reduce((sum: number, item) => sum + item.value, 0);
+  const sortedData = [...data].sort((a, b) => b.value - a.value);
 
   return (
     <div className="space-y-4">
@@ -33,9 +34,28 @@ export const ExpensesDistributionChart = () => {
       </div>
       
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 80, bottom: 5 }}>
-          <XAxis type="number" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `R$ ${(value / 1000).toFixed(0)}k`} />
-          <YAxis dataKey="name" type="category" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+        <BarChart 
+          data={sortedData} 
+          layout="vertical" 
+          margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
+          barSize={20}
+        >
+          <XAxis 
+            type="number" 
+            stroke="#888888" 
+            fontSize={12} 
+            tickLine={false} 
+            axisLine={false} 
+            tickFormatter={(value) => `R$ ${(value / 1000).toFixed(0)}k`} 
+          />
+          <YAxis 
+            dataKey="name" 
+            type="category" 
+            stroke="#888888" 
+            fontSize={12} 
+            tickLine={false} 
+            axisLine={false} 
+          />
           <Tooltip
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
@@ -53,10 +73,13 @@ export const ExpensesDistributionChart = () => {
                           {item.name}
                         </span>
                         <span className="font-bold text-rose-500">
-                          R$ {value.toLocaleString()} ({percentage}%)
+                          R$ {value.toLocaleString()}
                         </span>
-                        <div className={`text-xs ${isPositive ? 'text-rose-600' : 'text-emerald-600'}`}>
-                          vs Mês Anterior: {isPositive ? '+' : ''}{change}%
+                        <span className="text-sm text-gray-500">
+                          {percentage}% do total
+                        </span>
+                        <div className={`text-xs ${isPositive ? 'text-rose-500' : 'text-emerald-500'}`}>
+                          {isPositive ? '+' : ''}{change}% vs mês anterior
                           <br />
                           (R$ {item.previousValue.toLocaleString()})
                         </div>
@@ -68,7 +91,11 @@ export const ExpensesDistributionChart = () => {
               return null;
             }}
           />
-          <Bar dataKey="value" fill="#F43F5E" radius={[0, 4, 4, 0]} />
+          <Bar 
+            dataKey="value" 
+            fill="#F43F5E"
+            radius={[0, 4, 4, 0]}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>
