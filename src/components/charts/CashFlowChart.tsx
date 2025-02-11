@@ -2,12 +2,12 @@
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const data = [
-  { month: "Jan", receitas: 55000, despesas: 48000 },
-  { month: "Fev", receitas: 58000, despesas: 52000 },
-  { month: "Mar", receitas: 62000, despesas: 55000 },
-  { month: "Abr", receitas: 65750, despesas: 58000 },
-  { month: "Mai", receitas: 68000, despesas: 62000 },
-  { month: "Jun", receitas: 72000, despesas: 65000 },
+  { month: "Jan", receitas: 55000, despesas: 48000, resultado: 7000 },
+  { month: "Fev", receitas: 58000, despesas: 52000, resultado: 6000 },
+  { month: "Mar", receitas: 62000, despesas: 55000, resultado: 7000 },
+  { month: "Abr", receitas: 65750, despesas: 58000, resultado: 7750 },
+  { month: "Mai", receitas: 68000, despesas: 62000, resultado: 6000 },
+  { month: "Jun", receitas: 72000, despesas: 65000, resultado: 7000 },
 ];
 
 export const CashFlowChart = () => {
@@ -40,6 +40,12 @@ export const CashFlowChart = () => {
                         R$ {payload[1].value.toLocaleString()}
                       </span>
                     </div>
+                    <div className="flex flex-col">
+                      <span className="text-[0.70rem] uppercase text-muted-foreground">Resultado</span>
+                      <span className="font-bold text-[#1EA5E9]">
+                        R$ {payload[2].value.toLocaleString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
               );
@@ -49,7 +55,9 @@ export const CashFlowChart = () => {
         />
         <Bar dataKey="receitas" fill="#10B981" radius={[4, 4, 0, 0]} />
         <Bar dataKey="despesas" fill="#EF4444" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="resultado" fill="#1EA5E9" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
 };
+
