@@ -112,26 +112,78 @@ export const WeeklySalesChart = () => {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
-      const timeRange = selectedRange === 'all' ? payload[0].name : selectedRange;
-      const rangeData = data[timeRange];
       
       return (
         <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-          <p className="font-medium text-gray-700">{label}</p>
-          <p className="text-sm text-gray-600">{timeRanges.find(r => r.id === timeRange)?.label}</p>
-          <div className="mt-2">
-            <p className="text-sm text-gray-600">
-              Valor Total: <span className="font-medium text-[#6366F1]">R$ {rangeData.value.toLocaleString()}</span>
-            </p>
-            <p className="text-sm text-gray-600">
-              Vendas: <span className="font-medium text-[#6366F1]">{rangeData.transactions}</span>
-            </p>
-            <p className="text-sm text-gray-600">
-              Ticket Médio: <span className="font-medium text-[#6366F1]">
-                R$ {Math.round(rangeData.value / rangeData.transactions).toLocaleString()}
-              </span>
-            </p>
-          </div>
+          <p className="font-medium text-gray-700 mb-2">{label}</p>
+          {selectedRange === 'all' ? (
+            <div className="space-y-3">
+              {timeRanges.map((range) => {
+                const rangeData = data[range.id];
+                return (
+                  <div key={range.id} className="border-b border-gray-100 pb-2 last:border-0">
+                    <p className="text-sm font-medium text-gray-600">{range.label}</p>
+                    <div className="grid grid-cols-2 gap-2 mt-1">
+                      <p className="text-sm text-gray-600">
+                        Valor: <span className="font-medium text-[#6366F1]">R$ {rangeData.value.toLocaleString()}</span>
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Vendas: <span className="font-medium text-[#6366F1]">{rangeData.transactions}</span>
+                      </p>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Ticket Médio: <span className="font-medium text-[#6366F1]">
+                        R$ {Math.round(rangeData.value / rangeData.transactions).toLocaleString()}
+                      </span>
+                    </p>
+                  </div>
+                );
+              })}
+              <div className="pt-2 border-t border-gray-200">
+                <p className="text-sm font-medium text-gray-700">Total do Dia</p>
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  <p className="text-sm text-gray-600">
+                    Valor: <span className="font-medium text-emerald-600">
+                      R$ {Object.values(timeRanges.reduce((acc, range) => ({
+                        ...acc,
+                        value: acc.value + data[range.id].value,
+                        transactions: acc.transactions + data[range.id].transactions
+                      }), { value: 0, transactions: 0 })).value.toLocaleString()}
+                    </span>
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Vendas: <span className="font-medium text-emerald-600">
+                      {Object.values(timeRanges.reduce((acc, range) => ({
+                        ...acc,
+                        value: acc.value + data[range.id].value,
+                        transactions: acc.transactions + data[range.id].transactions
+                      }), { value: 0, transactions: 0 })).transactions}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="mt-2">
+                <p className="text-sm text-gray-600">
+                  Valor Total: <span className="font-medium text-[#6366F1]">
+                    R$ {data[selectedRange].value.toLocaleString()}
+                  </span>
+                </p>
+                <p className="text-sm text-gray-600">
+                  Vendas: <span className="font-medium text-[#6366F1]">
+                    {data[selectedRange].transactions}
+                  </span>
+                </p>
+                <p className="text-sm text-gray-600">
+                  Ticket Médio: <span className="font-medium text-[#6366F1]">
+                    R$ {Math.round(data[selectedRange].value / data[selectedRange].transactions).toLocaleString()}
+                  </span>
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       );
     }
