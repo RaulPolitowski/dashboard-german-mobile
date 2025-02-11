@@ -11,7 +11,7 @@ const data = [
 const COLORS = ["#9b87f5", "#D946EF", "#7E69AB", "#10B981"];
 
 export const ExpensesDistributionChart = () => {
-  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const total = data.reduce((sum: number, item) => sum + item.value, 0);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -32,7 +32,8 @@ export const ExpensesDistributionChart = () => {
         <Tooltip
           content={({ active, payload }) => {
             if (active && payload && payload.length) {
-              const percentage = ((payload[0].value / total) * 100).toFixed(1);
+              const value = payload[0].value as number;
+              const percentage = ((value / total) * 100).toFixed(1);
               return (
                 <div className="rounded-lg border bg-background p-2 shadow-sm">
                   <div className="grid gap-2">
@@ -41,7 +42,7 @@ export const ExpensesDistributionChart = () => {
                         {payload[0].name}
                       </span>
                       <span className="font-bold text-muted-foreground">
-                        R$ {payload[0].value.toLocaleString()} ({percentage}%)
+                        R$ {value.toLocaleString()} ({percentage}%)
                       </span>
                     </div>
                   </div>
