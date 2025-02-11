@@ -28,7 +28,7 @@ export const ExpensesDistributionChart = () => {
                       <span className="text-[0.70rem] uppercase text-muted-foreground">
                         {payload[0].payload.name}
                       </span>
-                      <span className="font-bold text-muted-foreground">
+                      <span className="font-bold text-rose-500">
                         R$ {value.toLocaleString()} ({percentage}%)
                       </span>
                     </div>
@@ -39,7 +39,7 @@ export const ExpensesDistributionChart = () => {
             return null;
           }}
         />
-        <Bar dataKey="value" fill="#EF4444" radius={[0, 4, 4, 0]} />
+        <Bar dataKey="value" fill="#F43F5E" radius={[0, 4, 4, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

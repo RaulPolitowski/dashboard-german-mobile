@@ -30,19 +30,19 @@ export const CashFlowChart = () => {
                   <div className="grid gap-2">
                     <div className="flex flex-col">
                       <span className="text-[0.70rem] uppercase text-muted-foreground">Receitas</span>
-                      <span className="font-bold text-success-DEFAULT">
+                      <span className="font-bold text-emerald-500">
                         R$ {payload[0].value.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[0.70rem] uppercase text-muted-foreground">Despesas</span>
-                      <span className="font-bold text-danger-DEFAULT">
+                      <span className="font-bold text-rose-500">
                         R$ {payload[1].value.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[0.70rem] uppercase text-muted-foreground">Resultado</span>
-                      <span className="font-bold text-[#1EA5E9]">
+                      <span className="font-bold text-violet-500">
                         R$ {payload[2].value.toLocaleString()}
                       </span>
                     </div>
@@ -54,8 +54,8 @@ export const CashFlowChart = () => {
           }}
         />
         <Bar dataKey="receitas" fill="#10B981" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="despesas" fill="#EF4444" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="resultado" fill="#1EA5E9" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="despesas" fill="#F43F5E" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="resultado" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
