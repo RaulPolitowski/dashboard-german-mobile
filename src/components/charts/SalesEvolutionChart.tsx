@@ -8,6 +8,12 @@ const data = [
   { date: "Abr", value: 45750 },
   { date: "Mai", value: 48000 },
   { date: "Jun", value: 52000 },
+  { date: "Jul", value: 54000 },
+  { date: "Ago", value: 51000 },
+  { date: "Set", value: 49000 },
+  { date: "Out", value: 53000 },
+  { date: "Nov", value: 56000 },
+  { date: "Dez", value: 58000 },
 ];
 
 export const SalesEvolutionChart = () => {
@@ -52,4 +58,3 @@ export const SalesEvolutionChart = () => {
     </ResponsiveContainer>
   );
 };
-
