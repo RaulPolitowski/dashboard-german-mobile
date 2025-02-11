@@ -1,6 +1,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { Medal, TrendingUp, Wallet } from "lucide-react";
+import { Medal, TrendingUp, Wallet, FileSpreadsheet } from "lucide-react";
 import { FinancialHeader } from "./dashboard/FinancialHeader";
 import { FinancialMetrics } from "./dashboard/FinancialMetrics";
 import { AccountsSection } from "./dashboard/AccountsSection";
@@ -8,6 +8,7 @@ import { FinancialCharts } from "./dashboard/FinancialCharts";
 import { SalesSection } from "./dashboard/SalesSection";
 import { RankingSection } from "./dashboard/RankingSection";
 import { MonthlyAnalysisTables } from "./dashboard/MonthlyAnalysisTables";
+import { OperationsSection } from "./dashboard/OperationsSection";
 
 const Dashboard = () => {
   return (
@@ -24,6 +25,10 @@ const Dashboard = () => {
             <TrendingUp className="w-4 h-4 mr-2" />
             Análise de Vendas
           </TabsTrigger>
+          <TabsTrigger value="operations" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+            <FileSpreadsheet className="w-4 h-4 mr-2" />
+            Operações
+          </TabsTrigger>
           <TabsTrigger value="ranking" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
             <Medal className="w-4 h-4 mr-2" />
             Performance
@@ -39,6 +44,10 @@ const Dashboard = () => {
 
         <TabsContent value="sales" className="space-y-4">
           <SalesSection />
+        </TabsContent>
+
+        <TabsContent value="operations" className="space-y-4">
+          <OperationsSection />
         </TabsContent>
 
         <TabsContent value="ranking" className="space-y-4">
