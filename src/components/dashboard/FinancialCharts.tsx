@@ -22,6 +22,7 @@ export const FinancialCharts = () => {
               onChange={(e) => setPeriod(e.target.value)}
               className="w-full md:w-auto px-2 py-1 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white text-gray-700"
             >
+              <option value="week">Semana atual</option>
               <option value="3">Últimos 3 meses</option>
               <option value="6">Últimos 6 meses</option>
               <option value="12">Último ano</option>
@@ -44,7 +45,7 @@ export const FinancialCharts = () => {
             <p className="text-sm text-gray-600">
               Total: R$ 93.000,00
               <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded">
-                +5.8% vs mês anterior
+                +5.8% vs mês anterior (R$ 87.900,00)
               </span>
             </p>
           </div>

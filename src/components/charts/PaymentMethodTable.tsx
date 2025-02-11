@@ -31,30 +31,32 @@ export const PaymentMethodTable = () => {
         </select>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Forma de Pagamento</TableHead>
-            <TableHead>Valor Total</TableHead>
-            <TableHead>Transações</TableHead>
-            <TableHead>Ticket Médio</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paymentData.map((item) => (
-            <TableRow key={item.method}>
-              <TableCell>{item.method}</TableCell>
-              <TableCell>R$ {item.amount.toLocaleString()}</TableCell>
-              <TableCell>{item.transactions}</TableCell>
-              <TableCell>
-                R$ {Math.round(item.amount / item.transactions).toLocaleString()}
-              </TableCell>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Forma de Pagamento</TableHead>
+              <TableHead>Valor Total</TableHead>
+              <TableHead>Transações</TableHead>
+              <TableHead>Ticket Médio</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {paymentData.map((item) => (
+              <TableRow key={item.method}>
+                <TableCell>{item.method}</TableCell>
+                <TableCell>R$ {item.amount.toLocaleString()}</TableCell>
+                <TableCell>{item.transactions}</TableCell>
+                <TableCell>
+                  R$ {Math.round(item.amount / item.transactions).toLocaleString()}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
-      <div className="mt-6 grid grid-cols-3 gap-4">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-400/5 border border-blue-500/20">
           <p className="text-sm text-gray-600">Total em Vendas</p>
           <p className="text-xl font-bold text-blue-600">

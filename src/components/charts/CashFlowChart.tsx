@@ -21,8 +21,20 @@ const allData = [
   { month: "Dez", receitas: 78000, despesas: 69000, resultado: 9000 },
 ];
 
+const weekData = [
+  { day: "Segunda", receitas: 15000, despesas: 12000, resultado: 3000 },
+  { day: "Terça", receitas: 14000, despesas: 11000, resultado: 3000 },
+  { day: "Quarta", receitas: 16000, despesas: 13000, resultado: 3000 },
+  { day: "Quinta", receitas: 15500, despesas: 12500, resultado: 3000 },
+  { day: "Sexta", receitas: 17000, despesas: 14000, resultado: 3000 },
+];
+
 export const CashFlowChart = ({ period }: CashFlowChartProps) => {
   const filteredData = useMemo(() => {
+    if (period === "week") {
+      return weekData;
+    }
+
     const currentMonth = new Date().getMonth();
     let startIndex;
 
@@ -45,7 +57,13 @@ export const CashFlowChart = ({ period }: CashFlowChartProps) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={filteredData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <XAxis dataKey="month" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+        <XAxis 
+          dataKey={period === "week" ? "day" : "month"} 
+          stroke="#888888" 
+          fontSize={12} 
+          tickLine={false} 
+          axisLine={false} 
+        />
         <YAxis
           stroke="#888888"
           fontSize={12}
