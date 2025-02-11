@@ -1,6 +1,10 @@
 
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
+
+interface CashFlowChartProps {
+  period: string;
+}
 
 const allData = [
   { month: "Jan", receitas: 55000, despesas: 48000, resultado: 7000 },
@@ -17,9 +21,7 @@ const allData = [
   { month: "Dez", receitas: 78000, despesas: 69000, resultado: 9000 },
 ];
 
-export const CashFlowChart = () => {
-  const [period, setPeriod] = useState("3");
-
+export const CashFlowChart = ({ period }: CashFlowChartProps) => {
   const filteredData = useMemo(() => {
     const currentMonth = new Date().getMonth();
     let startIndex;
@@ -71,7 +73,7 @@ export const CashFlowChart = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[0.70rem] uppercase text-muted-foreground">Resultado</span>
-                      <span className="font-bold text-violet-500">
+                      <span className="font-bold text-blue-500">
                         R$ {payload[2].value.toLocaleString()}
                       </span>
                     </div>
@@ -84,7 +86,7 @@ export const CashFlowChart = () => {
         />
         <Bar dataKey="receitas" fill="#10B981" radius={[4, 4, 0, 0]} />
         <Bar dataKey="despesas" fill="#F43F5E" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="resultado" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="resultado" fill="#3B82F6" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

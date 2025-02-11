@@ -31,7 +31,9 @@ export const FinancialCharts = () => {
           </div>
         </div>
         <div className="h-[250px] md:h-[300px]">
-          <CashFlowChart period={period} />
+          <CashFlowChart 
+            period={period}
+          />
         </div>
       </Card>
 
