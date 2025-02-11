@@ -1,5 +1,5 @@
 
-import { ArrowDown, ArrowUp, BadgeDollarSign, Banknote, ChartBar, ChartLine, ChartPie, Clock, Medal, Receipt, TrendingUp, Wallet, AlertTriangle, CreditCard, PiggyBank } from "lucide-react";
+import { ArrowDown, ArrowUp, BadgeDollarSign, Banknote, ChartBar, ChartLine, ChartPie, Clock, Medal, Receipt, TrendingUp, Wallet, AlertTriangle, CreditCard, PiggyBank, Users } from "lucide-react";
 import { Card } from "./ui/card";
 import { SalesEvolutionChart } from "./charts/SalesEvolutionChart";
 import { ExpensesDistributionChart } from "./charts/ExpensesDistributionChart";
@@ -271,3 +271,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
