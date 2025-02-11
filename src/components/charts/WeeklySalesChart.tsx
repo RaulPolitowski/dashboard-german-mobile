@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../ui/card';
@@ -144,20 +143,12 @@ export const WeeklySalesChart = () => {
                 <div className="grid grid-cols-2 gap-2 mt-1">
                   <p className="text-sm text-gray-600">
                     Valor: <span className="font-medium text-emerald-600">
-                      R$ {Object.values(timeRanges.reduce((acc, range) => ({
-                        ...acc,
-                        value: acc.value + data[range.id].value,
-                        transactions: acc.transactions + data[range.id].transactions
-                      }), { value: 0, transactions: 0 })).value.toLocaleString()}
+                      R$ {timeRanges.reduce((acc, range) => acc + data[range.id].value, 0).toLocaleString()}
                     </span>
                   </p>
                   <p className="text-sm text-gray-600">
                     Vendas: <span className="font-medium text-emerald-600">
-                      {Object.values(timeRanges.reduce((acc, range) => ({
-                        ...acc,
-                        value: acc.value + data[range.id].value,
-                        transactions: acc.transactions + data[range.id].transactions
-                      }), { value: 0, transactions: 0 })).transactions}
+                      {timeRanges.reduce((acc, range) => acc + data[range.id].transactions, 0)}
                     </span>
                   </p>
                 </div>
