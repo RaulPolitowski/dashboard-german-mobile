@@ -4,14 +4,71 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Card } from '../ui/card';
 import { Clock, TrendingUp, TrendingDown, AlertCircle } from 'lucide-react';
 
+const timeRanges = [
+  { id: '08:00-10:00', label: '08:00 às 10:00', color: 'hsl(220, 91%, 65%)' },
+  { id: '10:00-12:00', label: '10:00 às 12:00', color: 'hsl(250, 91%, 65%)' },
+  { id: '12:00-15:00', label: '12:00 às 15:00', color: 'hsl(280, 91%, 65%)' },
+  { id: '15:00-18:00', label: '15:00 às 18:00', color: 'hsl(310, 91%, 65%)' },
+  { id: '18:00-00:00', label: '18:00 às 00:00', color: 'hsl(340, 91%, 65%)' },
+];
+
 const data = [
-  { day: 'Segunda', '08:00': 1200, '12:00': 2800, '15:00': 2100, '18:00': 3200, '21:00': 1800 },
-  { day: 'Terça', '08:00': 1500, '12:00': 2600, '15:00': 2000, '18:00': 3000, '21:00': 1600 },
-  { day: 'Quarta', '08:00': 1300, '12:00': 2900, '15:00': 2200, '18:00': 3400, '21:00': 1700 },
-  { day: 'Quinta', '08:00': 1400, '12:00': 2700, '15:00': 2300, '18:00': 3600, '21:00': 1900 },
-  { day: 'Sexta', '08:00': 1600, '12:00': 3000, '15:00': 2500, '18:00': 3800, '21:00': 2200 },
-  { day: 'Sábado', '08:00': 2000, '12:00': 3500, '15:00': 3000, '18:00': 4000, '21:00': 2500 },
-  { day: 'Domingo', '08:00': 1000, '12:00': 2000, '15:00': 1800, '18:00': 2500, '21:00': 1300 },
+  { 
+    day: 'Segunda', 
+    '08:00-10:00': { value: 1200, transactions: 15 },
+    '10:00-12:00': { value: 2800, transactions: 32 },
+    '12:00-15:00': { value: 2100, transactions: 25 },
+    '15:00-18:00': { value: 3200, transactions: 38 },
+    '18:00-00:00': { value: 1800, transactions: 20 }
+  },
+  { 
+    day: 'Terça', 
+    '08:00-10:00': { value: 1500, transactions: 18 },
+    '10:00-12:00': { value: 2600, transactions: 30 },
+    '12:00-15:00': { value: 2000, transactions: 24 },
+    '15:00-18:00': { value: 3000, transactions: 35 },
+    '18:00-00:00': { value: 1600, transactions: 19 }
+  },
+  { 
+    day: 'Quarta', 
+    '08:00-10:00': { value: 1300, transactions: 16 },
+    '10:00-12:00': { value: 2900, transactions: 33 },
+    '12:00-15:00': { value: 2200, transactions: 26 },
+    '15:00-18:00': { value: 3400, transactions: 40 },
+    '18:00-00:00': { value: 1700, transactions: 20 }
+  },
+  { 
+    day: 'Quinta', 
+    '08:00-10:00': { value: 1400, transactions: 17 },
+    '10:00-12:00': { value: 2700, transactions: 31 },
+    '12:00-15:00': { value: 2300, transactions: 27 },
+    '15:00-18:00': { value: 3600, transactions: 42 },
+    '18:00-00:00': { value: 1900, transactions: 22 }
+  },
+  { 
+    day: 'Sexta', 
+    '08:00-10:00': { value: 1600, transactions: 19 },
+    '10:00-12:00': { value: 3000, transactions: 35 },
+    '12:00-15:00': { value: 2500, transactions: 29 },
+    '15:00-18:00': { value: 3800, transactions: 45 },
+    '18:00-00:00': { value: 2200, transactions: 26 }
+  },
+  { 
+    day: 'Sábado', 
+    '08:00-10:00': { value: 2000, transactions: 24 },
+    '10:00-12:00': { value: 3500, transactions: 41 },
+    '12:00-15:00': { value: 3000, transactions: 35 },
+    '15:00-18:00': { value: 4000, transactions: 47 },
+    '18:00-00:00': { value: 2500, transactions: 29 }
+  },
+  { 
+    day: 'Domingo', 
+    '08:00-10:00': { value: 1000, transactions: 12 },
+    '10:00-12:00': { value: 2000, transactions: 24 },
+    '12:00-15:00': { value: 1800, transactions: 21 },
+    '15:00-18:00': { value: 2500, transactions: 29 },
+    '18:00-00:00': { value: 1300, transactions: 15 }
+  },
 ];
 
 const insights = [
@@ -21,7 +78,7 @@ const insights = [
     bgColor: 'bg-emerald-500/10',
     borderColor: 'border-emerald-500/20',
     title: 'Pico de Vendas',
-    description: 'Maior movimento às 18h, especialmente aos sábados'
+    description: 'Das 15h às 18h concentra maior volume, especialmente sexta e sábado'
   },
   {
     icon: TrendingDown,
@@ -29,7 +86,7 @@ const insights = [
     bgColor: 'bg-amber-500/10',
     borderColor: 'border-amber-500/20',
     title: 'Menor Movimento',
-    description: 'Início da manhã aos domingos tem menor fluxo'
+    description: 'Início da manhã aos domingos apresenta menor fluxo'
   },
   {
     icon: Clock,
@@ -37,7 +94,7 @@ const insights = [
     bgColor: 'bg-blue-500/10',
     borderColor: 'border-blue-500/20',
     title: 'Horário Nobre',
-    description: 'Entre 17h e 19h concentra 35% das vendas diárias'
+    description: 'Entre 15h e 18h tem o maior ticket médio de vendas'
   },
   {
     icon: AlertCircle,
@@ -45,30 +102,57 @@ const insights = [
     bgColor: 'bg-violet-500/10',
     borderColor: 'border-violet-500/20',
     title: 'Oportunidade',
-    description: 'Potencial para promoções no período da tarde'
+    description: 'Potencial para promoções das 10h às 12h para aumentar fluxo'
   }
 ];
 
 export const WeeklySalesChart = () => {
-  const [selectedHour, setSelectedHour] = useState('all');
+  const [selectedRange, setSelectedRange] = useState('all');
   
-  const hours = ['08:00', '12:00', '15:00', '18:00', '21:00'];
-  
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      const timeRange = selectedRange === 'all' ? payload[0].name : selectedRange;
+      const rangeData = data[timeRange];
+      
+      return (
+        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+          <p className="font-medium text-gray-700">{label}</p>
+          <p className="text-sm text-gray-600">{timeRanges.find(r => r.id === timeRange)?.label}</p>
+          <div className="mt-2">
+            <p className="text-sm text-gray-600">
+              Valor Total: <span className="font-medium text-[#6366F1]">R$ {rangeData.value.toLocaleString()}</span>
+            </p>
+            <p className="text-sm text-gray-600">
+              Vendas: <span className="font-medium text-[#6366F1]">{rangeData.transactions}</span>
+            </p>
+            <p className="text-sm text-gray-600">
+              Ticket Médio: <span className="font-medium text-[#6366F1]">
+                R$ {Math.round(rangeData.value / rangeData.transactions).toLocaleString()}
+              </span>
+            </p>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Card className="p-4 md:p-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-700">Análise de Vendas por Dia e Horário</h3>
-          <p className="text-sm text-gray-500">Distribuição semanal de vendas por horário</p>
+          <p className="text-sm text-gray-500">Distribuição semanal de vendas por intervalo de horário</p>
         </div>
         <select
-          value={selectedHour}
-          onChange={(e) => setSelectedHour(e.target.value)}
+          value={selectedRange}
+          onChange={(e) => setSelectedRange(e.target.value)}
           className="mt-2 md:mt-0 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
         >
           <option value="all">Todos os horários</option>
-          {hours.map((hour) => (
-            <option key={hour} value={hour}>{hour}</option>
+          {timeRanges.map((range) => (
+            <option key={range.id} value={range.id}>{range.label}</option>
           ))}
         </select>
       </div>
@@ -87,26 +171,20 @@ export const WeeklySalesChart = () => {
               axisLine={{ stroke: '#e5e7eb' }}
               tickFormatter={(value) => `R$ ${(value / 1000)}k`}
             />
-            <Tooltip
-              formatter={(value: number) => `R$ ${value.toLocaleString()}`}
-              contentStyle={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid #e5e7eb',
-                borderRadius: '0.5rem',
-              }}
-            />
-            {selectedHour === 'all' ? (
-              hours.map((hour, index) => (
+            <Tooltip content={<CustomTooltip />} />
+            {selectedRange === 'all' ? (
+              timeRanges.map((range) => (
                 <Bar
-                  key={hour}
-                  dataKey={hour}
-                  fill={`hsl(${220 + (index * 30)}, 91%, 65%)`}
+                  key={range.id}
+                  dataKey={`${range.id}.value`}
+                  name={range.id}
+                  fill={range.color}
                   radius={[4, 4, 0, 0]}
                 />
               ))
             ) : (
               <Bar
-                dataKey={selectedHour}
+                dataKey={`${selectedRange}.value`}
                 fill="#6366F1"
                 radius={[4, 4, 0, 0]}
               />
