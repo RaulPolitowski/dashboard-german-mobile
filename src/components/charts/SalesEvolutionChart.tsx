@@ -44,7 +44,7 @@ export const SalesEvolutionChart = () => {
         <Line
           type="monotone"
           dataKey="value"
-          stroke="#1A1F2C"
+          stroke="#9b87f5"
           strokeWidth={2}
           dot={{ strokeWidth: 4 }}
         />
@@ -52,4 +52,3 @@ export const SalesEvolutionChart = () => {
     </ResponsiveContainer>
   );
 };
-

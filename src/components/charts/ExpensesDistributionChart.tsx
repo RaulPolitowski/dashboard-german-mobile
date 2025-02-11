@@ -8,7 +8,7 @@ const data = [
   { name: "Infraestrutura", value: 18000 },
 ];
 
-const COLORS = ["#1A1F2C", "#403E43", "#8E9196", "#1EA5E9"];
+const COLORS = ["#9b87f5", "#D946EF", "#7E69AB", "#10B981"];
 
 export const ExpensesDistributionChart = () => {
   const total = data.reduce((sum: number, item) => sum + item.value, 0);
@@ -56,4 +56,3 @@ export const ExpensesDistributionChart = () => {
     </ResponsiveContainer>
   );
 };
-

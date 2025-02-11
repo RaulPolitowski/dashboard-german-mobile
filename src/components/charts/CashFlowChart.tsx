@@ -47,10 +47,9 @@ export const CashFlowChart = () => {
             return null;
           }}
         />
-        <Bar dataKey="receitas" fill="#1A1F2C" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="despesas" fill="#403E43" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="receitas" fill="#10B981" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="despesas" fill="#EF4444" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
 };
-
