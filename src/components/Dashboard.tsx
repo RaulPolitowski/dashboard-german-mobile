@@ -7,6 +7,7 @@ import { AccountsSection } from "./dashboard/AccountsSection";
 import { FinancialCharts } from "./dashboard/FinancialCharts";
 import { SalesSection } from "./dashboard/SalesSection";
 import { RankingSection } from "./dashboard/RankingSection";
+import { MonthlyAnalysisTables } from "./dashboard/MonthlyAnalysisTables";
 
 const Dashboard = () => {
   return (
@@ -32,6 +33,7 @@ const Dashboard = () => {
         <TabsContent value="financial" className="space-y-6">
           <FinancialMetrics />
           <AccountsSection />
+          <MonthlyAnalysisTables />
           <FinancialCharts />
         </TabsContent>
 
