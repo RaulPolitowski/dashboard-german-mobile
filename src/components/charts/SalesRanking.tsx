@@ -1,5 +1,5 @@
 
-import { Medal, Check } from "lucide-react";
+import { Medal } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Checkbox } from "../ui/checkbox";
 
@@ -23,7 +23,10 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
 
   const handleCheckboxChange = (seller: any, checked: boolean) => {
     if (checked) {
-      onCompareSelect(seller);
+      // Se o vendedor clicado é diferente do selecionado, permitir comparação
+      if (seller.id !== selectedSellerId) {
+        onCompareSelect(seller);
+      }
     } else {
       onCompareSelect(null);
     }
@@ -38,7 +41,16 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
       {salesData.map((seller, index) => (
         <div
           key={seller.id}
-          onClick={() => !isCompareSelected(seller.id) && onSellerSelect(seller)}
+          onClick={() => {
+            // Ao clicar no card, apenas seleciona o vendedor se não estiver comparando
+            if (!isCompareSelected(seller.id)) {
+              onSellerSelect(seller);
+              // Limpa a comparação se o vendedor selecionado mudar
+              if (compareSellerId) {
+                onCompareSelect(null);
+              }
+            }
+          }}
           className={`p-4 rounded-lg bg-gradient-to-r from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 border ${
             selectedSellerId === seller.id ? 'border-[#6366F1] shadow-md' :
             compareSellerId === seller.id ? 'border-emerald-500 shadow-md' :
@@ -68,8 +80,14 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
                 <Checkbox
                   checked={isCompareSelected(seller.id)}
                   onCheckedChange={(checked) => handleCheckboxChange(seller, checked as boolean)}
-                  onClick={(e) => e.stopPropagation()}
-                  disabled={!isCompareSelected(seller.id) && compareSellerId !== null}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // No mobile, precisamos garantir que o evento de clique do checkbox funcione
+                    if (isMobile) {
+                      handleCheckboxChange(seller, !isCompareSelected(seller.id));
+                    }
+                  }}
+                  disabled={!isCompareSelected(seller.id) && compareSellerId !== null && seller.id !== selectedSellerId}
                   className="ml-2"
                 />
               </div>
