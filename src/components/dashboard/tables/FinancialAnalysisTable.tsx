@@ -16,13 +16,15 @@ type FinancialAnalysisTableProps = {
   calculateMarginChange: (currentRevenue: number, currentExpenses: number, prevRevenue: number, prevExpenses: number) => number;
   getYearOverYearComparison: (currentData: MonthlyData, monthIndex: number) => any;
   selectedYear: string;
+  setSelectedYear: (year: string) => void;
 };
 
 export const FinancialAnalysisTable = ({ 
   monthlyData, 
   calculateMarginChange,
   getYearOverYearComparison,
-  selectedYear
+  selectedYear,
+  setSelectedYear
 }: FinancialAnalysisTableProps) => {
   const years = Array.from({ length: 5 }, (_, i) => {
     const year = new Date().getFullYear() - i;
@@ -33,7 +35,7 @@ export const FinancialAnalysisTable = ({
     <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 backdrop-blur-sm border border-[#6366F1]/20">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-[#6366F1] mb-4">Análise Financeira Mensal</h3>
-        <Select value={selectedYear} onValueChange={(value) => setSelectedYear(value)}>
+        <Select value={selectedYear} onValueChange={setSelectedYear}>
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="Selecione o ano" />
           </SelectTrigger>

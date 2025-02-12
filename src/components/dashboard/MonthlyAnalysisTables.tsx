@@ -38,18 +38,6 @@ export const MonthlyAnalysisTables = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end">
-        <select
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20 text-sm"
-        >
-          {years.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-      </div>
-
       <div className="space-y-4">
         {isSalesMinimized ? (
           <div 
@@ -104,6 +92,7 @@ export const MonthlyAnalysisTables = () => {
             <FinancialAnalysisTable 
               monthlyData={monthlyData}
               selectedYear={selectedYear}
+              setSelectedYear={setSelectedYear}
               calculateMarginChange={calculateMarginChange}
               getYearOverYearComparison={getYearOverYearComparison}
             />
