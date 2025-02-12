@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "../../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
@@ -19,6 +18,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { differenceInDays } from "date-fns";
 import { OverdueDetailsDialog } from "../OverdueDetailsDialog";
 import { DueTodayCard } from "../DueTodayCard";
+import { DueTodayBudgets } from "./DueTodayBudgets";
 
 const timeRanges = ["7D", "15D", "30D", "90D"] as const;
 type TimeRange = (typeof timeRanges)[number];
@@ -79,7 +79,7 @@ export const BudgetMetrics = () => {
       </div>
 
       {/* Métricas Principais */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
           <div className="flex justify-between items-start">
             <div>
@@ -88,6 +88,17 @@ export const BudgetMetrics = () => {
               <p className="text-sm text-white/90">+12% vs período anterior</p>
             </div>
             <Calendar className="h-6 w-6 text-white" />
+          </div>
+        </Card>
+
+        <Card className="p-4 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-white/90">Orçamentos Aprovados</p>
+              <h3 className="text-2xl font-bold">45</h3>
+              <p className="text-sm text-white/90">R$ 320.000,00</p>
+            </div>
+            <CheckCircle2 className="h-6 w-6 text-white" />
           </div>
         </Card>
 
@@ -119,6 +130,8 @@ export const BudgetMetrics = () => {
           </div>
         </Card>
       </div>
+
+      <DueTodayBudgets />
 
       <DueTodayCard />
 

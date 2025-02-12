@@ -1,5 +1,4 @@
-
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import { Card } from '../../ui/card';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
@@ -22,10 +21,12 @@ const conversionData = [
   { month: 'Jun', aprovados: 58, pendentes: 13, vencidos: 6, taxa: 75 },
 ];
 
+const COLORS = ['#10B981', '#F59E0B', '#EF4444'];
+
 export const BudgetCharts = () => {
   const [isMinimized1, setIsMinimized1] = useState(false);
   const [isMinimized2, setIsMinimized2] = useState(false);
-  const [monthsToShow, setMonthsToShow] = useState(6);
+  const [timeFilter, setTimeFilter] = useState("3");
 
   const formatCurrency = (value: number) => `R$ ${value.toLocaleString()}`;
 
@@ -84,12 +85,18 @@ export const BudgetCharts = () => {
             </p>
             <p className="text-sm text-emerald-600">
               Aprovados: {payload[1].value}
+              <br />
+              Valor: {formatCurrency(payload[1].payload.valorAprovados)}
             </p>
             <p className="text-sm text-amber-600">
               Pendentes: {payload[2].value}
+              <br />
+              Valor: {formatCurrency(payload[2].payload.valorPendentes)}
             </p>
             <p className="text-sm text-rose-600">
               Vencidos: {payload[3].value}
+              <br />
+              Valor: {formatCurrency(payload[3].payload.valorVencidos)}
             </p>
           </div>
         </div>
@@ -100,15 +107,16 @@ export const BudgetCharts = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end mb-2">
+      <div className="flex justify-end gap-2 mb-2">
         <select
-          value={monthsToShow}
-          onChange={(e) => setMonthsToShow(Number(e.target.value))}
+          value={timeFilter}
+          onChange={(e) => setTimeFilter(e.target.value)}
           className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
         >
-          <option value={3}>3 meses</option>
-          <option value={6}>6 meses</option>
-          <option value={12}>12 meses</option>
+          <option value="this-month">Este Mês</option>
+          <option value="3">3 meses</option>
+          <option value="6">6 meses</option>
+          <option value="12">12 meses</option>
         </select>
       </div>
 
@@ -135,21 +143,43 @@ export const BudgetCharts = () => {
               </button>
             </div>
             <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={mockData.slice(-monthsToShow)}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
-                  <XAxis dataKey="month" />
-                  <YAxis yAxisId="left" />
-                  <YAxis yAxisId="right" orientation="right" tickFormatter={formatCurrency} />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Bar yAxisId="left" dataKey="aprovados" name="Aprovados (Qtd)" fill="#10B981" />
-                  <Bar yAxisId="right" dataKey="valorAprovados" name="Aprovados (R$)" fill="#34D399" />
-                  <Bar yAxisId="left" dataKey="pendentes" name="Pendentes (Qtd)" fill="#F59E0B" />
-                  <Bar yAxisId="right" dataKey="valorPendentes" name="Pendentes (R$)" fill="#FBBF24" />
-                  <Bar yAxisId="left" dataKey="recusados" name="Recusados (Qtd)" fill="#EF4444" />
-                  <Bar yAxisId="right" dataKey="valorRecusados" name="Recusados (R$)" fill="#F87171" />
-                </BarChart>
-              </ResponsiveContainer>
+              {timeFilter === "this-month" ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={conversionData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, value }) => `${name}: ${value}`}
+                      outerRadius={100}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {conversionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={mockData.slice(-Number(timeFilter))}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+                    <XAxis dataKey="month" />
+                    <YAxis yAxisId="left" />
+                    <YAxis yAxisId="right" orientation="right" tickFormatter={formatCurrency} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Bar yAxisId="left" dataKey="aprovados" name="Aprovados (Qtd)" fill="#10B981" />
+                    <Bar yAxisId="right" dataKey="valorAprovados" name="Aprovados (R$)" fill="#34D399" />
+                    <Bar yAxisId="left" dataKey="pendentes" name="Pendentes (Qtd)" fill="#F59E0B" />
+                    <Bar yAxisId="right" dataKey="valorPendentes" name="Pendentes (R$)" fill="#FBBF24" />
+                    <Bar yAxisId="left" dataKey="recusados" name="Recusados (Qtd)" fill="#EF4444" />
+                    <Bar yAxisId="right" dataKey="valorRecusados" name="Recusados (R$)" fill="#F87171" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
             <div className="grid grid-cols-3 gap-4 mt-4 text-sm">
               <div className="p-3 rounded-lg bg-emerald-50">
@@ -196,7 +226,7 @@ export const BudgetCharts = () => {
             </div>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={conversionData.slice(-monthsToShow)}>
+                <LineChart data={conversionData.slice(-Number(timeFilter))}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
                   <XAxis dataKey="month" />
                   <YAxis yAxisId="left" />

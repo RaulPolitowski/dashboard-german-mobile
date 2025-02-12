@@ -1,4 +1,3 @@
-
 import { Clock, CreditCard, PiggyBank } from "lucide-react";
 import { Card } from "../ui/card";
 import { useCardStyle } from "../../contexts/CardStyleContext";
@@ -9,13 +8,13 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 const overdueReceivables = [
-  { id: "1", date: "2024-02-10", value: 3500, entity: "Cliente A", description: "Fatura 001" },
-  { id: "2", date: "2024-02-12", value: 4200, entity: "Cliente B", description: "Fatura 002" },
+  { id: "1", date: "2024-02-10", value: 3500, entity: "Cliente A", description: "Fatura 001", seller: "João Silva" },
+  { id: "2", date: "2024-02-12", value: 4200, entity: "Cliente B", description: "Fatura 002", seller: "Maria Santos" },
 ];
 
 const overduePayables = [
-  { id: "1", date: "2024-02-15", value: 2800, entity: "Fornecedor X", description: "NF 123" },
-  { id: "2", date: "2024-02-18", value: 3100, entity: "Fornecedor Y", description: "NF 124" },
+  { id: "1", date: "2024-02-15", value: 2800, entity: "Fornecedor X", description: "NF 123", seller: "João Silva" },
+  { id: "2", date: "2024-02-18", value: 3100, entity: "Fornecedor Y", description: "NF 124", seller: "Maria Santos" },
 ];
 
 export const AccountsSection = () => {

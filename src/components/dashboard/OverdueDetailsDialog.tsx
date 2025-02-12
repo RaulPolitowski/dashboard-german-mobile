@@ -1,4 +1,3 @@
-
 import {
   Dialog,
   DialogContent,
@@ -97,9 +96,12 @@ export const OverdueDetailsDialog = ({
                       {type === "lost" ? (
                         <span className="text-rose-600 font-medium">Perdido</span>
                       ) : (
-                        <span className="text-amber-600 font-medium">
-                          {daysOverdue} dias vencido
-                        </span>
+                        <div className="flex flex-col">
+                          <span className="text-rose-600 font-medium text-lg">
+                            {daysOverdue} dias
+                          </span>
+                          <span className="text-sm text-rose-500">vencido</span>
+                        </div>
                       )}
                     </TableCell>
                   </TableRow>
