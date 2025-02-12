@@ -1,15 +1,12 @@
 
 import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../ui/card';
 import { subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { FilterControls } from './weekly-sales/FilterControls';
 import { timeRanges, mockData } from './weekly-sales/constants';
 import { DateRange } from './weekly-sales/types';
 import { useIsMobile } from '../../hooks/use-mobile';
-
-// Cores para o gráfico de pizza no mobile
-const COLORS = ['#4F46E5', '#06B6D4', '#10B981', '#F59E0B', '#EF4444'];
 
 export const WeeklySalesChart = () => {
   const [selectedRange, setSelectedRange] = useState('all');
@@ -36,7 +33,7 @@ export const WeeklySalesChart = () => {
     }
   };
 
-  // Preparar dados para gráfico de pizza no mobile
+  // Preparar dados para visualização móvel
   const prepareMobileData = () => {
     return mockData.map(day => {
       const dailyTotal = Object.values(day)
@@ -45,7 +42,7 @@ export const WeeklySalesChart = () => {
       
       return {
         name: day.day,
-        value: dailyTotal
+        total: dailyTotal
       };
     });
   };
@@ -67,31 +64,51 @@ export const WeeklySalesChart = () => {
         />
       </div>
 
-      <ResponsiveContainer width="100%" height={400}>
-        {isMobile ? (
-          // Versão mobile: Gráfico de pizza
-          <PieChart>
-            <Pie
-              data={prepareMobileData()}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              outerRadius={150}
-              fill="#8884d8"
-              dataKey="value"
-              label={({ name, value }) => `${name}: R$ ${(value / 1000).toFixed(1)}k`}
-            >
-              {prepareMobileData().map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(value: number) => [`R$ ${value.toLocaleString()}`, 'Valor']}
-            />
-            <Legend />
-          </PieChart>
-        ) : (
-          // Versão desktop: Gráfico de barras
+      {isMobile ? (
+        // Versão mobile: Lista com cards para cada dia
+        <div className="space-y-3">
+          {prepareMobileData().map((day, index) => (
+            <Card key={index} className="p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-800/20">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h4 className="font-semibold text-indigo-700 dark:text-indigo-300">{day.name}</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Total do dia</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                    R$ {day.total.toLocaleString()}
+                  </p>
+                  {selectedRange !== 'all' && timeRanges.find(range => range.id === selectedRange) && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {timeRanges.find(range => range.id === selectedRange)?.label}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {selectedRange === 'all' && (
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {timeRanges.map(range => {
+                    const value = mockData.find(d => d.day === day.name)?.[range.id]?.value || 0;
+                    return (
+                      <div 
+                        key={range.id}
+                        className="p-2 rounded-md bg-white/50 dark:bg-gray-800/50"
+                      >
+                        <p className="text-xs text-gray-600 dark:text-gray-400">{range.label}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                          R$ {value.toLocaleString()}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </Card>
+          ))}
+        </div>
+      ) : (
+        // Versão desktop: Gráfico de barras
+        <ResponsiveContainer width="100%" height={400}>
           <BarChart 
             data={mockData} 
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
@@ -126,8 +143,8 @@ export const WeeklySalesChart = () => {
               />
             )}
           </BarChart>
-        )}
-      </ResponsiveContainer>
+        </ResponsiveContainer>
+      )}
     </Card>
   );
 };
