@@ -1,7 +1,6 @@
-import { useState } from 'react';
+
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
 import { Card } from '../../../../ui/card';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../../../ui/select';
 
 interface ServiceOrderEvolutionChartProps {
   timeFilter: string;
@@ -35,25 +34,6 @@ export const ServiceOrderEvolutionChart = ({ timeFilter }: ServiceOrderEvolution
   if (timeFilter === 'daily' || timeFilter === 'current-month') {
     return (
       <div className="h-full">
-        <div className="flex justify-between items-center mb-4">
-          <Select value={timeFilter} onValueChange={setTimeFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Selecione o período" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="daily">Hoje</SelectItem>
-                <SelectItem value="current-month">Mês Atual</SelectItem>
-                <SelectItem value="monthly">Mensal</SelectItem>
-                <SelectItem value="3-months">3 Meses</SelectItem>
-                <SelectItem value="6-months">6 Meses</SelectItem>
-                <SelectItem value="12-months">12 Meses</SelectItem>
-                <SelectItem value="current-year">Ano Atual</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-
         <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
           <div className="p-3 rounded-lg bg-emerald-50">
             <p className="text-emerald-600 font-medium">Finalizadas</p>
@@ -95,25 +75,6 @@ export const ServiceOrderEvolutionChart = ({ timeFilter }: ServiceOrderEvolution
 
   return (
     <div className="h-full">
-      <div className="flex justify-between items-center mb-4">
-        <Select value={timeFilter} onValueChange={setTimeFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Selecione o período" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="daily">Hoje</SelectItem>
-              <SelectItem value="current-month">Mês Atual</SelectItem>
-              <SelectItem value="monthly">Mensal</SelectItem>
-              <SelectItem value="3-months">3 Meses</SelectItem>
-              <SelectItem value="6-months">6 Meses</SelectItem>
-              <SelectItem value="12-months">12 Meses</SelectItem>
-              <SelectItem value="current-year">Ano Atual</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-
       <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
         <div className="p-3 rounded-lg bg-emerald-50">
           <p className="text-emerald-600 font-medium">Total Finalizadas</p>
