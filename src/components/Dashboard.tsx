@@ -10,6 +10,7 @@ import { RankingSection } from "./dashboard/RankingSection";
 import { MonthlyAnalysisTables } from "./dashboard/MonthlyAnalysisTables";
 import { OperationsSection } from "./dashboard/OperationsSection";
 import { useCardStyle } from "../contexts/CardStyleContext";
+import { DueTodayCard } from "./dashboard/DueTodayCard";
 import {
   Tooltip,
   TooltipContent,
@@ -62,12 +63,13 @@ const Dashboard = () => {
           </TabsTrigger>
           <TabsTrigger value="ranking" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
             <Medal className="w-4 h-4 mr-2" />
-            Performance
+            Performance de Vendedores
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="financial" className="space-y-6">
           <FinancialMetrics />
+          <DueTodayCard />
           <AccountsSection />
           <MonthlyAnalysisTables />
           <FinancialCharts />
