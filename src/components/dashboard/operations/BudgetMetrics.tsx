@@ -41,7 +41,6 @@ export const BudgetMetrics = () => {
 
   return (
     <div className="space-y-6">
-      {/* Cabeçalho com Filtros */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
         <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Métricas de Orçamentos</h3>
         <div className="flex flex-col md:flex-row gap-4">
@@ -77,55 +76,62 @@ export const BudgetMetrics = () => {
         </div>
       </div>
 
-      {/* Métricas Principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+        <Card className="p-4 bg-gradient-to-br from-indigo-500/10 to-indigo-600/10 border-indigo-200">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white/90">Orçamentos Gerados</p>
-              <h3 className="text-2xl font-bold">78</h3>
-              <p className="text-sm text-white/90">+12% vs período anterior</p>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-indigo-500" />
+                <h3 className="font-semibold text-indigo-700">Orçamentos Gerados</h3>
+              </div>
+              <p className="text-2xl font-bold text-indigo-600 mt-2">78</p>
+              <p className="text-sm text-indigo-600 mt-1">+12% vs período anterior</p>
             </div>
-            <Calendar className="h-6 w-6 text-white" />
           </div>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+        <Card className="p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border-emerald-200">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white/90">Orçamentos Aprovados</p>
-              <h3 className="text-2xl font-bold">45</h3>
-              <p className="text-sm text-white/90">R$ 320.000,00</p>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                <h3 className="font-semibold text-emerald-700">Orçamentos Aprovados</h3>
+              </div>
+              <p className="text-2xl font-bold text-emerald-600 mt-2">45</p>
+              <p className="text-sm text-emerald-600 mt-1">R$ 320.000,00</p>
             </div>
-            <CheckCircle2 className="h-6 w-6 text-white" />
           </div>
         </Card>
 
         <Card 
-          className="p-4 bg-gradient-to-br from-amber-500 to-amber-600 text-white cursor-pointer hover:shadow-lg transition-all"
+          className="p-4 bg-gradient-to-br from-amber-500/10 to-amber-600/10 border-amber-200"
           onClick={() => setShowOverdueDetails(true)}
         >
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white/90">Orçamentos Vencidos</p>
-              <h3 className="text-2xl font-bold">8</h3>
-              <p className="text-sm text-white/90">R$ 42.000,00</p>
+              <div className="flex items-center gap-2">
+                <TimerOff className="h-5 w-5 text-amber-500" />
+                <h3 className="font-semibold text-amber-700">Orçamentos Vencidos</h3>
+              </div>
+              <p className="text-2xl font-bold text-amber-600 mt-2">8</p>
+              <p className="text-sm text-amber-600 mt-1">R$ 42.000,00</p>
             </div>
-            <TimerOff className="h-6 w-6 text-white" />
           </div>
         </Card>
 
         <Card 
-          className="p-4 bg-gradient-to-br from-rose-500 to-rose-600 text-white cursor-pointer hover:shadow-lg transition-all"
+          className="p-4 bg-gradient-to-br from-rose-500/10 to-rose-600/10 border-rose-200"
           onClick={() => setShowLostDetails(true)}
         >
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white/90">Orçamentos Perdidos</p>
-              <h3 className="text-2xl font-bold">12</h3>
-              <p className="text-sm text-white/90">R$ 75.000,00</p>
+              <div className="flex items-center gap-2">
+                <XCircle className="h-5 w-5 text-rose-500" />
+                <h3 className="font-semibold text-rose-700">Orçamentos Perdidos</h3>
+              </div>
+              <p className="text-2xl font-bold text-rose-600 mt-2">12</p>
+              <p className="text-sm text-rose-600 mt-1">R$ 75.000,00</p>
             </div>
-            <XCircle className="h-6 w-6 text-white" />
           </div>
         </Card>
       </div>
@@ -134,7 +140,6 @@ export const BudgetMetrics = () => {
 
       <BudgetCharts />
 
-      {/* Diálogos de Detalhes */}
       <OverdueDetailsDialog
         isOpen={showOverdueDetails}
         onClose={() => setShowOverdueDetails(false)}
