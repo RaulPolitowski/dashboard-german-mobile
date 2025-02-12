@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card } from "../../../../ui/card";
 import { Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
@@ -41,7 +40,7 @@ export const ServiceOrderCards = () => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <TooltipProvider>
+        <TooltipProvider delayDuration={200}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Card 
@@ -64,7 +63,11 @@ export const ServiceOrderCards = () => {
                 </div>
               </Card>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent 
+              side="top" 
+              align="center"
+              className="bg-gray-800 text-white px-3 py-1.5 rounded-md text-sm z-50"
+            >
               <p>Clique para ver detalhes das ordens em andamento</p>
             </TooltipContent>
           </Tooltip>
@@ -91,7 +94,11 @@ export const ServiceOrderCards = () => {
                 </div>
               </Card>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent 
+              side="top" 
+              align="center"
+              className="bg-gray-800 text-white px-3 py-1.5 rounded-md text-sm z-50"
+            >
               <p>Clique para ver detalhes das ordens atrasadas</p>
             </TooltipContent>
           </Tooltip>
@@ -118,7 +125,11 @@ export const ServiceOrderCards = () => {
                 </div>
               </Card>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent 
+              side="top" 
+              align="center"
+              className="bg-gray-800 text-white px-3 py-1.5 rounded-md text-sm z-50"
+            >
               <p>Clique para ver detalhes das ordens finalizadas</p>
             </TooltipContent>
           </Tooltip>

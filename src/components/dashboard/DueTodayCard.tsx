@@ -29,7 +29,7 @@ export const DueTodayCard = () => {
   const balance = totalReceivables - totalPayables;
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Card 
@@ -72,7 +72,11 @@ export const DueTodayCard = () => {
             </div>
           </Card>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent 
+          side="top" 
+          align="center"
+          className="bg-gray-800 text-white px-3 py-1.5 rounded-md text-sm z-50"
+        >
           <p>Clique para ver detalhes dos vencimentos de hoje</p>
         </TooltipContent>
       </Tooltip>
