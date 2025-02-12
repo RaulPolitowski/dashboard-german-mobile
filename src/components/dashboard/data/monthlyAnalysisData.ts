@@ -40,6 +40,20 @@ export const allMonthlyData: YearlyData = {
     { month: "Novembro", sales: 52000, transactions: 228, revenue: 86000, expenses: 72000 },
     { month: "Dezembro", sales: 54000, transactions: 236, revenue: 89000, expenses: 73000 },
   ],
+  "2022": [
+    { month: "Janeiro", sales: 30000, transactions: 130, revenue: 65000, expenses: 60000 },
+    { month: "Fevereiro", sales: 33000, transactions: 145, revenue: 68000, expenses: 61000 },
+    { month: "Março", sales: 36000, transactions: 160, revenue: 71000, expenses: 63000 },
+    { month: "Abril", sales: 40000, transactions: 175, revenue: 74000, expenses: 65000 },
+    { month: "Maio", sales: 43000, transactions: 185, revenue: 77000, expenses: 66000 },
+    { month: "Junho", sales: 46000, transactions: 200, revenue: 80000, expenses: 68000 },
+    { month: "Julho", sales: 48000, transactions: 210, revenue: 82000, expenses: 69000 },
+    { month: "Agosto", sales: 45000, transactions: 195, revenue: 79000, expenses: 67000 },
+    { month: "Setembro", sales: 43000, transactions: 188, revenue: 76000, expenses: 66000 },
+    { month: "Outubro", sales: 47000, transactions: 205, revenue: 81000, expenses: 68000 },
+    { month: "Novembro", sales: 50000, transactions: 218, revenue: 84000, expenses: 70000 },
+    { month: "Dezembro", sales: 52000, transactions: 226, revenue: 87000, expenses: 71000 },
+  ]
 };
 
 export const years = Object.keys(allMonthlyData).sort((a, b) => b.localeCompare(a));
