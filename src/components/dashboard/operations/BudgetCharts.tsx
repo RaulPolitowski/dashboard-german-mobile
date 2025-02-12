@@ -1,7 +1,9 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+
 import { Card } from '../../ui/card';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
+import { BudgetEvolutionChart } from './charts/BudgetEvolutionChart';
+import { ConversionChart } from './charts/ConversionChart';
 
 const mockData = [
   { month: 'Jan', aprovados: 45, valorAprovados: 320000, pendentes: 15, valorPendentes: 98000, recusados: 8, valorRecusados: 45000 },
@@ -13,15 +15,13 @@ const mockData = [
 ];
 
 const conversionData = [
-  { month: 'Jan', aprovados: 45, pendentes: 15, vencidos: 5, taxa: 65 },
-  { month: 'Fev', aprovados: 50, pendentes: 12, vencidos: 6, taxa: 68 },
-  { month: 'Mar', aprovados: 48, pendentes: 18, vencidos: 4, taxa: 62 },
-  { month: 'Abr', aprovados: 52, pendentes: 14, vencidos: 7, taxa: 70 },
-  { month: 'Mai', aprovados: 55, pendentes: 16, vencidos: 5, taxa: 72 },
-  { month: 'Jun', aprovados: 58, pendentes: 13, vencidos: 6, taxa: 75 },
+  { month: 'Jan', aprovados: 45, pendentes: 15, vencidos: 5, taxa: 65, valorAprovados: 320000, valorPendentes: 98000, valorVencidos: 45000 },
+  { month: 'Fev', aprovados: 50, pendentes: 12, vencidos: 6, taxa: 68, valorAprovados: 375000, valorPendentes: 85000, valorVencidos: 62000 },
+  { month: 'Mar', aprovados: 48, pendentes: 18, vencidos: 4, taxa: 62, valorAprovados: 350000, valorPendentes: 120000, valorVencidos: 38000 },
+  { month: 'Abr', aprovados: 52, pendentes: 14, vencidos: 7, taxa: 70, valorAprovados: 390000, valorPendentes: 95000, valorVencidos: 52000 },
+  { month: 'Mai', aprovados: 55, pendentes: 16, vencidos: 5, taxa: 72, valorAprovados: 420000, valorPendentes: 110000, valorVencidos: 68000 },
+  { month: 'Jun', aprovados: 58, pendentes: 13, vencidos: 6, taxa: 75, valorAprovados: 450000, valorPendentes: 89000, valorVencidos: 48000 },
 ];
-
-const COLORS = ['#10B981', '#F59E0B', '#EF4444'];
 
 export const BudgetCharts = () => {
   const [isMinimized1, setIsMinimized1] = useState(false);
@@ -45,65 +45,6 @@ export const BudgetCharts = () => {
     recusados: 0,
     valorRecusados: 0
   });
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-          <p className="font-medium text-gray-700 mb-2">{label}</p>
-          <div className="space-y-2">
-            <div className="border-b pb-2">
-              <p className="text-sm font-medium text-emerald-600">Aprovados</p>
-              <p className="text-sm">Quantidade: {payload[0].value}</p>
-              <p className="text-sm">Valor: {formatCurrency(payload[1].value)}</p>
-            </div>
-            <div className="border-b pb-2">
-              <p className="text-sm font-medium text-amber-600">Pendentes</p>
-              <p className="text-sm">Quantidade: {payload[2].value}</p>
-              <p className="text-sm">Valor: {formatCurrency(payload[3].value)}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-rose-600">Recusados</p>
-              <p className="text-sm">Quantidade: {payload[4].value}</p>
-              <p className="text-sm">Valor: {formatCurrency(payload[5].value)}</p>
-            </div>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const ConversionTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-          <p className="font-medium text-gray-700 mb-2">{label}</p>
-          <div className="space-y-2">
-            <p className="text-sm text-indigo-600">
-              Taxa de Conversão: {payload[0].value}%
-            </p>
-            <p className="text-sm text-emerald-600">
-              Aprovados: {payload[1].value}
-              <br />
-              Valor: {formatCurrency(payload[1].payload.valorAprovados)}
-            </p>
-            <p className="text-sm text-amber-600">
-              Pendentes: {payload[2].value}
-              <br />
-              Valor: {formatCurrency(payload[2].payload.valorPendentes)}
-            </p>
-            <p className="text-sm text-rose-600">
-              Vencidos: {payload[3].value}
-              <br />
-              Valor: {formatCurrency(payload[3].payload.valorVencidos)}
-            </p>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <div className="space-y-6">
@@ -143,43 +84,10 @@ export const BudgetCharts = () => {
               </button>
             </div>
             <div className="h-[300px]">
-              {timeFilter === "this-month" ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={conversionData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, value }) => `${name}: ${value}`}
-                      outerRadius={100}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {conversionData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={mockData.slice(-Number(timeFilter))}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
-                    <XAxis dataKey="month" />
-                    <YAxis yAxisId="left" />
-                    <YAxis yAxisId="right" orientation="right" tickFormatter={formatCurrency} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Bar yAxisId="left" dataKey="aprovados" name="Aprovados (Qtd)" fill="#10B981" />
-                    <Bar yAxisId="right" dataKey="valorAprovados" name="Aprovados (R$)" fill="#34D399" />
-                    <Bar yAxisId="left" dataKey="pendentes" name="Pendentes (Qtd)" fill="#F59E0B" />
-                    <Bar yAxisId="right" dataKey="valorPendentes" name="Pendentes (R$)" fill="#FBBF24" />
-                    <Bar yAxisId="left" dataKey="recusados" name="Recusados (Qtd)" fill="#EF4444" />
-                    <Bar yAxisId="right" dataKey="valorRecusados" name="Recusados (R$)" fill="#F87171" />
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
+              <BudgetEvolutionChart 
+                data={mockData.slice(-Number(timeFilter))} 
+                timeFilter={timeFilter}
+              />
             </div>
             <div className="grid grid-cols-3 gap-4 mt-4 text-sm">
               <div className="p-3 rounded-lg bg-emerald-50">
@@ -225,51 +133,7 @@ export const BudgetCharts = () => {
               </button>
             </div>
             <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={conversionData.slice(-Number(timeFilter))}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
-                  <XAxis dataKey="month" />
-                  <YAxis yAxisId="left" />
-                  <YAxis yAxisId="right" orientation="right" unit="%" />
-                  <Tooltip content={<ConversionTooltip />} />
-                  <Line 
-                    yAxisId="right"
-                    type="monotone" 
-                    dataKey="taxa" 
-                    name="Taxa de Conversão"
-                    stroke="#6366F1" 
-                    strokeWidth={2}
-                    dot={{ fill: '#6366F1' }}
-                  />
-                  <Line 
-                    yAxisId="left"
-                    type="monotone" 
-                    dataKey="aprovados" 
-                    name="Aprovados"
-                    stroke="#10B981" 
-                    strokeWidth={2}
-                    dot={{ fill: '#10B981' }}
-                  />
-                  <Line 
-                    yAxisId="left"
-                    type="monotone" 
-                    dataKey="pendentes" 
-                    name="Pendentes"
-                    stroke="#F59E0B" 
-                    strokeWidth={2}
-                    dot={{ fill: '#F59E0B' }}
-                  />
-                  <Line 
-                    yAxisId="left"
-                    type="monotone" 
-                    dataKey="vencidos" 
-                    name="Vencidos"
-                    stroke="#EF4444" 
-                    strokeWidth={2}
-                    dot={{ fill: '#EF4444' }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              <ConversionChart data={conversionData.slice(-Number(timeFilter))} />
             </div>
             <div className="grid grid-cols-4 gap-4 mt-4 text-sm">
               <div className="p-3 rounded-lg bg-indigo-50">
