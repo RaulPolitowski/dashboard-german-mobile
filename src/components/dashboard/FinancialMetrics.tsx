@@ -7,10 +7,13 @@ export const FinancialMetrics = () => {
   const { cardStyle } = useCardStyle();
 
   const getCardClassName = (baseColor: string) => {
+    const baseClasses = "p-4 hover:shadow-lg transition-all cursor-pointer";
+    const darkClasses = `dark:bg-${baseColor} dark:border-0`;
+    
     if (cardStyle === "solid") {
-      return `p-4 hover:shadow-lg transition-all cursor-pointer bg-${baseColor}`;
+      return `${baseClasses} bg-${baseColor} text-white ${darkClasses}`;
     }
-    return `p-4 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-${baseColor}/20 to-${baseColor}/5 border border-${baseColor}/30`;
+    return `${baseClasses} bg-white dark:bg-gray-800 bg-gradient-to-br from-${baseColor}/20 via-${baseColor}/10 to-transparent border border-${baseColor}/30`;
   };
 
   return (
@@ -27,7 +30,7 @@ export const FinancialMetrics = () => {
                 <span className="block mt-0.5">(R$ 66.667,00)</span>
               </p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-full"}>
+            <div className={`${cardStyle === "solid" ? "bg-white/20" : "bg-emerald-100 dark:bg-emerald-900/30"} p-3 rounded-full`}>
               <ArrowUp className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-emerald-500 dark:text-emerald-400"}`} />
             </div>
           </div>
@@ -43,7 +46,7 @@ export const FinancialMetrics = () => {
                 <span className="block mt-0.5">(R$ 61.905,00)</span>
               </p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-rose-100 dark:bg-rose-900/30 p-3 rounded-full"}>
+            <div className={`${cardStyle === "solid" ? "bg-white/20" : "bg-rose-100 dark:bg-rose-900/30"} p-3 rounded-full`}>
               <ArrowDown className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500 dark:text-rose-400"}`} />
             </div>
           </div>
@@ -59,7 +62,7 @@ export const FinancialMetrics = () => {
                 <span className="block mt-0.5">(R$ 6.087,00)</span>
               </p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full"}>
+            <div className={`${cardStyle === "solid" ? "bg-white/20" : "bg-blue-100 dark:bg-blue-900/30"} p-3 rounded-full`}>
               <BadgeDollarSign className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-blue-500 dark:text-blue-400"}`} />
             </div>
           </div>
