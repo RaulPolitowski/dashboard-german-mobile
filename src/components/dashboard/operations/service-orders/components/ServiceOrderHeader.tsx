@@ -15,9 +15,8 @@ export const ServiceOrderHeader = ({
   onPeriodChange,
   onTechnicianChange,
 }: ServiceOrderHeaderProps) => {
-  // Definir o mês atual ao montar o componente
   useEffect(() => {
-    onPeriodChange("30"); // Define o período padrão como 30 dias
+    onPeriodChange("30");
   }, []);
 
   return (
@@ -25,9 +24,9 @@ export const ServiceOrderHeader = ({
       <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
         Gestão de Ordens de Serviço
       </h2>
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
         <Select value={selectedTechnician} onValueChange={onTechnicianChange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full md:w-[180px]">
             <SelectValue placeholder="Selecione um técnico" />
           </SelectTrigger>
           <SelectContent>
@@ -41,7 +40,7 @@ export const ServiceOrderHeader = ({
           </SelectContent>
         </Select>
         <Select value={selectedPeriod} onValueChange={onPeriodChange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full md:w-[180px]">
             <SelectValue placeholder="Selecione o período" />
           </SelectTrigger>
           <SelectContent>

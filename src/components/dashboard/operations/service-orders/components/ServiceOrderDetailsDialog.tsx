@@ -1,6 +1,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../../ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../../ui/table";
+import { ScrollArea } from "../../../../ui/scroll-area";
 
 interface ServiceOrder {
   id: string;
@@ -31,32 +32,34 @@ export const ServiceOrderDetailsDialog = ({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="flex-1 overflow-auto touch-pan-x">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Cliente</TableHead>
-                <TableHead>Descrição</TableHead>
-                <TableHead>Técnico</TableHead>
-                <TableHead>Prazo</TableHead>
-                <TableHead className="text-right">Valor</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.client}</TableCell>
-                  <TableCell>{order.description}</TableCell>
-                  <TableCell>{order.technician}</TableCell>
-                  <TableCell>{order.deadline}</TableCell>
-                  <TableCell className="text-right">
-                    R$ {order.value.toLocaleString()}
-                  </TableCell>
+        <ScrollArea className="flex-1">
+          <div className="p-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[200px]">Cliente</TableHead>
+                  <TableHead className="w-[250px]">Descrição</TableHead>
+                  <TableHead className="w-[150px]">Técnico</TableHead>
+                  <TableHead className="w-[120px]">Prazo</TableHead>
+                  <TableHead className="text-right w-[120px]">Valor</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {orders.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell className="font-medium">{order.client}</TableCell>
+                    <TableCell className="max-w-[250px] truncate">{order.description}</TableCell>
+                    <TableCell>{order.technician}</TableCell>
+                    <TableCell>{order.deadline}</TableCell>
+                    <TableCell className="text-right">
+                      R$ {order.value.toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
