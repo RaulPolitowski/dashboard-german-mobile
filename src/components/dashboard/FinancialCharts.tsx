@@ -144,16 +144,7 @@ export const FinancialCharts = () => {
             <DialogTitle>Detalhamento por Forma de Pagamento</DialogTitle>
           </DialogHeader>
           <div className="flex-1 overflow-auto p-4 md:p-6">
-            <div className="flex flex-col space-y-6">
-              <div className="h-[300px] md:h-[400px]">
-                <PaymentMethodChart />
-              </div>
-              <div className="overflow-auto touch-pan-x">
-                <div className="min-w-[640px]">
-                  <PaymentMethodTable data={totals.paymentMethods} period={period} />
-                </div>
-              </div>
-            </div>
+            <PaymentMethodDetails data={totals.paymentMethods} period={period} />
           </div>
         </DialogContent>
       </Dialog>
