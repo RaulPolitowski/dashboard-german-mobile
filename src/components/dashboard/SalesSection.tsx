@@ -8,6 +8,7 @@ import { PaymentMethodTable } from "../charts/PaymentMethodTable";
 import { SalesDialogs } from "./sales/SalesDialogs";
 import { Card } from "../ui/card";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { calculateTotals } from "../charts/CashFlowChart";
 
 const todaysSales = [
   { 
@@ -40,6 +41,8 @@ export const SalesSection = () => {
   const [isEvolutionMinimized, setEvolutionMinimized] = useState(false);
   const [isWeeklyMinimized, setWeeklyMinimized] = useState(false);
   const [isPaymentMethodMinimized, setPaymentMethodMinimized] = useState(false);
+  const [period, setPeriod] = useState("week");
+  const totals = calculateTotals(period);
 
   return (
     <div className="space-y-4">
@@ -85,7 +88,7 @@ export const SalesSection = () => {
             </>
           )}
         </Card>
-        <PaymentMethodTable />
+        <PaymentMethodTable data={totals.paymentMethods} period={period} />
       </div>
 
       <SalesDialogs 
