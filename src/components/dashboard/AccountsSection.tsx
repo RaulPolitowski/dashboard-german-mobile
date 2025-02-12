@@ -27,27 +27,20 @@ export const AccountsSection = () => {
     return `p-4 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-${baseColor}/20 to-${baseColor}/5 border border-${baseColor}/30`;
   };
 
-  const getTextColor = (baseColor: string, isTitle: boolean = false) => {
-    if (cardStyle === "solid") {
-      return isTitle ? "text-white" : "text-white/90";
-    }
-    return isTitle ? `text-${baseColor}-600` : "text-gray-600";
-  };
-
   return (
     <div className="space-y-2">
-      <h3 className="text-lg font-semibold text-gray-700">Contas e Previsões</h3>
+      <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Contas e Previsões</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         <Card className={getCardClassName("emerald-500")}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium mb-1">Contas a Receber</p>
-              <p className={`text-2xl font-bold ${getTextColor("emerald", true)}`}>R$ 45.000,00</p>
-              <p className="text-xs mt-1">Próximos 30 dias</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Contas a Receber</p>
+              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-emerald-600 dark:text-emerald-400"}`}>R$ 45.000,00</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>Próximos 30 dias</p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-emerald-100 p-3 rounded-full"}>
-              <CreditCard className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-emerald-500"}`} />
+            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-full"}>
+              <CreditCard className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-emerald-500 dark:text-emerald-400"}`} />
             </div>
           </div>
         </Card>
@@ -55,12 +48,12 @@ export const AccountsSection = () => {
         <Card className={getCardClassName("rose-500")}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium mb-1">Contas a Pagar</p>
-              <p className={`text-2xl font-bold ${getTextColor("rose", true)}`}>R$ 38.000,00</p>
-              <p className="text-xs mt-1">Próximos 30 dias</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Contas a Pagar</p>
+              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-rose-600 dark:text-rose-400"}`}>R$ 38.000,00</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>Próximos 30 dias</p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-rose-100 p-3 rounded-full"}>
-              <Clock className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500"}`} />
+            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-rose-100 dark:bg-rose-900/30 p-3 rounded-full"}>
+              <Clock className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500 dark:text-rose-400"}`} />
             </div>
           </div>
         </Card>
@@ -68,12 +61,12 @@ export const AccountsSection = () => {
         <Card className={getCardClassName("blue-500")}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium mb-1">Saldo Previsto</p>
-              <p className={`text-2xl font-bold ${getTextColor("blue", true)}`}>R$ 7.000,00</p>
-              <p className="text-xs mt-1">Final do mês</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Saldo Previsto</p>
+              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-blue-600 dark:text-blue-400"}`}>R$ 7.000,00</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>Final do mês</p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-blue-100 p-3 rounded-full"}>
-              <PiggyBank className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-blue-500"}`} />
+            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full"}>
+              <PiggyBank className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-blue-500 dark:text-blue-400"}`} />
             </div>
           </div>
         </Card>
@@ -86,12 +79,12 @@ export const AccountsSection = () => {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium mb-1">Recebimentos em Atraso</p>
-              <p className={`text-2xl font-bold ${getTextColor("amber", true)}`}>R$ 12.500,00</p>
-              <p className="text-xs mt-1">8 títulos pendentes</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Recebimentos em Atraso</p>
+              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-amber-600 dark:text-amber-400"}`}>R$ 12.500,00</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>8 títulos pendentes</p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-amber-100 p-3 rounded-full"}>
-              <AlertTriangle className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-amber-500"}`} />
+            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-amber-100 dark:bg-amber-900/30 p-3 rounded-full"}>
+              <AlertTriangle className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-amber-500 dark:text-amber-400"}`} />
             </div>
           </div>
         </Card>
@@ -102,12 +95,12 @@ export const AccountsSection = () => {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium mb-1">Pagamentos em Atraso</p>
-              <p className={`text-2xl font-bold ${getTextColor("rose", true)}`}>R$ 8.300,00</p>
-              <p className="text-xs mt-1">5 títulos pendentes</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Pagamentos em Atraso</p>
+              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-rose-600 dark:text-rose-400"}`}>R$ 8.300,00</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>5 títulos pendentes</p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-rose-100 p-3 rounded-full"}>
-              <AlertTriangle className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500"}`} />
+            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-rose-100 dark:bg-rose-900/30 p-3 rounded-full"}>
+              <AlertTriangle className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500 dark:text-rose-400"}`} />
             </div>
           </div>
         </Card>
