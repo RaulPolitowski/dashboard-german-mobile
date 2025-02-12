@@ -2,7 +2,18 @@
 import { useState } from "react";
 import { Card } from "../../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import { AlertTriangle, BarChart, Clock, FileQuestion, TimerOff, TrendingUp } from "lucide-react";
+import { 
+  AlertTriangle, 
+  BarChart, 
+  Clock, 
+  FileQuestion, 
+  TimerOff, 
+  TrendingUp,
+  CheckCircle2,
+  XCircle,
+  Calendar,
+  DollarSign
+} from "lucide-react";
 import { BudgetCharts } from "./BudgetCharts";
 import { PowerBIEmbed } from "./PowerBIEmbed";
 
@@ -54,31 +65,56 @@ export const BudgetMetrics = () => {
         </div>
       </div>
 
-      {/* Métricas Principais */}
+      {/* Métricas Principais - Linha 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 bg-blue-500 text-white">
+        <Card className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white/90">Orçamentos em Aberto</p>
+              <p className="text-white/90">Orçamentos Gerados</p>
+              <h3 className="text-2xl font-bold">78</h3>
+              <p className="text-sm text-white/90">+12% vs período anterior</p>
+            </div>
+            <Calendar className="h-6 w-6 text-white" />
+          </div>
+        </Card>
+
+        <Card className="p-4 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-white/90">Orçamentos Aprovados</p>
               <h3 className="text-2xl font-bold">45</h3>
               <p className="text-sm text-white/90">R$ 320.000,00</p>
+            </div>
+            <CheckCircle2 className="h-6 w-6 text-white" />
+          </div>
+        </Card>
+
+        <Card className="p-4 bg-gradient-to-br from-amber-500 to-amber-600 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-white/90">Em Negociação</p>
+              <h3 className="text-2xl font-bold">23</h3>
+              <p className="text-sm text-white/90">R$ 185.000,00</p>
             </div>
             <FileQuestion className="h-6 w-6 text-white" />
           </div>
         </Card>
 
-        <Card className="p-4 bg-amber-500 text-white">
+        <Card className="p-4 bg-gradient-to-br from-rose-500 to-rose-600 text-white">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white/90">A Vencer (7 dias)</p>
-              <h3 className="text-2xl font-bold">12</h3>
-              <p className="text-sm text-white/90">R$ 85.000,00</p>
+              <p className="text-white/90">Orçamentos Perdidos</p>
+              <h3 className="text-2xl font-bold">10</h3>
+              <p className="text-sm text-white/90">R$ 75.000,00</p>
             </div>
-            <AlertTriangle className="h-6 w-6 text-white" />
+            <XCircle className="h-6 w-6 text-white" />
           </div>
         </Card>
+      </div>
 
-        <Card className="p-4 bg-emerald-500 text-white">
+      {/* Métricas Principais - Linha 2 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="p-4 bg-gradient-to-br from-purple-500 to-purple-600 text-white">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-white/90">Taxa de Conversão</p>
@@ -89,7 +125,18 @@ export const BudgetMetrics = () => {
           </div>
         </Card>
 
-        <Card className="p-4 bg-violet-500 text-white">
+        <Card className="p-4 bg-gradient-to-br from-yellow-500 to-yellow-600 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-white/90">A Vencer (7 dias)</p>
+              <h3 className="text-2xl font-bold">12</h3>
+              <p className="text-sm text-white/90">R$ 85.000,00</p>
+            </div>
+            <AlertTriangle className="h-6 w-6 text-white" />
+          </div>
+        </Card>
+
+        <Card className="p-4 bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-white/90">Tempo Médio Resposta</p>
@@ -97,6 +144,17 @@ export const BudgetMetrics = () => {
               <p className="text-sm text-white/90">Meta: 2.5 dias</p>
             </div>
             <Clock className="h-6 w-6 text-white" />
+          </div>
+        </Card>
+
+        <Card className="p-4 bg-gradient-to-br from-teal-500 to-teal-600 text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-white/90">Valor Médio</p>
+              <h3 className="text-2xl font-bold">R$ 7.800</h3>
+              <p className="text-sm text-white/90">+15% vs. anterior</p>
+            </div>
+            <DollarSign className="h-6 w-6 text-white" />
           </div>
         </Card>
       </div>
