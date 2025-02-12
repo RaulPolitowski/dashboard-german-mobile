@@ -1,9 +1,9 @@
-
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "../../ui/card";
 import { WeeklySalesChart } from "../../charts/WeeklySalesChart";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { useState } from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
 
 interface WeeklySalesCardProps {
   isMinimized: boolean;
@@ -47,13 +47,22 @@ export const WeeklySalesCard = ({
   return (
     <Card className="p-4 md:p-6">
       {isMinimized ? (
-        <div 
-          className="flex items-center justify-between cursor-pointer"
-          onClick={onToggleMinimize}
-        >
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Análise de Vendas por Dia e Horário</h3>
-          <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div 
+                className="flex items-center justify-between cursor-pointer"
+                onClick={onToggleMinimize}
+              >
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Análise de Vendas por Dia e Horário</h3>
+                <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Expandir análise de vendas</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       ) : (
         <>
           <div className="flex items-center justify-between mb-4">
@@ -61,12 +70,21 @@ export const WeeklySalesCard = ({
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Análise de Vendas por Dia e Horário</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">Distribuição semanal de vendas por intervalo de horário</p>
             </div>
-            <button 
-              onClick={onToggleMinimize}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-            >
-              <ChevronUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-            </button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button 
+                    onClick={onToggleMinimize}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+                  >
+                    <ChevronUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Minimizar análise de vendas</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           {!isInsightsMinimized && (
@@ -98,17 +116,26 @@ export const WeeklySalesCard = ({
           )}
 
           <div className="mt-4">
-            <div 
-              className="flex items-center justify-between cursor-pointer p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg"
-              onClick={onToggleInsights}
-            >
-              <h4 className="font-medium text-gray-700 dark:text-gray-200">Insights</h4>
-              {isInsightsMinimized ? (
-                <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-              ) : (
-                <ChevronUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-              )}
-            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div 
+                    className="flex items-center justify-between cursor-pointer p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg"
+                    onClick={onToggleInsights}
+                  >
+                    <h4 className="font-medium text-gray-700 dark:text-gray-200">Insights</h4>
+                    {isInsightsMinimized ? (
+                      <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    ) : (
+                      <ChevronUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{isInsightsMinimized ? "Expandir" : "Minimizar"} insights</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             {!isInsightsMinimized && (
               <div className="mt-2 space-y-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
