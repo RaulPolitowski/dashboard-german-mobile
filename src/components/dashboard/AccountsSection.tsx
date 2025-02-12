@@ -21,9 +21,10 @@ export const AccountsSection = () => {
   const [showPayablesDialog, setShowPayablesDialog] = useState(false);
 
   const getCardStyle = (color: string) => {
-    return cardStyle === "solid" 
-      ? `bg-${color} text-white`
-      : `bg-gradient-to-br from-${color}/10 to-white border border-${color}/20 dark:from-${color}/20 dark:to-gray-800`;
+    if (cardStyle === "solid") {
+      return `bg-${color} dark:bg-${color}`;
+    }
+    return `bg-gradient-to-br from-${color}/10 via-${color}/5 to-transparent border border-${color}/20 dark:from-${color}/20 dark:to-gray-800`;
   };
 
   return (
