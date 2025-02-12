@@ -1,6 +1,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { Medal, TrendingUp, Wallet, FileSpreadsheet } from "lucide-react";
+import { Medal, TrendingUp, Wallet, FileSpreadsheet, Sun, Moon } from "lucide-react";
 import { FinancialHeader } from "./dashboard/FinancialHeader";
 import { FinancialMetrics } from "./dashboard/FinancialMetrics";
 import { AccountsSection } from "./dashboard/AccountsSection";
@@ -9,11 +9,42 @@ import { SalesSection } from "./dashboard/SalesSection";
 import { RankingSection } from "./dashboard/RankingSection";
 import { MonthlyAnalysisTables } from "./dashboard/MonthlyAnalysisTables";
 import { OperationsSection } from "./dashboard/OperationsSection";
+import { useCardStyle } from "../contexts/CardStyleContext";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 const Dashboard = () => {
+  const { cardStyle, toggleCardStyle } = useCardStyle();
+
   return (
     <div className="p-3 md:p-6 space-y-4 md:space-y-6 animate-fade-in">
-      <FinancialHeader />
+      <div className="flex justify-between items-center">
+        <FinancialHeader />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={toggleCardStyle}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors border border-gray-200"
+                aria-label="Alternar estilo dos cards"
+              >
+                {cardStyle === "solid" ? (
+                  <Sun className="w-5 h-5 text-gray-600" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-600" />
+                )}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Alternar entre cores sólidas e gradientes</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
       <Tabs defaultValue="financial" className="space-y-4">
         <TabsList>
