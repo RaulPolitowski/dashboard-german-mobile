@@ -1,4 +1,3 @@
-
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useMemo } from "react";
 
@@ -28,6 +27,24 @@ const weekData = [
   { day: "Quinta", receitas: 15500, despesas: 12500, resultado: 3000 },
   { day: "Sexta", receitas: 17000, despesas: 14000, resultado: 3000 },
 ];
+
+export const calculateTotals = (period: string) => {
+  const data = period === "week" ? weekData : allData;
+  let filteredData = data;
+  
+  if (period !== "week" && period !== "year") {
+    const currentMonth = new Date().getMonth();
+    const monthsToShow = Number(period);
+    const startIndex = Math.max(0, currentMonth - monthsToShow + 1);
+    filteredData = allData.slice(startIndex, currentMonth + 1);
+  }
+
+  return filteredData.reduce((acc, curr) => ({
+    revenue: acc.revenue + curr.receitas,
+    expenses: acc.expenses + curr.despesas,
+    result: acc.result + (curr.receitas - curr.despesas)
+  }), { revenue: 0, expenses: 0, result: 0 });
+};
 
 export const CashFlowChart = ({ period }: CashFlowChartProps) => {
   const filteredData = useMemo(() => {
