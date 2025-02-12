@@ -1,4 +1,5 @@
 
+import { useEffect } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../../../ui/select";
 
 interface ServiceOrderHeaderProps {
@@ -14,6 +15,11 @@ export const ServiceOrderHeader = ({
   onPeriodChange,
   onTechnicianChange,
 }: ServiceOrderHeaderProps) => {
+  // Definir o mês atual ao montar o componente
+  useEffect(() => {
+    onPeriodChange("30"); // Define o período padrão como 30 dias
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">

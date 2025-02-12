@@ -2,12 +2,12 @@
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 
 const mockPerformanceData = [
-  { month: 'Jan', completionTime: 3.2, onTimeRate: 92 },
-  { month: 'Fev', completionTime: 3.5, onTimeRate: 89 },
-  { month: 'Mar', completionTime: 3.1, onTimeRate: 94 },
-  { month: 'Abr', completionTime: 3.3, onTimeRate: 91 },
-  { month: 'Mai', completionTime: 3.0, onTimeRate: 95 },
-  { month: 'Jun', completionTime: 2.8, onTimeRate: 96 },
+  { month: 'Jan', completionTime: 3.2, onTimeRate: 92, delayRate: 8 },
+  { month: 'Fev', completionTime: 3.5, onTimeRate: 89, delayRate: 11 },
+  { month: 'Mar', completionTime: 3.1, onTimeRate: 94, delayRate: 6 },
+  { month: 'Abr', completionTime: 3.3, onTimeRate: 91, delayRate: 9 },
+  { month: 'Mai', completionTime: 3.0, onTimeRate: 95, delayRate: 5 },
+  { month: 'Jun', completionTime: 2.8, onTimeRate: 96, delayRate: 4 },
 ];
 
 export const ServiceOrderPerformanceChart = () => {
@@ -34,6 +34,14 @@ export const ServiceOrderPerformanceChart = () => {
           dataKey="onTimeRate"
           name="Taxa de Entrega no Prazo (%)"
           stroke="#10B981"
+          activeDot={{ r: 8 }}
+        />
+        <Line
+          yAxisId="right"
+          type="monotone"
+          dataKey="delayRate"
+          name="Taxa de Atraso (%)"
+          stroke="#EF4444"
           activeDot={{ r: 8 }}
         />
       </LineChart>
