@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../ui/card';
 import { subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { FilterControls } from './weekly-sales/FilterControls';
@@ -50,25 +50,29 @@ export const WeeklySalesChart = () => {
         />
       </div>
 
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={isMobile ? 400 : 300}>
         <BarChart 
           data={mockData} 
-          margin={isMobile ? { top: 20, right: 10, left: 10, bottom: 60 } : { top: 20, right: 30, left: 20, bottom: 5 }}
+          margin={isMobile ? { top: 20, right: 10, left: 10, bottom: 100 } : { top: 20, right: 30, left: 20, bottom: 5 }}
+          layout={isMobile ? "vertical" : "horizontal"}
         >
           <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
           <XAxis 
             dataKey="day" 
+            type={isMobile ? "number" : "category"}
             tick={{ fill: '#6b7280' }}
             axisLine={{ stroke: '#e5e7eb' }}
             interval={0}
-            angle={isMobile ? -45 : 0}
+            angle={isMobile ? -65 : 0}
             textAnchor={isMobile ? "end" : "middle"}
-            height={isMobile ? 80 : 30}
+            height={isMobile ? 120 : 30}
+            tickMargin={isMobile ? 25 : 5}
           />
           <YAxis 
             tick={{ fill: '#6b7280' }}
             axisLine={{ stroke: '#e5e7eb' }}
             tickFormatter={(value) => `R$ ${(value / 1000)}k`}
+            width={isMobile ? 60 : 40}
           />
           <Tooltip />
           {selectedRange === 'all' ? (

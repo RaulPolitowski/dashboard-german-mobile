@@ -1,5 +1,6 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useIsMobile } from '../../hooks/use-mobile';
 
 const data = [
   { category: 'Pessoal', value: 35000 },
@@ -16,23 +17,33 @@ const data = [
 
 export const ExpensesDistributionChart = () => {
   const total = data.reduce((acc, curr) => acc + curr.value, 0);
+  const isMobile = useIsMobile();
 
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart 
         data={data} 
         layout="vertical"
-        margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+        margin={isMobile ? 
+          { top: 5, right: 10, left: 80, bottom: 5 } : 
+          { top: 5, right: 30, left: 100, bottom: 5 }
+        }
       >
         <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
         <XAxis 
           type="number"
           tickFormatter={(value) => `R$ ${(value / 1000)}k`}
+          domain={[0, 'dataMax']}
+          tickMargin={5}
         />
         <YAxis 
           type="category"
           dataKey="category"
-          width={90}
+          width={isMobile ? 70 : 90}
+          tick={{ 
+            fontSize: isMobile ? 11 : 12,
+            textAnchor: "end",
+          }}
         />
         <Tooltip
           formatter={(value: number) => [
