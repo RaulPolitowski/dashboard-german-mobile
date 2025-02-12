@@ -1,12 +1,15 @@
 
 import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { Card } from '../ui/card';
 import { subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { FilterControls } from './weekly-sales/FilterControls';
 import { timeRanges, mockData } from './weekly-sales/constants';
 import { DateRange } from './weekly-sales/types';
 import { useIsMobile } from '../../hooks/use-mobile';
+
+// Cores para o gráfico de pizza no mobile
+const COLORS = ['#4F46E5', '#06B6D4', '#10B981', '#F59E0B', '#EF4444'];
 
 export const WeeklySalesChart = () => {
   const [selectedRange, setSelectedRange] = useState('all');
@@ -22,8 +25,8 @@ export const WeeklySalesChart = () => {
     if (value === 'currentWeek') {
       const now = new Date();
       setCustomDateRange({
-        start: startOfWeek(now, { weekStartsOn: 1 }), // Segunda-feira
-        end: endOfWeek(now, { weekStartsOn: 1 }) // Domingo
+        start: startOfWeek(now, { weekStartsOn: 1 }),
+        end: endOfWeek(now, { weekStartsOn: 1 })
       });
     } else {
       setCustomDateRange({
@@ -31,6 +34,20 @@ export const WeeklySalesChart = () => {
         end: new Date()
       });
     }
+  };
+
+  // Preparar dados para gráfico de pizza no mobile
+  const prepareMobileData = () => {
+    return mockData.map(day => {
+      const dailyTotal = Object.values(day)
+        .filter(value => typeof value === 'object' && value?.value)
+        .reduce((sum, curr: any) => sum + curr.value, 0);
+      
+      return {
+        name: day.day,
+        value: dailyTotal
+      };
+    });
   };
 
   return (
@@ -50,49 +67,66 @@ export const WeeklySalesChart = () => {
         />
       </div>
 
-      <ResponsiveContainer width="100%" height={isMobile ? 400 : 300}>
-        <BarChart 
-          data={mockData} 
-          margin={isMobile ? { top: 20, right: 10, left: 10, bottom: 100 } : { top: 20, right: 30, left: 20, bottom: 5 }}
-          layout={isMobile ? "vertical" : "horizontal"}
-        >
-          <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
-          <XAxis 
-            dataKey="day" 
-            type={isMobile ? "number" : "category"}
-            tick={{ fill: '#6b7280' }}
-            axisLine={{ stroke: '#e5e7eb' }}
-            interval={0}
-            angle={isMobile ? -65 : 0}
-            textAnchor={isMobile ? "end" : "middle"}
-            height={isMobile ? 120 : 30}
-            tickMargin={isMobile ? 25 : 5}
-          />
-          <YAxis 
-            tick={{ fill: '#6b7280' }}
-            axisLine={{ stroke: '#e5e7eb' }}
-            tickFormatter={(value) => `R$ ${(value / 1000)}k`}
-            width={isMobile ? 60 : 40}
-          />
-          <Tooltip />
-          {selectedRange === 'all' ? (
-            timeRanges.map((range) => (
+      <ResponsiveContainer width="100%" height={400}>
+        {isMobile ? (
+          // Versão mobile: Gráfico de pizza
+          <PieChart>
+            <Pie
+              data={prepareMobileData()}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              outerRadius={150}
+              fill="#8884d8"
+              dataKey="value"
+              label={({ name, value }) => `${name}: R$ ${(value / 1000).toFixed(1)}k`}
+            >
+              {prepareMobileData().map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip
+              formatter={(value: number) => [`R$ ${value.toLocaleString()}`, 'Valor']}
+            />
+            <Legend />
+          </PieChart>
+        ) : (
+          // Versão desktop: Gráfico de barras
+          <BarChart 
+            data={mockData} 
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+            <XAxis 
+              dataKey="day" 
+              tick={{ fill: '#6b7280' }}
+              axisLine={{ stroke: '#e5e7eb' }}
+            />
+            <YAxis 
+              tick={{ fill: '#6b7280' }}
+              axisLine={{ stroke: '#e5e7eb' }}
+              tickFormatter={(value) => `R$ ${(value / 1000)}k`}
+            />
+            <Tooltip />
+            {selectedRange === 'all' ? (
+              timeRanges.map((range) => (
+                <Bar
+                  key={range.id}
+                  dataKey={`${range.id}.value`}
+                  name={range.id}
+                  fill={range.color}
+                  radius={[4, 4, 0, 0]}
+                />
+              ))
+            ) : (
               <Bar
-                key={range.id}
-                dataKey={`${range.id}.value`}
-                name={range.id}
-                fill={range.color}
+                dataKey={`${selectedRange}.value`}
+                fill="#6366F1"
                 radius={[4, 4, 0, 0]}
               />
-            ))
-          ) : (
-            <Bar
-              dataKey={`${selectedRange}.value`}
-              fill="#6366F1"
-              radius={[4, 4, 0, 0]}
-            />
-          )}
-        </BarChart>
+            )}
+          </BarChart>
+        )}
       </ResponsiveContainer>
     </Card>
   );
