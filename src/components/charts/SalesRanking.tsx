@@ -1,5 +1,7 @@
 
 import { Medal } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "../ui/button";
 
 const salesData = [
   { id: '1', name: "João Silva", sales: 156000, transactions: 45, avgTicket: 3466.67 },
@@ -17,6 +19,8 @@ interface SalesRankingProps {
 }
 
 export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId, compareSellerId }: SalesRankingProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <div className="space-y-4">
       {salesData.map((seller, index) => (
@@ -26,12 +30,7 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
             selectedSellerId === seller.id ? 'border-[#6366F1] shadow-md' :
             compareSellerId === seller.id ? 'border-emerald-500 shadow-md' :
             'border-[#6366F1]/20'
-          } hover:shadow-md transition-all cursor-pointer`}
-          onClick={() => onSellerSelect(seller)}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            onCompareSelect(seller);
-          }}
+          } hover:shadow-md transition-all`}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -62,11 +61,31 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
               </p>
             </div>
           </div>
+          {isMobile && (
+            <div className="flex gap-2 mt-3">
+              <Button 
+                variant="outline" 
+                className="flex-1 bg-white/50 dark:bg-gray-800/50"
+                onClick={() => onSellerSelect(seller)}
+              >
+                Selecionar
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1 bg-white/50 dark:bg-gray-800/50"
+                onClick={() => onCompareSelect(seller)}
+              >
+                Comparar
+              </Button>
+            </div>
+          )}
         </div>
       ))}
-      <p className="text-sm text-gray-500 dark:text-gray-400 italic mt-2">
-        Clique para selecionar um vendedor. Clique com botão direito para comparar.
-      </p>
+      {!isMobile && (
+        <p className="text-sm text-gray-500 dark:text-gray-400 italic mt-2">
+          Clique para selecionar um vendedor. Clique com botão direito para comparar.
+        </p>
+      )}
     </div>
   );
 };

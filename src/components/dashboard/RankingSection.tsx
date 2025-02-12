@@ -11,9 +11,9 @@ export const RankingSection = () => {
   const [isPerformanceMinimized, setPerformanceMinimized] = useState(false);
 
   const sellerInsights = {
-    week: { change: 15, value: 42000 },
-    month: { change: -5, value: 156000 },
-    year: { change: 22, value: 1840000 }
+    week: { change: 15, value: 42000, previousValue: 36500 },
+    month: { change: -5, value: 156000, previousValue: 164200 },
+    year: { change: 22, value: 1840000, previousValue: 1508200 }
   };
 
   return (
@@ -84,6 +84,9 @@ export const RankingSection = () => {
                   </div>
                   <p className="text-lg font-bold text-gray-700 dark:text-gray-200">
                     R$ {data.value.toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Anterior: R$ {data.previousValue.toLocaleString()}
                   </p>
                 </div>
               ))}

@@ -1,4 +1,3 @@
-
 import { Card } from "../../ui/card";
 import { SellerPerformanceChart } from "../../charts/SellerPerformanceChart";
 import { SellerProductsChart } from "../../charts/SellerProductsChart";
@@ -9,6 +8,16 @@ interface PerformanceSectionProps {
 }
 
 export const PerformanceSection = ({ selectedSeller, compareSeller }: PerformanceSectionProps) => {
+  const bestDays = [
+    { day: 'Segunda', sales: 7500, percent: 12 },
+    { day: 'Terça', sales: 8200, percent: 13 },
+    { day: 'Quarta', sales: 9100, percent: 15 },
+    { day: 'Quinta', sales: 8900, percent: 14 },
+    { day: 'Sexta', sales: 10200, percent: 16 },
+    { day: 'Sábado', sales: 12000, percent: 19 },
+    { day: 'Domingo', sales: 6800, percent: 11 },
+  ];
+
   return (
     <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 backdrop-blur-sm border border-[#6366F1]/20">
       <div className="space-y-6">
@@ -50,21 +59,26 @@ export const PerformanceSection = ({ selectedSeller, compareSeller }: Performanc
                 </div>
               </div>
               <div className="space-y-4">
-                {['Sábado', 'Sexta', 'Quinta', 'Quarta', 'Terça'].map((day, index) => (
-                  <div key={day} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                {bestDays.map((day, index) => (
+                  <div key={day.day} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#6366F1]/10 text-[#6366F1] dark:text-[#818cf8] font-medium">
                         {index + 1}
                       </div>
-                      <span className="text-gray-700 dark:text-gray-200">{day}</span>
+                      <span className="text-gray-700 dark:text-gray-200">{day.day}</span>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-medium text-[#6366F1] dark:text-[#818cf8]">
-                        R$ {(Math.random() * 10000 + 5000).toFixed(2)}
+                        R$ {day.sales.toLocaleString()}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {Math.floor(Math.random() * 20 + 10)} vendas
-                      </p>
+                      <div className="flex items-center justify-end gap-1">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {Math.floor(Math.random() * 20 + 10)} vendas
+                        </p>
+                        <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                          ({day.percent}%)
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -83,21 +97,26 @@ export const PerformanceSection = ({ selectedSeller, compareSeller }: Performanc
                   </div>
                 </div>
                 <div className="space-y-4">
-                  {['Sábado', 'Sexta', 'Quinta', 'Quarta', 'Terça'].map((day, index) => (
-                    <div key={day} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                  {bestDays.map((day, index) => (
+                    <div key={day.day} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#6366F1]/10 text-[#6366F1] dark:text-[#818cf8] font-medium">
                           {index + 1}
                         </div>
-                        <span className="text-gray-700 dark:text-gray-200">{day}</span>
+                        <span className="text-gray-700 dark:text-gray-200">{day.day}</span>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium text-[#6366F1] dark:text-[#818cf8]">
-                          R$ {(Math.random() * 10000 + 5000).toFixed(2)}
+                          R$ {day.sales.toLocaleString()}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {Math.floor(Math.random() * 20 + 10)} vendas
-                        </p>
+                        <div className="flex items-center justify-end gap-1">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {Math.floor(Math.random() * 20 + 10)} vendas
+                          </p>
+                          <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                            ({day.percent}%)
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ))}
