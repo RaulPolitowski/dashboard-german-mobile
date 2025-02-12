@@ -17,7 +17,6 @@ import { mockBudgetData } from "./data/mockBudgetData";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../ui/select";
 import { differenceInDays } from "date-fns";
 import { OverdueDetailsDialog } from "../OverdueDetailsDialog";
-import { DueTodayCard } from "../DueTodayCard";
 import { DueTodayBudgets } from "./DueTodayBudgets";
 
 const timeRanges = ["7D", "15D", "30D", "90D"] as const;
@@ -133,9 +132,6 @@ export const BudgetMetrics = () => {
 
       <DueTodayBudgets />
 
-      <DueTodayCard />
-
-      {/* Visualizações */}
       <BudgetCharts />
 
       {/* Diálogos de Detalhes */}
