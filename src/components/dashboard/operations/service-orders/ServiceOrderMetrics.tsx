@@ -1,28 +1,55 @@
-
 import { useState } from "react";
 import { Card } from "../../../ui/card";
-import { Clock, AlertTriangle, CheckCircle2, Calendar } from "lucide-react";
+import { Clock, AlertTriangle, CheckCircle2, Calendar, ChevronDown, ChevronUp } from "lucide-react";
 import { mockMetrics, mockServiceOrders } from "./data/mockData";
 import { DueTodayOrders } from "./DueTodayOrders";
+import { ServiceOrderEvolutionChart } from "./charts/ServiceOrderEvolutionChart";
+import { ServiceOrderPerformanceChart } from "./charts/ServiceOrderPerformanceChart";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../../ui/select";
 
 export const ServiceOrderMetrics = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("30");
+  const [selectedTechnician, setSelectedTechnician] = useState("all");
+  const [showEvolutionChart, setShowEvolutionChart] = useState(true);
+  const [showPerformanceChart, setShowPerformanceChart] = useState(true);
 
   return (
     <div className="space-y-6">
       {/* Header com filtros */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-800">Gestão de Ordens de Serviço</h2>
-        <select 
-          value={selectedPeriod}
-          onChange={(e) => setSelectedPeriod(e.target.value)}
-          className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-        >
-          <option value="7">Últimos 7 dias</option>
-          <option value="15">Últimos 15 dias</option>
-          <option value="30">Últimos 30 dias</option>
-          <option value="90">Últimos 90 dias</option>
-        </select>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+          Gestão de Ordens de Serviço
+        </h2>
+        <div className="flex flex-col md:flex-row gap-4">
+          <Select value={selectedTechnician} onValueChange={setSelectedTechnician}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Selecione um técnico" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Técnicos</SelectLabel>
+                <SelectItem value="all">Todos</SelectItem>
+                <SelectItem value="joao">João Silva</SelectItem>
+                <SelectItem value="maria">Maria Santos</SelectItem>
+                <SelectItem value="pedro">Pedro Oliveira</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Selecione o período" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Período</SelectLabel>
+                <SelectItem value="7">Últimos 7 dias</SelectItem>
+                <SelectItem value="15">Últimos 15 dias</SelectItem>
+                <SelectItem value="30">Últimos 30 dias</SelectItem>
+                <SelectItem value="90">Últimos 90 dias</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Cards principais */}
@@ -83,6 +110,47 @@ export const ServiceOrderMetrics = () => {
 
         {/* OS Previstas para Hoje */}
         <DueTodayOrders />
+      </div>
+
+      {/* Gráficos */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              Evolução das OS
+            </h3>
+            <button
+              onClick={() => setShowEvolutionChart(!showEvolutionChart)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            >
+              {showEvolutionChart ? (
+                <ChevronUp className="w-5 h-5 text-gray-500" />
+              ) : (
+                <ChevronDown className="w-5 h-5 text-gray-500" />
+              )}
+            </button>
+          </div>
+          {showEvolutionChart && <ServiceOrderEvolutionChart />}
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              Performance
+            </h3>
+            <button
+              onClick={() => setShowPerformanceChart(!showPerformanceChart)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            >
+              {showPerformanceChart ? (
+                <ChevronUp className="w-5 h-5 text-gray-500" />
+              ) : (
+                <ChevronDown className="w-5 h-5 text-gray-500" />
+              )}
+            </button>
+          </div>
+          {showPerformanceChart && <ServiceOrderPerformanceChart />}
+        </Card>
       </div>
 
       {/* Indicadores de Performance */}
