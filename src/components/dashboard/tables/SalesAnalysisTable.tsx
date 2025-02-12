@@ -1,24 +1,19 @@
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
 import { Card } from "../../ui/card";
 import { MonthlyData } from "../data/monthlyAnalysisData";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
-import { useState } from "react";
 
 type SalesAnalysisTableProps = {
   monthlyData: MonthlyData[];
   selectedYear: string;
+  setSelectedYear: (year: string) => void;
   getYearOverYearComparison: (currentData: MonthlyData, monthIndex: number) => any;
 };
 
 export const SalesAnalysisTable = ({ 
   monthlyData, 
   selectedYear,
+  setSelectedYear,
   getYearOverYearComparison 
 }: SalesAnalysisTableProps) => {
   const years = Array.from({ length: 5 }, (_, i) => {

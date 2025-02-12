@@ -63,6 +63,7 @@ export const MonthlyAnalysisTables = () => {
             <SalesAnalysisTable 
               monthlyData={monthlyData}
               selectedYear={selectedYear}
+              setSelectedYear={setSelectedYear}
               getYearOverYearComparison={getYearOverYearComparison}
             />
           </div>
