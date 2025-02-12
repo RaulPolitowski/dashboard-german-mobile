@@ -23,7 +23,7 @@ export const DueTodayBudgets = () => {
   const total = dueTodayBudgets.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
       <Card 
         className="p-4 bg-gradient-to-br from-rose-500/10 to-rose-600/10 border-rose-200 cursor-pointer hover:shadow-lg transition-all"
         onClick={() => setShowDetails(true)}
