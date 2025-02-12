@@ -1,12 +1,33 @@
-
-import { Package, AlertTriangle } from "lucide-react";
+import { Package, AlertTriangle, TrendingUp, TrendingDown } from "lucide-react";
 import { Card } from "../ui/card";
 import { differenceInDays } from "date-fns";
 import { useState } from "react";
 
 const lowPerformingProducts = [
-  { id: 1, name: "Câmera 360", sales: 5000, lastSale: "2024-01-15", stock: 45, lastWeekSales: 0, lastWeekValue: 0, salesPercentage: 0.6 },
-  { id: 2, name: "Drone Basic", sales: 8000, lastSale: "2024-02-01", stock: 30, lastWeekSales: 1, lastWeekValue: 800, salesPercentage: 1.0 },
+  { 
+    id: 1, 
+    name: "Câmera 360", 
+    sales: 5000, 
+    lastSale: "2024-01-15", 
+    stock: 45, 
+    lastWeekSales: 0, 
+    lastWeekValue: 0,
+    previousWeekSales: 1,
+    previousWeekValue: 500,
+    salesTrend: -100 // queda de 100% em relação à semana anterior
+  },
+  { 
+    id: 2, 
+    name: "Drone Basic", 
+    sales: 8000, 
+    lastSale: "2024-02-01", 
+    stock: 30, 
+    lastWeekSales: 1, 
+    lastWeekValue: 800,
+    previousWeekSales: 0,
+    previousWeekValue: 0,
+    salesTrend: Infinity // aumento de infinito% (de 0 para algum valor)
+  },
   { id: 3, name: "Smart Watch X", sales: 12000, lastSale: "2024-02-15", stock: 25, lastWeekSales: 2, lastWeekValue: 1200, salesPercentage: 1.5 },
   { id: 4, name: "Projetor Mini", sales: 15000, lastSale: "2024-01-30", stock: 20, lastWeekSales: 1, lastWeekValue: 1500, salesPercentage: 1.8 },
   { id: 5, name: "Speaker BT", sales: 18000, lastSale: "2024-02-10", stock: 35, lastWeekSales: 2, lastWeekValue: 1800, salesPercentage: 2.2 },
@@ -27,6 +48,12 @@ export const LowPerformanceProducts = () => {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
+  const formatTrend = (trend: number) => {
+    if (trend === Infinity) return "+100";
+    if (trend === -Infinity) return "-100";
+    return trend.toFixed(1);
+  };
 
   return (
     <Card className="p-4">
@@ -64,9 +91,24 @@ export const LowPerformanceProducts = () => {
                     Total: R$ {product.sales.toLocaleString()}
                   </p>
                   <div className="text-sm space-y-1">
-                    <p className="text-red-500">
-                      {product.salesPercentage}% das vendas
-                    </p>
+                    <div className="flex items-center justify-end gap-1">
+                      {product.salesTrend > 0 ? (
+                        <>
+                          <TrendingUp className="w-4 h-4 text-emerald-500" />
+                          <span className="text-emerald-600 font-medium">
+                            +{formatTrend(product.salesTrend)}%
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <TrendingDown className="w-4 h-4 text-rose-500" />
+                          <span className="text-rose-600 font-medium">
+                            {formatTrend(product.salesTrend)}%
+                          </span>
+                        </>
+                      )}
+                      <span className="text-gray-500">vs última semana</span>
+                    </div>
                     <p className="text-gray-500">
                       Últimos 7 dias: {product.lastWeekSales} un. | R$ {product.lastWeekValue.toLocaleString()}
                     </p>

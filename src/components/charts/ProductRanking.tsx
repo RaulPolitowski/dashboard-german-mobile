@@ -1,10 +1,33 @@
-
-import { Package } from "lucide-react";
+import { Package, TrendingUp, TrendingDown } from "lucide-react";
 import { useState } from "react";
 
 const productData = [
-  { id: 1, name: "Notebook Pro X1", sales: 235000, units: 85, lastSale: "2024-03-15", salesPercentage: 28.5, lastWeekSales: 12, lastWeekValue: 32400 },
-  { id: 2, name: "Smartphone Galaxy S21", sales: 198000, units: 120, lastSale: "2024-03-14", salesPercentage: 24.1, lastWeekSales: 15, lastWeekValue: 24750 },
+  { 
+    id: 1, 
+    name: "Notebook Pro X1", 
+    sales: 235000, 
+    units: 85, 
+    lastSale: "2024-03-15", 
+    salesPercentage: 28.5, 
+    lastWeekSales: 12, 
+    lastWeekValue: 32400,
+    previousWeekSales: 8, 
+    previousWeekValue: 21600, 
+    salesTrend: 50 
+  },
+  { 
+    id: 2, 
+    name: "Smartphone Galaxy S21", 
+    sales: 198000, 
+    units: 120, 
+    lastSale: "2024-03-14", 
+    salesPercentage: 24.1, 
+    lastWeekSales: 15, 
+    lastWeekValue: 24750,
+    previousWeekSales: 18,
+    previousWeekValue: 29700,
+    salesTrend: -16.67 
+  },
   { id: 3, name: "Monitor 4K 32'", sales: 156000, units: 65, lastSale: "2024-03-13", salesPercentage: 19.0, lastWeekSales: 8, lastWeekValue: 19200 },
   { id: 4, name: "Tablet Air Plus", sales: 125000, units: 95, lastSale: "2024-03-12", salesPercentage: 15.2, lastWeekSales: 10, lastWeekValue: 13200 },
   { id: 5, name: "Fone Bluetooth Pro", sales: 98000, units: 180, lastSale: "2024-03-11", salesPercentage: 11.9, lastWeekSales: 22, lastWeekValue: 11660 },
@@ -63,9 +86,24 @@ export const ProductRanking = () => {
                   R$ {product.sales.toLocaleString()}
                 </p>
                 <div className="text-sm space-y-1">
-                  <p className="text-emerald-600 font-medium">
-                    {product.salesPercentage}% das vendas
-                  </p>
+                  <div className="flex items-center justify-end gap-1">
+                    {product.salesTrend > 0 ? (
+                      <>
+                        <TrendingUp className="w-4 h-4 text-emerald-500" />
+                        <span className="text-emerald-600 font-medium">
+                          +{product.salesTrend.toFixed(1)}%
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <TrendingDown className="w-4 h-4 text-rose-500" />
+                        <span className="text-rose-600 font-medium">
+                          {product.salesTrend.toFixed(1)}%
+                        </span>
+                      </>
+                    )}
+                    <span className="text-gray-500">vs última semana</span>
+                  </div>
                   <p className="text-gray-500">
                     Últimos 7 dias: {product.lastWeekSales} un. | R$ {product.lastWeekValue.toLocaleString()}
                   </p>
