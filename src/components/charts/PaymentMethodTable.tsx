@@ -1,7 +1,5 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-import { Card } from "../ui/card";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import type { PaymentMethodData } from "./CashFlowChart";
 
 interface PaymentMethodTableProps {
@@ -16,28 +14,25 @@ export const PaymentMethodTable = ({ data, period }: PaymentMethodTableProps) =>
   const totalOutflowTransactions = data.reduce((acc, curr) => acc + curr.outflowTransactions, 0);
 
   return (
-    <Card className="p-4 md:p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">Detalhamento por Forma de Pagamento</h3>
-          <p className="text-sm text-gray-600">
-            {period === 'week' ? 'Semana atual' : 
-             period === '3' ? 'Últimos 3 meses' :
-             period === '6' ? 'Últimos 6 meses' :
-             period === '12' ? 'Último ano' : 'Ano atual'}
-          </p>
-        </div>
+    <div>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold text-gray-900">Detalhamento por Forma de Pagamento</h3>
+        <p className="text-sm text-gray-600">
+          {period === 'week' ? 'Semana atual' : 
+           period === '3' ? 'Últimos 3 meses' :
+           period === '6' ? 'Últimos 6 meses' :
+           period === '12' ? 'Último ano' : 'Ano atual'}
+        </p>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="max-h-[300px] overflow-y-auto">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-white dark:bg-gray-900">
             <TableRow>
-              <TableHead>Forma de Pagamento</TableHead>
+              <TableHead className="w-[180px]">Forma de Pagamento</TableHead>
               <TableHead>Entradas</TableHead>
               <TableHead>Saídas</TableHead>
-              <TableHead>Trans. Entrada</TableHead>
-              <TableHead>Trans. Saída</TableHead>
+              <TableHead className="text-center">Trans.</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -56,27 +51,30 @@ export const PaymentMethodTable = ({ data, period }: PaymentMethodTableProps) =>
                     ({((item.outflow / totalOutflow) * 100).toFixed(1)}%)
                   </span>
                 </TableCell>
-                <TableCell>{item.inflowTransactions}</TableCell>
-                <TableCell>{item.outflowTransactions}</TableCell>
+                <TableCell className="text-center">
+                  <span className="text-emerald-600">+{item.inflowTransactions}</span>
+                  {" / "}
+                  <span className="text-rose-600">-{item.outflowTransactions}</span>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        <div className="p-4 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-400/5 border border-emerald-500/20">
+      <div className="mt-4 grid grid-cols-2 gap-4">
+        <div className="p-3 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-400/5 border border-emerald-500/20">
           <p className="text-sm text-gray-600">Total de Entradas</p>
-          <p className="text-xl font-bold text-emerald-600">
+          <p className="text-lg font-semibold text-emerald-600">
             R$ {totalInflow.toLocaleString()}
           </p>
           <p className="text-sm text-gray-500 mt-1">
             {totalInflowTransactions} transações
           </p>
         </div>
-        <div className="p-4 rounded-lg bg-gradient-to-br from-rose-500/10 to-rose-400/5 border border-rose-500/20">
+        <div className="p-3 rounded-lg bg-gradient-to-br from-rose-500/10 to-rose-400/5 border border-rose-500/20">
           <p className="text-sm text-gray-600">Total de Saídas</p>
-          <p className="text-xl font-bold text-rose-600">
+          <p className="text-lg font-semibold text-rose-600">
             R$ {totalOutflow.toLocaleString()}
           </p>
           <p className="text-sm text-gray-500 mt-1">
@@ -84,6 +82,6 @@ export const PaymentMethodTable = ({ data, period }: PaymentMethodTableProps) =>
           </p>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
