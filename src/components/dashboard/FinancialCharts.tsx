@@ -1,3 +1,4 @@
+
 import { ChartBar, ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
@@ -8,12 +9,14 @@ import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { useIsMobile } from "../../hooks/use-mobile";
 
 export const FinancialCharts = () => {
   const [period, setPeriod] = useState("week");
   const [isMinimized, setIsMinimized] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const totals = calculateTotals(period);
+  const isMobile = useIsMobile();
 
   const shouldShowPieChart = ['day', 'currentWeek', 'currentMonth'].includes(period);
 
@@ -58,7 +61,10 @@ export const FinancialCharts = () => {
                     <option value="year">Ano atual</option>
                   </select>
                   <div className="flex gap-2">
-                    <ChartBar className="w-4 h-4 md:w-5 md:h-5 text-gray-500" />
+                    <ChartBar 
+                      className="w-4 h-4 md:w-5 md:h-5 text-gray-500 cursor-pointer"
+                      onClick={() => setShowDetails(true)}
+                    />
                     <button 
                       onClick={() => setIsMinimized(true)}
                       className="p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -133,11 +139,22 @@ export const FinancialCharts = () => {
       </Card>
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
+        <DialogContent className="max-w-[95vw] md:max-w-4xl h-[90vh] md:h-auto overflow-hidden flex flex-col p-0">
+          <DialogHeader className="p-4 md:p-6 border-b">
             <DialogTitle>Detalhamento por Forma de Pagamento</DialogTitle>
           </DialogHeader>
-          <PaymentMethodDetails data={totals.paymentMethods} period={period} />
+          <div className="flex-1 overflow-auto p-4 md:p-6">
+            <div className="flex flex-col space-y-6">
+              <div className="h-[300px] md:h-[400px]">
+                <PaymentMethodChart />
+              </div>
+              <div className="overflow-auto touch-pan-x">
+                <div className="min-w-[640px]">
+                  <PaymentMethodTable data={totals.paymentMethods} period={period} />
+                </div>
+              </div>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
