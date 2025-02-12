@@ -11,7 +11,7 @@ interface CardStyleContextType {
 const CardStyleContext = createContext<CardStyleContextType | undefined>(undefined);
 
 export function CardStyleProvider({ children }: { children: ReactNode }) {
-  const [cardStyle, setCardStyle] = useState<CardStyle>("solid");
+  const [cardStyle, setCardStyle] = useState<CardStyle>("gradient");
 
   const toggleCardStyle = () => {
     setCardStyle(prev => prev === "solid" ? "gradient" : "solid");

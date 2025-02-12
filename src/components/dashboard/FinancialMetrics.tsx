@@ -7,10 +7,17 @@ export const FinancialMetrics = () => {
   const { cardStyle } = useCardStyle();
 
   const getCardClassName = (baseColor: string) => {
-    const baseClasses = "p-4 hover:shadow-lg transition-all cursor-pointer";
-    return cardStyle === "solid"
-      ? `${baseClasses} bg-${baseColor} border-none`
-      : `${baseClasses} bg-gradient-to-br from-${baseColor}/20 to-${baseColor}/5 border border-${baseColor}/30`;
+    if (cardStyle === "solid") {
+      return `p-4 hover:shadow-lg transition-all cursor-pointer bg-${baseColor}`;
+    }
+    return `p-4 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-${baseColor}/20 to-${baseColor}/5 border border-${baseColor}/30`;
+  };
+
+  const getTextColor = (baseColor: string, isTitle: boolean = false) => {
+    if (cardStyle === "solid") {
+      return isTitle ? "text-white" : "text-white/90";
+    }
+    return isTitle ? `text-${baseColor}-600` : "text-gray-600";
   };
 
   return (
@@ -20,11 +27,11 @@ export const FinancialMetrics = () => {
         <Card className={getCardClassName("emerald-500")}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`text-sm ${cardStyle === "solid" ? "text-white/90" : "text-gray-600"}`}>Receita Total</p>
-              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-emerald-600"}`}>R$ 72.000,00</p>
-              <p className={`text-xs ${cardStyle === "solid" ? "text-white/90" : "text-gray-500"}`}>
+              <p className="text-sm font-medium mb-1">Receita Total</p>
+              <p className={`text-2xl font-bold ${getTextColor("emerald", true)}`}>R$ 72.000,00</p>
+              <p className="text-xs mt-1">
                 +8% vs. mês anterior
-                <span className="block text-white/80">(R$ 66.667,00)</span>
+                <span className="block mt-0.5">(R$ 66.667,00)</span>
               </p>
             </div>
             <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-emerald-100 p-3 rounded-full"}>
@@ -36,11 +43,11 @@ export const FinancialMetrics = () => {
         <Card className={getCardClassName("rose-500")}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`text-sm ${cardStyle === "solid" ? "text-white/90" : "text-gray-600"}`}>Despesas Totais</p>
-              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-rose-600"}`}>R$ 65.000,00</p>
-              <p className={`text-xs ${cardStyle === "solid" ? "text-white/90" : "text-gray-500"}`}>
+              <p className="text-sm font-medium mb-1">Despesas Totais</p>
+              <p className={`text-2xl font-bold ${getTextColor("rose", true)}`}>R$ 65.000,00</p>
+              <p className="text-xs mt-1">
                 +5% vs. mês anterior
-                <span className="block text-white/80">(R$ 61.905,00)</span>
+                <span className="block mt-0.5">(R$ 61.905,00)</span>
               </p>
             </div>
             <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-rose-100 p-3 rounded-full"}>
@@ -52,11 +59,11 @@ export const FinancialMetrics = () => {
         <Card className={getCardClassName("blue-500")}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`text-sm ${cardStyle === "solid" ? "text-white/90" : "text-gray-600"}`}>Resultado do Mês</p>
-              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-blue-600"}`}>R$ 7.000,00</p>
-              <p className={`text-xs ${cardStyle === "solid" ? "text-white/90" : "text-gray-500"}`}>
+              <p className="text-sm font-medium mb-1">Resultado do Mês</p>
+              <p className={`text-2xl font-bold ${getTextColor("blue", true)}`}>R$ 7.000,00</p>
+              <p className="text-xs mt-1">
                 +15% vs. mês anterior
-                <span className="block text-white/80">(R$ 6.087,00)</span>
+                <span className="block mt-0.5">(R$ 6.087,00)</span>
               </p>
             </div>
             <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-blue-100 p-3 rounded-full"}>
