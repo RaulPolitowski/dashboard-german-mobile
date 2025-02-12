@@ -1,12 +1,12 @@
 
-import { ChartBar, ChartPie } from "lucide-react";
+import { ChartBar } from "lucide-react";
 import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
-import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
+import { ExpensesTable } from "./ExpensesTable";
 import { useState } from "react";
 
 export const FinancialCharts = () => {
-  const [period, setPeriod] = useState("3");
+  const [period, setPeriod] = useState("week");
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
@@ -38,23 +38,7 @@ export const FinancialCharts = () => {
         </div>
       </Card>
 
-      <Card className="p-4 md:p-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-2 md:gap-0">
-          <div>
-            <h3 className="text-base md:text-lg font-semibold text-gray-900">Distribuição de Despesas</h3>
-            <p className="text-sm text-gray-600">
-              Total: R$ 93.000,00
-              <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded">
-                +5.8% vs mês anterior (R$ 87.900,00)
-              </span>
-            </p>
-          </div>
-          <ChartPie className="w-4 h-4 md:w-5 md:h-5 text-gray-500" />
-        </div>
-        <div className="h-[250px] md:h-[300px]">
-          <ExpensesDistributionChart />
-        </div>
-      </Card>
+      <ExpensesTable />
     </div>
   );
 };
