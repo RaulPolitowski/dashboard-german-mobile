@@ -1,5 +1,8 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { BudgetMetrics } from "./operations/BudgetMetrics";
+import { Card } from "../ui/card";
+import { BarChart } from "lucide-react";
 
 export const OperationsSection = () => {
   return (
