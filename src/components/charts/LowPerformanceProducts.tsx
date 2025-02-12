@@ -1,3 +1,4 @@
+
 import { Package, AlertTriangle, TrendingUp, TrendingDown } from "lucide-react";
 import { Card } from "../ui/card";
 import { differenceInDays } from "date-fns";
@@ -14,7 +15,7 @@ const lowPerformingProducts = [
     lastWeekValue: 0,
     previousWeekSales: 1,
     previousWeekValue: 500,
-    salesTrend: -100 // queda de 100% em relação à semana anterior
+    salesTrend: -100 
   },
   { 
     id: 2, 
@@ -26,16 +27,104 @@ const lowPerformingProducts = [
     lastWeekValue: 800,
     previousWeekSales: 0,
     previousWeekValue: 0,
-    salesTrend: Infinity // aumento de infinito% (de 0 para algum valor)
+    salesTrend: Infinity 
   },
-  { id: 3, name: "Smart Watch X", sales: 12000, lastSale: "2024-02-15", stock: 25, lastWeekSales: 2, lastWeekValue: 1200, salesPercentage: 1.5 },
-  { id: 4, name: "Projetor Mini", sales: 15000, lastSale: "2024-01-30", stock: 20, lastWeekSales: 1, lastWeekValue: 1500, salesPercentage: 1.8 },
-  { id: 5, name: "Speaker BT", sales: 18000, lastSale: "2024-02-10", stock: 35, lastWeekSales: 2, lastWeekValue: 1800, salesPercentage: 2.2 },
-  { id: 6, name: "Mouse Pad RGB", sales: 4000, lastSale: "2024-01-20", stock: 50, lastWeekSales: 0, lastWeekValue: 0, salesPercentage: 0.5 },
-  { id: 7, name: "Webcam Basic", sales: 6000, lastSale: "2024-01-25", stock: 40, lastWeekSales: 1, lastWeekValue: 600, salesPercentage: 0.7 },
-  { id: 8, name: "Headset Gamer", sales: 9000, lastSale: "2024-02-05", stock: 28, lastWeekSales: 1, lastWeekValue: 900, salesPercentage: 1.1 },
-  { id: 9, name: "Teclado Básico", sales: 7000, lastSale: "2024-01-28", stock: 55, lastWeekSales: 0, lastWeekValue: 0, salesPercentage: 0.9 },
-  { id: 10, name: "Hub USB", sales: 5500, lastSale: "2024-02-08", stock: 42, lastWeekSales: 1, lastWeekValue: 550, salesPercentage: 0.7 },
+  { 
+    id: 3, 
+    name: "Smart Watch X", 
+    sales: 12000, 
+    lastSale: "2024-02-15", 
+    stock: 25, 
+    lastWeekSales: 2, 
+    lastWeekValue: 1200,
+    previousWeekSales: 3,
+    previousWeekValue: 1800,
+    salesTrend: -33.33
+  },
+  { 
+    id: 4, 
+    name: "Projetor Mini", 
+    sales: 15000, 
+    lastSale: "2024-01-30", 
+    stock: 20, 
+    lastWeekSales: 1, 
+    lastWeekValue: 1500,
+    previousWeekSales: 2,
+    previousWeekValue: 3000,
+    salesTrend: -50
+  },
+  { 
+    id: 5, 
+    name: "Speaker BT", 
+    sales: 18000, 
+    lastSale: "2024-02-10", 
+    stock: 35, 
+    lastWeekSales: 2, 
+    lastWeekValue: 1800,
+    previousWeekSales: 1,
+    previousWeekValue: 900,
+    salesTrend: 100
+  },
+  { 
+    id: 6, 
+    name: "Mouse Pad RGB", 
+    sales: 4000, 
+    lastSale: "2024-01-20", 
+    stock: 50, 
+    lastWeekSales: 0, 
+    lastWeekValue: 0,
+    previousWeekSales: 1,
+    previousWeekValue: 400,
+    salesTrend: -100
+  },
+  { 
+    id: 7, 
+    name: "Webcam Basic", 
+    sales: 6000, 
+    lastSale: "2024-01-25", 
+    stock: 40, 
+    lastWeekSales: 1, 
+    lastWeekValue: 600,
+    previousWeekSales: 0,
+    previousWeekValue: 0,
+    salesTrend: Infinity
+  },
+  { 
+    id: 8, 
+    name: "Headset Gamer", 
+    sales: 9000, 
+    lastSale: "2024-02-05", 
+    stock: 28, 
+    lastWeekSales: 1, 
+    lastWeekValue: 900,
+    previousWeekSales: 2,
+    previousWeekValue: 1800,
+    salesTrend: -50
+  },
+  { 
+    id: 9, 
+    name: "Teclado Básico", 
+    sales: 7000, 
+    lastSale: "2024-01-28", 
+    stock: 55, 
+    lastWeekSales: 0, 
+    lastWeekValue: 0,
+    previousWeekSales: 1,
+    previousWeekValue: 700,
+    salesTrend: -100
+  },
+  { 
+    id: 10, 
+    name: "Hub USB", 
+    sales: 5500, 
+    lastSale: "2024-02-08", 
+    stock: 42, 
+    lastWeekSales: 1, 
+    lastWeekValue: 550,
+    previousWeekSales: 1,
+    previousWeekValue: 550,
+    salesTrend: 0
+  },
 ];
 
 const ITEMS_PER_PAGE = 5;
@@ -49,9 +138,10 @@ export const LowPerformanceProducts = () => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  const formatTrend = (trend: number) => {
-    if (trend === Infinity) return "+100";
-    if (trend === -Infinity) return "-100";
+  const formatTrend = (trend: number | undefined) => {
+    if (trend === undefined || isNaN(trend)) return "0.0";
+    if (trend === Infinity) return "+100.0";
+    if (trend === -Infinity) return "-100.0";
     return trend.toFixed(1);
   };
 
@@ -92,7 +182,7 @@ export const LowPerformanceProducts = () => {
                   </p>
                   <div className="text-sm space-y-1">
                     <div className="flex items-center justify-end gap-1">
-                      {product.salesTrend > 0 ? (
+                      {(product.salesTrend || 0) > 0 ? (
                         <>
                           <TrendingUp className="w-4 h-4 text-emerald-500" />
                           <span className="text-emerald-600 font-medium">
