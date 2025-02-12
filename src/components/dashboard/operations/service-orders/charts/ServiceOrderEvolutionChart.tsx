@@ -1,8 +1,11 @@
-
 import { useState } from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
 import { Card } from '../../../../ui/card';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../../../ui/select';
+
+interface ServiceOrderEvolutionChartProps {
+  timeFilter: string;
+}
 
 const mockEvolutionData = {
   monthly: [
@@ -22,9 +25,7 @@ const mockEvolutionData = {
 
 const COLORS = ['#10B981', '#6366F1', '#EF4444'];
 
-export const ServiceOrderEvolutionChart = () => {
-  const [timeFilter, setTimeFilter] = useState('monthly');
-
+export const ServiceOrderEvolutionChart = ({ timeFilter }: ServiceOrderEvolutionChartProps) => {
   const totals = mockEvolutionData.monthly.reduce((acc, curr) => ({
     completed: acc.completed + curr.completed,
     inProgress: acc.inProgress + curr.inProgress,

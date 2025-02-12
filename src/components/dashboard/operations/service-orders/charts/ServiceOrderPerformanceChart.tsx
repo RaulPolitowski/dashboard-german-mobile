@@ -1,7 +1,10 @@
-
 import { useState } from 'react';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../../../ui/select';
+
+interface ServiceOrderPerformanceChartProps {
+  timeFilter: string;
+}
 
 const mockPerformanceData = {
   monthly: [
@@ -20,9 +23,7 @@ const mockPerformanceData = {
 
 const COLORS = ['#10B981', '#EF4444'];
 
-export const ServiceOrderPerformanceChart = () => {
-  const [timeFilter, setTimeFilter] = useState('monthly');
-
+export const ServiceOrderPerformanceChart = ({ timeFilter }: ServiceOrderPerformanceChartProps) => {
   const averages = {
     completionTime: Number((mockPerformanceData.monthly.reduce((acc, curr) => acc + curr.completionTime, 0) / mockPerformanceData.monthly.length).toFixed(1)),
     onTimeRate: Number((mockPerformanceData.monthly.reduce((acc, curr) => acc + curr.onTimeRate, 0) / mockPerformanceData.monthly.length).toFixed(1)),
