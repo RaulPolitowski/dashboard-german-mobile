@@ -20,14 +20,10 @@ export const AccountsSection = () => {
   const [showReceivablesDialog, setShowReceivablesDialog] = useState(false);
   const [showPayablesDialog, setShowPayablesDialog] = useState(false);
 
-  const getCardClassName = (baseColor: string) => {
-    const baseClasses = "p-4 hover:shadow-lg transition-all cursor-pointer";
-    const darkClasses = `dark:bg-${baseColor} dark:border-0`;
-    
-    if (cardStyle === "solid") {
-      return `${baseClasses} bg-${baseColor} text-white ${darkClasses}`;
-    }
-    return `${baseClasses} bg-white dark:bg-gray-800 bg-gradient-to-br from-${baseColor}/20 via-${baseColor}/10 to-transparent border border-${baseColor}/30`;
+  const getCardStyle = (color: string) => {
+    return cardStyle === "solid" 
+      ? `bg-${color} text-white`
+      : `bg-gradient-to-br from-${color}/10 to-white border border-${color}/20 dark:from-${color}/20 dark:to-gray-800`;
   };
 
   return (
@@ -35,40 +31,40 @@ export const AccountsSection = () => {
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Contas e Previsões</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-        <Card className={getCardClassName("emerald-500")}>
+        <Card className={`p-4 hover:shadow-lg transition-all ${getCardStyle("emerald-500")}`}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Contas a Receber</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>Contas a Receber</p>
               <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-emerald-600 dark:text-emerald-400"}`}>R$ 45.000,00</p>
-              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>Próximos 30 dias</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-400"}`}>Próximos 30 dias</p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-full"}>
+            <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-emerald-100 dark:bg-emerald-500/20"}`}>
               <CreditCard className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-emerald-500 dark:text-emerald-400"}`} />
             </div>
           </div>
         </Card>
 
-        <Card className={getCardClassName("rose-500")}>
+        <Card className={`p-4 hover:shadow-lg transition-all ${getCardStyle("rose-500")}`}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Contas a Pagar</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>Contas a Pagar</p>
               <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-rose-600 dark:text-rose-400"}`}>R$ 38.000,00</p>
-              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>Próximos 30 dias</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-400"}`}>Próximos 30 dias</p>
             </div>
-            <div className={`${cardStyle === "solid" ? "bg-white/20" : "bg-rose-100 dark:bg-rose-900/30"} p-3 rounded-full`}>
+            <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-rose-100 dark:bg-rose-500/20"}`}>
               <Clock className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500 dark:text-rose-400"}`} />
             </div>
           </div>
         </Card>
 
-        <Card className={getCardClassName("blue-500")}>
+        <Card className={`p-4 hover:shadow-lg transition-all ${getCardStyle("blue-500")}`}>
           <div className="flex items-center justify-between">
             <div>
-              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Saldo Previsto</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>Saldo Previsto</p>
               <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-blue-600 dark:text-blue-400"}`}>R$ 7.000,00</p>
-              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>Final do mês</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-400"}`}>Final do mês</p>
             </div>
-            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full"}>
+            <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-blue-100 dark:bg-blue-500/20"}`}>
               <PiggyBank className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-blue-500 dark:text-blue-400"}`} />
             </div>
           </div>
@@ -77,32 +73,32 @@ export const AccountsSection = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
         <Card 
-          className={getCardClassName("amber-500")}
+          className={`p-4 hover:shadow-lg transition-all cursor-pointer ${getCardStyle("amber-500")}`}
           onClick={() => setShowReceivablesDialog(true)}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Recebimentos em Atraso</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>Recebimentos em Atraso</p>
               <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-amber-600 dark:text-amber-400"}`}>R$ 12.500,00</p>
-              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>8 títulos pendentes</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-400"}`}>8 títulos pendentes</p>
             </div>
-            <div className={`${cardStyle === "solid" ? "bg-white/20" : "bg-amber-100 dark:bg-amber-900/30"} p-3 rounded-full`}>
+            <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-amber-100 dark:bg-amber-500/20"}`}>
               <AlertTriangle className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-amber-500 dark:text-amber-400"}`} />
             </div>
           </div>
         </Card>
 
         <Card 
-          className={getCardClassName("rose-500")}
+          className={`p-4 hover:shadow-lg transition-all cursor-pointer ${getCardStyle("rose-500")}`}
           onClick={() => setShowPayablesDialog(true)}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-200"}`}>Pagamentos em Atraso</p>
+              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>Pagamentos em Atraso</p>
               <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-rose-600 dark:text-rose-400"}`}>R$ 8.300,00</p>
-              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-300"}`}>5 títulos pendentes</p>
+              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-gray-400"}`}>5 títulos pendentes</p>
             </div>
-            <div className={`${cardStyle === "solid" ? "bg-white/20" : "bg-rose-100 dark:bg-rose-900/30"} p-3 rounded-full`}>
+            <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-rose-100 dark:bg-rose-500/20"}`}>
               <AlertTriangle className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500 dark:text-rose-400"}`} />
             </div>
           </div>
