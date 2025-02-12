@@ -1,7 +1,6 @@
 
 import { Medal } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Checkbox } from "../ui/checkbox";
 
 const salesData = [
   { id: '1', name: "João Silva", sales: 156000, transactions: 45, avgTicket: 3466.67 },
@@ -13,48 +12,20 @@ const salesData = [
 
 interface SalesRankingProps {
   onSellerSelect: (seller: any) => void;
-  onCompareSelect: (seller: any) => void;
   selectedSellerId?: string;
-  compareSellerId?: string;
 }
 
-export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId, compareSellerId }: SalesRankingProps) => {
-  const isMobile = useIsMobile();
-
-  const handleCheckboxChange = (seller: any, checked: boolean) => {
-    if (checked) {
-      // Se o vendedor clicado é diferente do selecionado, permitir comparação
-      if (seller.id !== selectedSellerId) {
-        onCompareSelect(seller);
-      }
-    } else {
-      onCompareSelect(null);
-    }
-  };
-
-  const isCompareSelected = (sellerId: string) => {
-    return sellerId === compareSellerId;
-  };
-
+export const SalesRanking = ({ onSellerSelect, selectedSellerId }: SalesRankingProps) => {
   return (
     <div className="space-y-4">
       {salesData.map((seller, index) => (
         <div
           key={seller.id}
-          onClick={() => {
-            // Ao clicar no card, apenas seleciona o vendedor se não estiver comparando
-            if (!isCompareSelected(seller.id)) {
-              onSellerSelect(seller);
-              // Limpa a comparação se o vendedor selecionado mudar
-              if (compareSellerId) {
-                onCompareSelect(null);
-              }
-            }
-          }}
+          onClick={() => onSellerSelect(seller)}
           className={`p-4 rounded-lg bg-gradient-to-r from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 border ${
-            selectedSellerId === seller.id ? 'border-[#6366F1] shadow-md' :
-            compareSellerId === seller.id ? 'border-emerald-500 shadow-md' :
-            'border-[#6366F1]/20'
+            selectedSellerId === seller.id 
+              ? 'border-[#6366F1] shadow-md' 
+              : 'border-[#6366F1]/20'
           } hover:shadow-md transition-all cursor-pointer`}
         >
           <div className="flex items-center justify-between">
@@ -72,24 +43,9 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
                   "text-blue-500"
                 }`} />
               </div>
-              <div className="flex items-center gap-3">
-                <div>
-                  <p className="font-medium text-gray-700 dark:text-gray-200">{seller.name}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{seller.transactions} vendas</p>
-                </div>
-                <Checkbox
-                  checked={isCompareSelected(seller.id)}
-                  onCheckedChange={(checked) => handleCheckboxChange(seller, checked as boolean)}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // No mobile, precisamos garantir que o evento de clique do checkbox funcione
-                    if (isMobile) {
-                      handleCheckboxChange(seller, !isCompareSelected(seller.id));
-                    }
-                  }}
-                  disabled={!isCompareSelected(seller.id) && compareSellerId !== null && seller.id !== selectedSellerId}
-                  className="ml-2"
-                />
+              <div>
+                <p className="font-medium text-gray-700 dark:text-gray-200">{seller.name}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{seller.transactions} vendas</p>
               </div>
             </div>
             <div className="text-right">
@@ -104,7 +60,7 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
         </div>
       ))}
       <p className="text-sm text-gray-500 dark:text-gray-400 italic mt-2">
-        Clique no card para selecionar um vendedor. Marque as caixas de seleção para comparar dois vendedores.
+        Clique no card para selecionar um vendedor
       </p>
     </div>
   );

@@ -4,6 +4,21 @@ import { Card } from "../ui/card";
 import { ChevronDown, ChevronUp, TrendingUp, TrendingDown } from "lucide-react";
 import { SalesRanking } from "../charts/SalesRanking";
 import { PerformanceSection } from "./performance/PerformanceSection";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+const salesData = [
+  { id: '1', name: "João Silva", sales: 156000, transactions: 45, avgTicket: 3466.67 },
+  { id: '2', name: "Maria Santos", sales: 142000, transactions: 38, avgTicket: 3736.84 },
+  { id: '3', name: "Pedro Oliveira", sales: 128000, transactions: 35, avgTicket: 3657.14 },
+  { id: '4', name: "Ana Costa", sales: 98000, transactions: 28, avgTicket: 3500.00 },
+  { id: '5', name: "Carlos Souza", sales: 85000, transactions: 25, avgTicket: 3400.00 },
+];
 
 export const RankingSection = () => {
   const [selectedSeller, setSelectedSeller] = useState<any>(null);
@@ -14,6 +29,11 @@ export const RankingSection = () => {
     week: { change: 15, value: 42000, previousValue: 36500 },
     month: { change: -5, value: 156000, previousValue: 164200 },
     year: { change: 22, value: 1840000, previousValue: 1508200 }
+  };
+
+  const handleCompareSelect = (sellerId: string) => {
+    const seller = salesData.find(s => s.id === sellerId);
+    setCompareSeller(seller || null);
   };
 
   return (
@@ -37,9 +57,7 @@ export const RankingSection = () => {
         </div>
         <SalesRanking 
           onSellerSelect={setSelectedSeller}
-          onCompareSelect={setCompareSeller}
           selectedSellerId={selectedSeller?.id}
-          compareSellerId={compareSeller?.id}
         />
       </Card>
 
@@ -48,9 +66,33 @@ export const RankingSection = () => {
           <div className="space-y-4">
             <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 backdrop-blur-sm border border-[#6366F1]/20">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-[#6366F1] dark:text-[#818cf8]">
-                  Insights de Performance
-                </h3>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-[#6366F1] dark:text-[#818cf8] mb-2">
+                    Insights de Performance
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      Comparar com:
+                    </span>
+                    <Select
+                      value={compareSeller?.id || ""}
+                      onValueChange={handleCompareSelect}
+                    >
+                      <SelectTrigger className="w-[200px]">
+                        <SelectValue placeholder="Selecione um vendedor" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {salesData
+                          .filter(seller => seller.id !== selectedSeller.id)
+                          .map(seller => (
+                            <SelectItem key={seller.id} value={seller.id}>
+                              {seller.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
                 <button 
                   onClick={() => setPerformanceMinimized(true)}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
