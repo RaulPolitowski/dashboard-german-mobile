@@ -4,18 +4,20 @@ import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
 import { ExpensesTable } from "./ExpensesTable";
 import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
-import { PaymentMethodTable } from "../charts/PaymentMethodTable";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
+import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
 
 export const FinancialCharts = () => {
   const [period, setPeriod] = useState("week");
   const [isMinimized, setIsMinimized] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const totals = calculateTotals(period);
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 gap-4 md:gap-6">
         <Card className="p-4 md:p-6">
           {isMinimized ? (
             <div 
@@ -79,34 +81,34 @@ export const FinancialCharts = () => {
                 </div>
               </div>
 
-              <div className="h-[200px] md:h-[250px]">
+              <div 
+                className="h-[200px] md:h-[250px] cursor-pointer"
+                onClick={() => setShowDetails(true)}
+              >
                 <CashFlowChart period={period} />
               </div>
             </>
           )}
         </Card>
-
-        <Card className="p-4 md:p-6 h-fit">
-          <PaymentMethodTable data={totals.paymentMethods} period={period} />
-        </Card>
       </div>
 
       <ExpensesTable />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-        <Card className="p-4 md:p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Análise de Custos</h3>
-          <div className="h-[300px]">
-            <ExpensesDistributionChart />
-          </div>
-        </Card>
-        <Card className="p-4 md:p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribuição de Despesas</h3>
-          <div className="h-[300px]">
-            <ExpensesDistributionChart />
-          </div>
-        </Card>
-      </div>
+      <Card className="p-4 md:p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribuição de Despesas</h3>
+        <div className="h-[300px]">
+          <ExpensesDistributionChart />
+        </div>
+      </Card>
+
+      <Dialog open={showDetails} onOpenChange={setShowDetails}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Detalhamento por Forma de Pagamento</DialogTitle>
+          </DialogHeader>
+          <PaymentMethodDetails data={totals.paymentMethods} period={period} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -1,6 +1,14 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
 import { Card } from "../../ui/card";
 import { MonthlyData } from "../data/monthlyAnalysisData";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../ui/select";
+import { useState } from "react";
 
 type SalesAnalysisTableProps = {
   monthlyData: MonthlyData[];
@@ -13,9 +21,25 @@ export const SalesAnalysisTable = ({
   selectedYear,
   getYearOverYearComparison 
 }: SalesAnalysisTableProps) => {
+  const years = Array.from({ length: 5 }, (_, i) => {
+    const year = new Date().getFullYear() - i;
+    return year.toString();
+  });
+
   return (
     <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 backdrop-blur-sm border border-[#6366F1]/20">
-      <h3 className="text-lg font-semibold text-[#6366F1] mb-4">Análise de Vendas Mensal</h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-[#6366F1]">Análise de Vendas Mensal</h3>
+        <select 
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
+        >
+          {years.map((year) => (
+            <option key={year} value={year}>{year}</option>
+          ))}
+        </select>
+      </div>
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
