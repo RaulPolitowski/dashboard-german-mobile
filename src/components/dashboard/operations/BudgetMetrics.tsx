@@ -4,7 +4,6 @@ import { Card } from "../../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { 
   AlertTriangle, 
-  BarChart, 
   Clock, 
   FileQuestion, 
   TimerOff, 
@@ -15,25 +14,30 @@ import {
   DollarSign
 } from "lucide-react";
 import { BudgetCharts } from "./BudgetCharts";
-import { PowerBIEmbed } from "./PowerBIEmbed";
 import { mockBudgetData } from "./data/mockBudgetData";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../ui/select";
 import { differenceInDays } from "date-fns";
 import { OverdueDetailsDialog } from "../OverdueDetailsDialog";
+import { DueTodayCard } from "../DueTodayCard";
 
 const timeRanges = ["7D", "15D", "30D", "90D"] as const;
 type TimeRange = (typeof timeRanges)[number];
 
 export const BudgetMetrics = () => {
   const [selectedRange, setSelectedRange] = useState<TimeRange>("30D");
-  const [selectedView, setSelectedView] = useState<"charts" | "powerbi">("charts");
   const [selectedSeller, setSelectedSeller] = useState<string>("all");
   const [showOverdueDetails, setShowOverdueDetails] = useState(false);
+  const [showLostDetails, setShowLostDetails] = useState(false);
 
   const overdueItems = [
-    { id: "1", date: "2024-02-01", value: 12500, entity: "Cliente A", description: "Projeto X" },
-    { id: "2", date: "2024-02-05", value: 8900, entity: "Cliente B", description: "Serviço Y" },
-    { id: "3", date: "2024-02-10", value: 15600, entity: "Cliente C", description: "Produto Z" },
+    { id: "1", date: "2024-02-01", value: 12500, entity: "Cliente A", description: "Projeto X", seller: "João Silva" },
+    { id: "2", date: "2024-02-05", value: 8900, entity: "Cliente B", description: "Serviço Y", seller: "Maria Santos" },
+    { id: "3", date: "2024-02-10", value: 15600, entity: "Cliente C", description: "Produto Z", seller: "Pedro Oliveira" },
+  ];
+
+  const lostItems = [
+    { id: "1", date: "2024-02-15", value: 18500, entity: "Cliente D", description: "Projeto W", seller: "João Silva" },
+    { id: "2", date: "2024-02-18", value: 22000, entity: "Cliente E", description: "Serviço V", seller: "Maria Santos" },
   ];
 
   return (
@@ -71,29 +75,11 @@ export const BudgetMetrics = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Tabs value={selectedView} className="w-fit">
-            <TabsList>
-              <TabsTrigger 
-                value="charts" 
-                onClick={() => setSelectedView("charts")}
-                className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white"
-              >
-                Gráficos
-              </TabsTrigger>
-              <TabsTrigger 
-                value="powerbi"
-                onClick={() => setSelectedView("powerbi")}
-                className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white"
-              >
-                Power BI
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
       </div>
 
       {/* Métricas Principais */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
           <div className="flex justify-between items-start">
             <div>
@@ -119,46 +105,39 @@ export const BudgetMetrics = () => {
           </div>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+        <Card 
+          className="p-4 bg-gradient-to-br from-rose-500 to-rose-600 text-white cursor-pointer hover:shadow-lg transition-all"
+          onClick={() => setShowLostDetails(true)}
+        >
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white/90">Taxa de Conversão</p>
-              <h3 className="text-2xl font-bold">68%</h3>
-              <p className="text-sm text-white/90">+5% vs. anterior</p>
+              <p className="text-white/90">Orçamentos Perdidos</p>
+              <h3 className="text-2xl font-bold">12</h3>
+              <p className="text-sm text-white/90">R$ 75.000,00</p>
             </div>
-            <TrendingUp className="h-6 w-6 text-white" />
-          </div>
-        </Card>
-
-        <Card className="p-4 bg-gradient-to-br from-violet-500 to-violet-600 text-white">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-white/90">Tempo Médio Resposta</p>
-              <h3 className="text-2xl font-bold">3.2 dias</h3>
-              <p className="text-sm text-white/90">Meta: 2.5 dias</p>
-            </div>
-            <Clock className="h-6 w-6 text-white" />
+            <XCircle className="h-6 w-6 text-white" />
           </div>
         </Card>
       </div>
 
-      {/* Visualizações */}
-      {selectedView === "charts" ? (
-        <BudgetCharts />
-      ) : (
-        <PowerBIEmbed 
-          embedUrl="SEU_LINK_DO_POWER_BI_AQUI"
-          height="800px"
-          title="Dashboard de Orçamentos"
-        />
-      )}
+      <DueTodayCard />
 
-      {/* Diálogo de Detalhes de Orçamentos Vencidos */}
+      {/* Visualizações */}
+      <BudgetCharts />
+
+      {/* Diálogos de Detalhes */}
       <OverdueDetailsDialog
         isOpen={showOverdueDetails}
         onClose={() => setShowOverdueDetails(false)}
-        type="payable"
+        type="overdue"
         items={overdueItems}
+      />
+
+      <OverdueDetailsDialog
+        isOpen={showLostDetails}
+        onClose={() => setShowLostDetails(false)}
+        type="lost"
+        items={lostItems}
       />
     </div>
   );
