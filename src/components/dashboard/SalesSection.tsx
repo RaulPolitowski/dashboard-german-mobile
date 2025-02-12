@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MetricsCards } from "./sales/MetricsCards";
 import { SalesEvolutionCard } from "./sales/SalesEvolutionCard";
@@ -63,6 +62,8 @@ export const SalesSection = () => {
         onToggleInsights={() => setInsightsMinimized(!isInsightsMinimized)}
       />
 
+      <ProductPerformanceSection />
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="p-4 md:p-6">
           {isPaymentMethodMinimized ? (
@@ -98,6 +99,15 @@ export const SalesSection = () => {
         onMonthlySalesClose={() => setShowMonthlySales(false)}
         todaysSales={todaysSales}
       />
+    </div>
+  );
+};
+
+export const ProductPerformanceSection = () => {
+  return (
+    <div>
+      <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Performance de Produtos</h2>
+      <p className="text-gray-500 dark:text-gray-400">Detalhes sobre a performance de produtos vendidos.</p>
     </div>
   );
 };

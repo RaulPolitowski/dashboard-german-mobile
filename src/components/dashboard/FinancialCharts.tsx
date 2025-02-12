@@ -1,4 +1,3 @@
-
 import { ChartBar, ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
@@ -8,12 +7,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 export const FinancialCharts = () => {
   const [period, setPeriod] = useState("week");
   const [isMinimized, setIsMinimized] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const totals = calculateTotals(period);
+
+  const shouldShowPieChart = ['day', 'currentWeek', 'currentMonth'].includes(period);
+
+  const pieData = [
+    { name: 'Entrada', value: totals.revenue, color: '#10B981' },
+    { name: 'Saída', value: totals.expenses, color: '#EF4444' },
+  ];
 
   return (
     <div className="space-y-6">
@@ -42,7 +49,9 @@ export const FinancialCharts = () => {
                     onChange={(e) => setPeriod(e.target.value)}
                     className="w-full md:w-auto px-2 py-1 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white text-gray-700"
                   >
-                    <option value="week">Semana atual</option>
+                    <option value="day">Hoje</option>
+                    <option value="currentWeek">Semana atual</option>
+                    <option value="currentMonth">Mês atual</option>
                     <option value="3">Últimos 3 meses</option>
                     <option value="6">Últimos 6 meses</option>
                     <option value="12">Último ano</option>
@@ -85,7 +94,29 @@ export const FinancialCharts = () => {
                 className="h-[200px] md:h-[250px] cursor-pointer"
                 onClick={() => setShowDetails(true)}
               >
-                <CashFlowChart period={period} />
+                {shouldShowPieChart ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, value }) => `${name}: R$ ${value.toLocaleString()}`}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <CashFlowChart period={period} />
+                )}
               </div>
             </>
           )}

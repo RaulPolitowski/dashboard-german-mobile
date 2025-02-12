@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Card } from '../ui/card';
 import { Clock, TrendingUp, TrendingDown, AlertCircle } from 'lucide-react';
+import { format, subDays, startOfWeek, endOfWeek } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const timeRanges = [
   { id: '08:00-10:00', label: '08:00 às 10:00', color: 'hsl(220, 91%, 65%)' },
@@ -70,140 +72,56 @@ const data = [
   },
 ];
 
-const insights = [
-  {
-    icon: TrendingUp,
-    color: 'text-emerald-500',
-    bgColor: 'bg-emerald-500/10',
-    borderColor: 'border-emerald-500/20',
-    title: 'Pico de Vendas',
-    description: 'Das 15h às 18h concentra maior volume, especialmente sexta e sábado'
-  },
-  {
-    icon: TrendingDown,
-    color: 'text-amber-500',
-    bgColor: 'bg-amber-500/10',
-    borderColor: 'border-amber-500/20',
-    title: 'Menor Movimento',
-    description: 'Início da manhã aos domingos apresenta menor fluxo'
-  },
-  {
-    icon: Clock,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'border-blue-500/20',
-    title: 'Horário Nobre',
-    description: 'Entre 15h e 18h tem o maior ticket médio de vendas'
-  },
-  {
-    icon: AlertCircle,
-    color: 'text-violet-500',
-    bgColor: 'bg-violet-500/10',
-    borderColor: 'border-violet-500/20',
-    title: 'Oportunidade',
-    description: 'Potencial para promoções das 10h às 12h para aumentar fluxo'
-  }
-];
+interface DateRange {
+  start: Date;
+  end: Date;
+}
 
 export const WeeklySalesChart = () => {
   const [selectedRange, setSelectedRange] = useState('all');
+  const [customDateRange, setCustomDateRange] = useState<DateRange>({
+    start: subDays(new Date(), 7),
+    end: new Date()
+  });
+  const [dateFilter, setDateFilter] = useState<'last7' | 'currentWeek'>('last7');
   
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      
-      const calculateDayTotal = () => {
-        const totals = timeRanges.reduce((acc, range) => {
-          const rangeData = data[range.id];
-          return {
-            value: acc.value + (rangeData?.value || 0),
-            transactions: acc.transactions + (rangeData?.transactions || 0)
-          };
-        }, { value: 0, transactions: 0 });
-        
-        return totals;
-      };
-      
-      return (
-        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-          <p className="font-medium text-gray-700 mb-2">{label}</p>
-          {selectedRange === 'all' ? (
-            <div className="space-y-3">
-              {timeRanges.map((range) => {
-                const rangeData = data[range.id];
-                if (!rangeData) return null;
-                
-                return (
-                  <div key={range.id} className="border-b border-gray-100 pb-2 last:border-0">
-                    <p className="text-sm font-medium text-gray-600">{range.label}</p>
-                    <div className="grid grid-cols-2 gap-2 mt-1">
-                      <p className="text-sm text-gray-600">
-                        Valor: <span className="font-medium text-[#6366F1]">
-                          R$ {rangeData.value?.toLocaleString() || '0'}
-                        </span>
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        Vendas: <span className="font-medium text-[#6366F1]">
-                          {rangeData.transactions || 0}
-                        </span>
-                      </p>
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      Ticket Médio: <span className="font-medium text-[#6366F1]">
-                        R$ {rangeData.transactions ? Math.round(rangeData.value / rangeData.transactions).toLocaleString() : '0'}
-                      </span>
-                    </p>
-                  </div>
-                );
-              })}
-              <div className="pt-2 border-t border-gray-200">
-                <p className="text-sm font-medium text-gray-700">Total do Dia</p>
-                <div className="grid grid-cols-2 gap-2 mt-1">
-                  <p className="text-sm text-gray-600">
-                    Valor: <span className="font-medium text-emerald-600">
-                      R$ {calculateDayTotal().value.toLocaleString()}
-                    </span>
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Vendas: <span className="font-medium text-emerald-600">
-                      {calculateDayTotal().transactions}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="mt-2">
-                {data[selectedRange] ? (
-                  <>
-                    <p className="text-sm text-gray-600">
-                      Valor Total: <span className="font-medium text-[#6366F1]">
-                        R$ {data[selectedRange].value?.toLocaleString() || '0'}
-                      </span>
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Vendas: <span className="font-medium text-[#6366F1]">
-                        {data[selectedRange].transactions || 0}
-                      </span>
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Ticket Médio: <span className="font-medium text-[#6366F1]">
-                        R$ {data[selectedRange].transactions ? 
-                          Math.round(data[selectedRange].value / data[selectedRange].transactions).toLocaleString() : '0'}
-                      </span>
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-sm text-gray-600">Dados não disponíveis</p>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-    return null;
+  const calculateAverageByWeekday = (start: Date, end: Date) => {
+    const weekdayAverages = {
+      'Segunda': { total: 0, count: 0 },
+      'Terça': { total: 0, count: 0 },
+      'Quarta': { total: 0, count: 0 },
+      'Quinta': { total: 0, count: 0 },
+      'Sexta': { total: 0, count: 0 },
+      'Sábado': { total: 0, count: 0 },
+      'Domingo': { total: 0, count: 0 }
+    };
+
+    data.forEach(day => {
+      weekdayAverages[day.day].total += Object.values(day).reduce((acc: number, curr: any) => {
+        if (typeof curr === 'object' && curr.value) {
+          return acc + curr.value;
+        }
+        return acc;
+      }, 0);
+      weekdayAverages[day.day].count++;
+    });
+
+    return Object.entries(weekdayAverages).map(([day, values]) => ({
+      day,
+      average: values.count > 0 ? values.total / values.count : 0
+    }));
+  };
+
+  const getCurrentWeekData = () => {
+    const start = startOfWeek(new Date(), { locale: ptBR });
+    const end = endOfWeek(new Date(), { locale: ptBR });
+    return calculateAverageByWeekday(start, end);
+  };
+
+  const getLast7DaysData = () => {
+    const start = subDays(new Date(), 7);
+    const end = new Date();
+    return calculateAverageByWeekday(start, end);
   };
 
   return (
@@ -213,20 +131,64 @@ export const WeeklySalesChart = () => {
           <h3 className="text-lg font-semibold text-gray-700">Análise de Vendas por Dia e Horário</h3>
           <p className="text-sm text-gray-500">Distribuição semanal de vendas por intervalo de horário</p>
         </div>
-        <select
-          value={selectedRange}
-          onChange={(e) => setSelectedRange(e.target.value)}
-          className="mt-2 md:mt-0 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
-        >
-          <option value="all">Todos os horários</option>
-          {timeRanges.map((range) => (
-            <option key={range.id} value={range.id}>{range.label}</option>
-          ))}
-        </select>
+        <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
+          <select
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value as 'last7' | 'currentWeek')}
+            className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
+          >
+            <option value="last7">Últimos 7 dias</option>
+            <option value="currentWeek">Semana atual</option>
+          </select>
+          <select
+            value={selectedRange}
+            onChange={(e) => setSelectedRange(e.target.value)}
+            className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
+          >
+            <option value="all">Todos os horários</option>
+            {timeRanges.map((range) => (
+              <option key={range.id} value={range.id}>{range.label}</option>
+            ))}
+          </select>
+          <div className="flex gap-2">
+            <input
+              type="date"
+              value={format(customDateRange.start, 'yyyy-MM-dd')}
+              onChange={(e) => setCustomDateRange(prev => ({ ...prev, start: new Date(e.target.value) }))}
+              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
+            />
+            <input
+              type="date"
+              value={format(customDateRange.end, 'yyyy-MM-dd')}
+              onChange={(e) => setCustomDateRange(prev => ({ ...prev, end: new Date(e.target.value) }))}
+              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="h-[300px] mb-6">
-        <ResponsiveContainer width="100%" height="100%">
+      {['last7', 'currentWeek'].includes(dateFilter) ? (
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={dateFilter === 'last7' ? getLast7DaysData() : getCurrentWeekData()}
+              dataKey="average"
+              nameKey="day"
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              fill="#8884d8"
+              label
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={timeRanges[index % timeRanges.length].color} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      ) : (
+        <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
             <XAxis 
@@ -239,7 +201,7 @@ export const WeeklySalesChart = () => {
               axisLine={{ stroke: '#e5e7eb' }}
               tickFormatter={(value) => `R$ ${(value / 1000)}k`}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip />
             {selectedRange === 'all' ? (
               timeRanges.map((range) => (
                 <Bar
@@ -259,26 +221,7 @@ export const WeeklySalesChart = () => {
             )}
           </BarChart>
         </ResponsiveContainer>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {insights.map((insight, index) => (
-          <div
-            key={index}
-            className={`p-4 rounded-lg ${insight.bgColor} border ${insight.borderColor}`}
-          >
-            <div className="flex items-start gap-3">
-              <div className={`p-2 rounded-full ${insight.bgColor}`}>
-                <insight.icon className={`w-5 h-5 ${insight.color}`} />
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-700">{insight.title}</h4>
-                <p className="text-sm text-gray-600">{insight.description}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      )}
     </Card>
   );
 };
