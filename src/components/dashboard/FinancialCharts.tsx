@@ -93,10 +93,20 @@ export const FinancialCharts = () => {
 
       <ExpensesTable />
 
-      <Card className="p-4 md:p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribuição de Despesas</h3>
-        <ExpensesDistributionChart />
-      </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        <Card className="p-4 md:p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Análise de Custos</h3>
+          <div className="h-[300px]">
+            <ExpensesDistributionChart />
+          </div>
+        </Card>
+        <Card className="p-4 md:p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribuição de Despesas</h3>
+          <div className="h-[300px]">
+            <ExpensesDistributionChart />
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
