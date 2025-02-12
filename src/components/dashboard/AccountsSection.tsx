@@ -1,4 +1,3 @@
-
 import { AlertTriangle, Clock, CreditCard, PiggyBank } from "lucide-react";
 import { Card } from "../ui/card";
 import { useCardStyle } from "../../contexts/CardStyleContext";
@@ -21,10 +20,13 @@ export const AccountsSection = () => {
   const [showPayablesDialog, setShowPayablesDialog] = useState(false);
 
   const getCardStyle = (color: string) => {
+    const baseClasses = "p-4 hover:shadow-lg transition-all";
+    
     if (cardStyle === "solid") {
-      return `bg-${color} dark:bg-${color}`;
+      return `${baseClasses} ${color} text-white`;
     }
-    return `bg-gradient-to-br from-${color}/10 via-${color}/5 to-transparent border border-${color}/20 dark:from-${color}/20 dark:to-gray-800`;
+    
+    return `${baseClasses} bg-gradient-to-br from-${color}/10 via-${color}/5 to-transparent border border-${color}/20 dark:from-${color}/20 dark:to-gray-800/50`;
   };
 
   return (
@@ -32,7 +34,7 @@ export const AccountsSection = () => {
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Contas e Previsões</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-        <Card className={`p-4 hover:shadow-lg transition-all ${getCardStyle("emerald-500")}`}>
+        <Card className={getCardStyle("bg-emerald-500")}>
           <div className="flex items-center justify-between">
             <div>
               <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>Contas a Receber</p>
@@ -45,7 +47,7 @@ export const AccountsSection = () => {
           </div>
         </Card>
 
-        <Card className={`p-4 hover:shadow-lg transition-all ${getCardStyle("rose-500")}`}>
+        <Card className={getCardStyle("bg-rose-500")}>
           <div className="flex items-center justify-between">
             <div>
               <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>Contas a Pagar</p>
@@ -58,7 +60,7 @@ export const AccountsSection = () => {
           </div>
         </Card>
 
-        <Card className={`p-4 hover:shadow-lg transition-all ${getCardStyle("blue-500")}`}>
+        <Card className={getCardStyle("bg-blue-500")}>
           <div className="flex items-center justify-between">
             <div>
               <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>Saldo Previsto</p>
@@ -74,7 +76,7 @@ export const AccountsSection = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
         <Card 
-          className={`p-4 hover:shadow-lg transition-all cursor-pointer ${getCardStyle("amber-500")}`}
+          className={`cursor-pointer ${getCardStyle("bg-amber-500")}`}
           onClick={() => setShowReceivablesDialog(true)}
         >
           <div className="flex items-center justify-between">
@@ -90,7 +92,7 @@ export const AccountsSection = () => {
         </Card>
 
         <Card 
-          className={`p-4 hover:shadow-lg transition-all cursor-pointer ${getCardStyle("rose-500")}`}
+          className={`cursor-pointer ${getCardStyle("bg-rose-500")}`}
           onClick={() => setShowPayablesDialog(true)}
         >
           <div className="flex items-center justify-between">
