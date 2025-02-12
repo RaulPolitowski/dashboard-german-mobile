@@ -1,7 +1,15 @@
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
 import { Card } from "../../ui/card";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { MonthlyData } from "../data/monthlyAnalysisData";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../ui/select";
 
 type FinancialAnalysisTableProps = {
   monthlyData: MonthlyData[];
@@ -16,9 +24,28 @@ export const FinancialAnalysisTable = ({
   getYearOverYearComparison,
   selectedYear
 }: FinancialAnalysisTableProps) => {
+  const years = Array.from({ length: 5 }, (_, i) => {
+    const year = new Date().getFullYear() - i;
+    return year.toString();
+  });
+
   return (
     <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 backdrop-blur-sm border border-[#6366F1]/20">
-      <h3 className="text-lg font-semibold text-[#6366F1] mb-4">Análise Financeira Mensal</h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-[#6366F1] mb-4">Análise Financeira Mensal</h3>
+        <Select value={selectedYear} onValueChange={(value) => setSelectedYear(value)}>
+          <SelectTrigger className="w-[120px]">
+            <SelectValue placeholder="Selecione o ano" />
+          </SelectTrigger>
+          <SelectContent>
+            {years.map((year) => (
+              <SelectItem key={year} value={year}>
+                {year}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -43,6 +70,10 @@ export const FinancialAnalysisTable = ({
                 : 0;
               
               const comparison = getYearOverYearComparison(month, index);
+              const resultChange = comparison ? 
+                ((result - (comparison.lastYearData.revenue - comparison.lastYearData.expenses)) / 
+                Math.abs(comparison.lastYearData.revenue - comparison.lastYearData.expenses) * 100) : 0;
+
               const tooltipContent = comparison ? `
                 Comparativo com ${Number(selectedYear) - 1}:
                 
@@ -59,7 +90,8 @@ export const FinancialAnalysisTable = ({
                 Resultado:
                 Atual: R$ ${result.toLocaleString()}
                 Anterior: R$ ${(comparison.lastYearData.revenue - comparison.lastYearData.expenses).toLocaleString()}
-                Variação: ${((result - (comparison.lastYearData.revenue - comparison.lastYearData.expenses)) / Math.abs(comparison.lastYearData.revenue - comparison.lastYearData.expenses) * 100).toFixed(1)}%
+                Variação: ${resultChange >= 0 ? '+' : ''}${resultChange.toFixed(1)}%
+                ${resultChange >= 0 ? '✅ Resultado superior ao ano anterior' : '⚠️ Resultado inferior ao ano anterior'}
               ` : 'Dados do ano anterior não disponíveis';
 
               return (

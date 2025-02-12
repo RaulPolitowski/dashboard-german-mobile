@@ -46,56 +46,62 @@ export const AccountsSection = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Contas e Previsões</h3>
 
-      <DueTodayCard />
+      <div className="space-y-4">
+        <h4 className="text-base font-medium text-gray-600 dark:text-gray-300">Vencimentos Hoje</h4>
+        <DueTodayCard />
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-        <Card className={getCardStyle("bg-emerald-500")}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-white"}`}>Contas a Receber</p>
-              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-emerald-600 dark:text-white"}`}>R$ 45.000,00</p>
-              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-white/90"}`}>
-                Período: {dateRange}
-              </p>
+      <div className="space-y-4">
+        <h4 className="text-base font-medium text-gray-600 dark:text-gray-300">Previsão</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+          <Card className={getCardStyle("bg-emerald-500")}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-white"}`}>Contas a Receber</p>
+                <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-emerald-600 dark:text-white"}`}>R$ 45.000,00</p>
+                <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-white/90"}`}>
+                  Período: {dateRange}
+                </p>
+              </div>
+              <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-emerald-100/70 dark:bg-white/20"}`}>
+                <CreditCard className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-emerald-500 dark:text-white"}`} />
+              </div>
             </div>
-            <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-emerald-100/70 dark:bg-white/20"}`}>
-              <CreditCard className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-emerald-500 dark:text-white"}`} />
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className={getCardStyle("bg-rose-500")}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-white"}`}>Contas a Pagar</p>
-              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-rose-600 dark:text-white"}`}>R$ 38.000,00</p>
-              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-white/90"}`}>
-                Período: {dateRange}
-              </p>
+          <Card className={getCardStyle("bg-rose-500")}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-white"}`}>Contas a Pagar</p>
+                <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-rose-600 dark:text-white"}`}>R$ 38.000,00</p>
+                <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-white/90"}`}>
+                  Período: {dateRange}
+                </p>
+              </div>
+              <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-rose-100/70 dark:bg-white/20"}`}>
+                <Clock className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500 dark:text-white"}`} />
+              </div>
             </div>
-            <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-rose-100/70 dark:bg-white/20"}`}>
-              <Clock className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500 dark:text-white"}`} />
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className={getCardStyle("bg-blue-500")}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-white"}`}>Saldo Previsto</p>
-              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-blue-600 dark:text-white"}`}>R$ 7.000,00</p>
-              <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-white/90"}`}>
-                Período: {dateRange}
-              </p>
+          <Card className={getCardStyle("bg-blue-500")}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-sm font-medium mb-1 ${cardStyle === "solid" ? "text-white" : "text-gray-600 dark:text-white"}`}>Saldo Previsto</p>
+                <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-blue-600 dark:text-white"}`}>R$ 7.000,00</p>
+                <p className={`text-xs mt-1 ${cardStyle === "solid" ? "text-white/90" : "text-gray-500 dark:text-white/90"}`}>
+                  Período: {dateRange}
+                </p>
+              </div>
+              <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-blue-100/70 dark:bg-white/20"}`}>
+                <PiggyBank className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-blue-500 dark:text-white"}`} />
+              </div>
             </div>
-            <div className={`p-3 rounded-full ${cardStyle === "solid" ? "bg-white/20" : "bg-blue-100/70 dark:bg-white/20"}`}>
-              <PiggyBank className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-blue-500 dark:text-white"}`} />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
       </div>
 
       <OverdueDetailsDialog
