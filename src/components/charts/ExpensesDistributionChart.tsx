@@ -1,103 +1,56 @@
 
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { useState } from "react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const data = [
-  { name: "Pessoal", value: 35000, previousValue: 33000 },
-  { name: "Marketing", value: 15000, previousValue: 16000 },
-  { name: "Operacional", value: 25000, previousValue: 23000 },
-  { name: "Infraestrutura", value: 18000, previousValue: 17500 },
-  { name: "Logística", value: 12000, previousValue: 11000 },
-  { name: "Tecnologia", value: 8500, previousValue: 7800 },
-  { name: "Manutenção", value: 6500, previousValue: 6000 },
-  { name: "Treinamento", value: 4500, previousValue: 5000 },
-  { name: "Seguros", value: 3800, previousValue: 3500 },
-  { name: "Outros", value: 2700, previousValue: 2500 }
-];
+  { category: 'Pessoal', value: 35000 },
+  { category: 'Marketing', value: 15000 },
+  { category: 'Operacional', value: 25000 },
+  { category: 'Infraestrutura', value: 18000 },
+  { category: 'Logística', value: 12000 },
+  { category: 'Tecnologia', value: 8500 },
+  { category: 'Manutenção', value: 6500 },
+  { category: 'Treinamento', value: 4500 },
+  { category: 'Seguros', value: 3800 },
+  { category: 'Outros', value: 2700 }
+].sort((a, b) => b.value - a.value);
 
 export const ExpensesDistributionChart = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState("current");
-  const total = data.reduce((sum: number, item) => sum + item.value, 0);
-  const sortedData = [...data].sort((a, b) => b.value - a.value);
+  const total = data.reduce((acc, curr) => acc + curr.value, 0);
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-end">
-        <select
-          value={selectedPeriod}
-          onChange={(e) => setSelectedPeriod(e.target.value)}
-          className="px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20 text-sm"
-        >
-          <option value="current">Mês Atual</option>
-          <option value="previous">Mês Anterior</option>
-        </select>
-      </div>
-      
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart 
-          data={sortedData} 
-          layout="vertical" 
-          margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
-          barSize={20}
-        >
-          <XAxis 
-            type="number" 
-            stroke="#888888" 
-            fontSize={12} 
-            tickLine={false} 
-            axisLine={false} 
-            tickFormatter={(value) => `R$ ${(value / 1000).toFixed(0)}k`} 
-          />
-          <YAxis 
-            dataKey="name" 
-            type="category" 
-            stroke="#888888" 
-            fontSize={12} 
-            tickLine={false} 
-            axisLine={false} 
-          />
-          <Tooltip
-            content={({ active, payload }) => {
-              if (active && payload && payload.length) {
-                const value = payload[0].value as number;
-                const item = payload[0].payload;
-                const percentage = ((value / total) * 100).toFixed(1);
-                const change = ((value - item.previousValue) / item.previousValue * 100).toFixed(1);
-                const isPositive = value > item.previousValue;
-
-                return (
-                  <div className="rounded-lg border bg-background p-2 shadow-sm">
-                    <div className="grid gap-2">
-                      <div className="flex flex-col">
-                        <span className="text-[0.70rem] uppercase text-muted-foreground">
-                          {item.name}
-                        </span>
-                        <span className="font-bold text-rose-500">
-                          R$ {value.toLocaleString()}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {percentage}% do total
-                        </span>
-                        <div className={`text-xs ${isPositive ? 'text-rose-500' : 'text-emerald-500'}`}>
-                          {isPositive ? '+' : ''}{change}% vs mês anterior
-                          <br />
-                          (R$ {item.previousValue.toLocaleString()})
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            }}
-          />
-          <Bar 
-            dataKey="value" 
-            fill="#F43F5E"
-            radius={[0, 4, 4, 0]}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart 
+        data={data} 
+        layout="vertical"
+        margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+        <XAxis 
+          type="number"
+          tickFormatter={(value) => `R$ ${(value / 1000)}k`}
+        />
+        <YAxis 
+          type="category"
+          dataKey="category"
+          width={90}
+        />
+        <Tooltip
+          formatter={(value: number) => [
+            `R$ ${value.toLocaleString()}`,
+            `${((value / total) * 100).toFixed(1)}% do total`
+          ]}
+          contentStyle={{
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            border: '1px solid #e5e7eb',
+            borderRadius: '0.5rem',
+          }}
+        />
+        <Bar 
+          dataKey="value" 
+          fill="#F43F5E"
+          radius={[0, 4, 4, 0]}
+        />
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
