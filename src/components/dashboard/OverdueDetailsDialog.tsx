@@ -1,3 +1,4 @@
+
 import {
   Dialog,
   DialogContent,
@@ -60,7 +61,7 @@ export const OverdueDetailsDialog = ({
         <DialogHeader>
           <DialogTitle>{getDialogTitle()}</DialogTitle>
         </DialogHeader>
-        <div className="overflow-x-auto flex-1">
+        <div className="overflow-auto touch-pan-x flex-1">
           <Table>
             <TableHeader>
               <TableRow>

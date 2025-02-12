@@ -31,7 +31,7 @@ export const ServiceOrderDetailsDialog = ({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto touch-pan-x">
           <Table>
             <TableHeader>
               <TableRow>

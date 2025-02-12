@@ -80,30 +80,32 @@ export const DueTodayOrders = () => {
           <DialogHeader>
             <DialogTitle>Pedidos Vencendo Hoje</DialogTitle>
           </DialogHeader>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Cliente</TableHead>
-                <TableHead>Descrição</TableHead>
-                <TableHead>Vendedor</TableHead>
-                <TableHead>Vencimento</TableHead>
-                <TableHead className="text-right">Valor</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {dueTodayOrders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.client}</TableCell>
-                  <TableCell>{order.description}</TableCell>
-                  <TableCell>{order.seller}</TableCell>
-                  <TableCell>{order.expiresAt}</TableCell>
-                  <TableCell className="text-right">
-                    R$ {order.value.toLocaleString()}
-                  </TableCell>
+          <div className="overflow-auto touch-pan-x">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead>Vendedor</TableHead>
+                  <TableHead>Vencimento</TableHead>
+                  <TableHead className="text-right">Valor</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {dueTodayOrders.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell className="font-medium">{order.client}</TableCell>
+                    <TableCell>{order.description}</TableCell>
+                    <TableCell>{order.seller}</TableCell>
+                    <TableCell>{order.expiresAt}</TableCell>
+                    <TableCell className="text-right">
+                      R$ {order.value.toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

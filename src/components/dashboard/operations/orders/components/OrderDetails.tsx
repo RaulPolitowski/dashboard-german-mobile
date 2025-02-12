@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { OrderDetailsProps } from "../types/order-metrics";
 
 export const OrderDetails = ({ orders }: OrderDetailsProps) => (
-  <div>
+  <div className="overflow-auto touch-pan-x">
     <Table>
       <TableHeader>
         <TableRow>

@@ -25,7 +25,7 @@ export const PaymentMethodTable = ({ data, period }: PaymentMethodTableProps) =>
         </p>
       </div>
 
-      <div className="max-h-[300px] overflow-y-auto">
+      <div className="overflow-auto touch-pan-x max-h-[300px]">
         <Table>
           <TableHeader className="sticky top-0 bg-white dark:bg-gray-900">
             <TableRow>
