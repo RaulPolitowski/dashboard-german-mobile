@@ -136,10 +136,22 @@ export const RankingSection = () => {
               </div>
             </Card>
 
-            <PerformanceSection 
-              selectedSeller={selectedSeller}
-              compareSeller={compareSeller}
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 backdrop-blur-sm border border-[#6366F1]/20">
+                <PerformanceSection 
+                  selectedSeller={selectedSeller}
+                  compareSeller={null}
+                />
+              </Card>
+              {compareSeller && (
+                <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 backdrop-blur-sm border border-[#6366F1]/20">
+                  <PerformanceSection 
+                    selectedSeller={compareSeller}
+                    compareSeller={null}
+                  />
+                </Card>
+              )}
+            </div>
           </div>
         ) : (
           <Card 
