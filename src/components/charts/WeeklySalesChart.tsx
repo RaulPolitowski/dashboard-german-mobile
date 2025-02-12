@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Card } from '../ui/card';
-import { subDays } from 'date-fns';
+import { subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { FilterControls } from './weekly-sales/FilterControls';
 import { timeRanges, mockData } from './weekly-sales/constants';
 import { DateRange } from './weekly-sales/types';
@@ -15,6 +15,22 @@ export const WeeklySalesChart = () => {
   });
   const [dateFilter, setDateFilter] = useState<'last7' | 'currentWeek'>('last7');
 
+  const handleDateFilterChange = (value: 'last7' | 'currentWeek') => {
+    setDateFilter(value);
+    if (value === 'currentWeek') {
+      const now = new Date();
+      setCustomDateRange({
+        start: startOfWeek(now, { weekStartsOn: 1 }), // Segunda-feira
+        end: endOfWeek(now, { weekStartsOn: 1 }) // Domingo
+      });
+    } else {
+      setCustomDateRange({
+        start: subDays(new Date(), 6),
+        end: new Date()
+      });
+    }
+  };
+
   return (
     <Card className="p-4 md:p-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
@@ -26,7 +42,7 @@ export const WeeklySalesChart = () => {
           dateFilter={dateFilter}
           selectedRange={selectedRange}
           customDateRange={customDateRange}
-          onDateFilterChange={setDateFilter}
+          onDateFilterChange={handleDateFilterChange}
           onRangeChange={setSelectedRange}
           onCustomDateChange={setCustomDateRange}
         />

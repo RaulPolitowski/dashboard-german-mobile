@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { MetricsCards } from "./sales/MetricsCards";
 import { SalesEvolutionCard } from "./sales/SalesEvolutionCard";
@@ -8,6 +9,7 @@ import { SalesDialogs } from "./sales/SalesDialogs";
 import { Card } from "../ui/card";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { calculateTotals } from "../charts/CashFlowChart";
+import { ProductPerformanceSection } from "./sales/ProductPerformanceSection";
 
 const todaysSales = [
   { 
@@ -99,15 +101,6 @@ export const SalesSection = () => {
         onMonthlySalesClose={() => setShowMonthlySales(false)}
         todaysSales={todaysSales}
       />
-    </div>
-  );
-};
-
-export const ProductPerformanceSection = () => {
-  return (
-    <div>
-      <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Performance de Produtos</h2>
-      <p className="text-gray-500 dark:text-gray-400">Detalhes sobre a performance de produtos vendidos.</p>
     </div>
   );
 };
