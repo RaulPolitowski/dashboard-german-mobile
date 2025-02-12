@@ -1,3 +1,4 @@
+
 import { AlertTriangle, Clock, CreditCard, PiggyBank } from "lucide-react";
 import { Card } from "../ui/card";
 import { useCardStyle } from "../../contexts/CardStyleContext";
@@ -66,6 +67,40 @@ export const AccountsSection = () => {
             </div>
             <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-blue-100 p-3 rounded-full"}>
               <PiggyBank className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-blue-500"}`} />
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+        <Card 
+          className={getCardClassName("amber-500")}
+          onClick={() => setShowReceivablesDialog(true)}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className={`text-sm ${cardStyle === "solid" ? "text-white/90" : "text-gray-600"}`}>Recebimentos em Atraso</p>
+              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-amber-600"}`}>R$ 12.500,00</p>
+              <p className={`text-xs ${cardStyle === "solid" ? "text-white/90" : "text-gray-500"}`}>8 títulos pendentes</p>
+            </div>
+            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-amber-100 p-3 rounded-full"}>
+              <AlertTriangle className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-amber-500"}`} />
+            </div>
+          </div>
+        </Card>
+
+        <Card 
+          className={getCardClassName("rose-500")}
+          onClick={() => setShowPayablesDialog(true)}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className={`text-sm ${cardStyle === "solid" ? "text-white/90" : "text-gray-600"}`}>Pagamentos em Atraso</p>
+              <p className={`text-2xl font-bold ${cardStyle === "solid" ? "text-white" : "text-rose-600"}`}>R$ 8.300,00</p>
+              <p className={`text-xs ${cardStyle === "solid" ? "text-white/90" : "text-gray-500"}`}>5 títulos pendentes</p>
+            </div>
+            <div className={cardStyle === "solid" ? "bg-white/20 p-3 rounded-full" : "bg-rose-100 p-3 rounded-full"}>
+              <AlertTriangle className={`w-6 h-6 ${cardStyle === "solid" ? "text-white" : "text-rose-500"}`} />
             </div>
           </div>
         </Card>
