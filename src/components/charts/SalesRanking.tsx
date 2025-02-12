@@ -2,20 +2,36 @@
 import { Medal } from "lucide-react";
 
 const salesData = [
-  { id: 1, name: "João Silva", sales: 156000, transactions: 45 },
-  { id: 2, name: "Maria Santos", sales: 142000, transactions: 38 },
-  { id: 3, name: "Pedro Oliveira", sales: 128000, transactions: 35 },
-  { id: 4, name: "Ana Costa", sales: 98000, transactions: 28 },
-  { id: 5, name: "Carlos Souza", sales: 85000, transactions: 25 },
+  { id: '1', name: "João Silva", sales: 156000, transactions: 45, avgTicket: 3466.67 },
+  { id: '2', name: "Maria Santos", sales: 142000, transactions: 38, avgTicket: 3736.84 },
+  { id: '3', name: "Pedro Oliveira", sales: 128000, transactions: 35, avgTicket: 3657.14 },
+  { id: '4', name: "Ana Costa", sales: 98000, transactions: 28, avgTicket: 3500.00 },
+  { id: '5', name: "Carlos Souza", sales: 85000, transactions: 25, avgTicket: 3400.00 },
 ];
 
-export const SalesRanking = () => {
+interface SalesRankingProps {
+  onSellerSelect: (seller: any) => void;
+  onCompareSelect: (seller: any) => void;
+  selectedSellerId?: string;
+  compareSellerId?: string;
+}
+
+export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId, compareSellerId }: SalesRankingProps) => {
   return (
     <div className="space-y-4">
       {salesData.map((seller, index) => (
         <div
           key={seller.id}
-          className="p-4 rounded-lg bg-gradient-to-r from-white/80 to-white/50 border border-[#6366F1]/20 hover:shadow-md transition-all"
+          className={`p-4 rounded-lg bg-gradient-to-r from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 border ${
+            selectedSellerId === seller.id ? 'border-[#6366F1] shadow-md' :
+            compareSellerId === seller.id ? 'border-emerald-500 shadow-md' :
+            'border-[#6366F1]/20'
+          } hover:shadow-md transition-all cursor-pointer`}
+          onClick={() => onSellerSelect(seller)}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            onCompareSelect(seller);
+          }}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -33,21 +49,24 @@ export const SalesRanking = () => {
                 }`} />
               </div>
               <div>
-                <p className="font-medium text-gray-700">{seller.name}</p>
-                <p className="text-sm text-gray-500">{seller.transactions} vendas</p>
+                <p className="font-medium text-gray-700 dark:text-gray-200">{seller.name}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{seller.transactions} vendas</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold text-[#6366F1]">
+              <p className="text-lg font-bold text-[#6366F1] dark:text-[#818cf8]">
                 R$ {seller.sales.toLocaleString()}
               </p>
-              <p className="text-sm text-gray-600">
-                Ticket médio: R$ {Math.round(seller.sales / seller.transactions).toLocaleString()}
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Ticket médio: R$ {seller.avgTicket.toLocaleString()}
               </p>
             </div>
           </div>
         </div>
       ))}
+      <p className="text-sm text-gray-500 dark:text-gray-400 italic mt-2">
+        Clique para selecionar um vendedor. Clique com botão direito para comparar.
+      </p>
     </div>
   );
 };
