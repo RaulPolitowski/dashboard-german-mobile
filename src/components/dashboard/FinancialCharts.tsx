@@ -5,7 +5,6 @@ import { CashFlowChart } from "../charts/CashFlowChart";
 import { ExpensesTable } from "./ExpensesTable";
 import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
 import { PaymentMethodTable } from "../charts/PaymentMethodTable";
-import { PaymentMethodChart } from "../charts/PaymentMethodChart";
 import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 
@@ -87,7 +86,7 @@ export const FinancialCharts = () => {
           )}
         </Card>
 
-        <PaymentMethodTable />
+        <PaymentMethodTable data={totals.paymentMethods} period={period} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
