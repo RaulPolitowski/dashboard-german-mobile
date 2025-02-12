@@ -1,3 +1,4 @@
+
 import { Package, TrendingUp, TrendingDown } from "lucide-react";
 import { useState } from "react";
 
@@ -28,14 +29,110 @@ const productData = [
     previousWeekValue: 29700,
     salesTrend: -16.67 
   },
-  { id: 3, name: "Monitor 4K 32'", sales: 156000, units: 65, lastSale: "2024-03-13", salesPercentage: 19.0, lastWeekSales: 8, lastWeekValue: 19200 },
-  { id: 4, name: "Tablet Air Plus", sales: 125000, units: 95, lastSale: "2024-03-12", salesPercentage: 15.2, lastWeekSales: 10, lastWeekValue: 13200 },
-  { id: 5, name: "Fone Bluetooth Pro", sales: 98000, units: 180, lastSale: "2024-03-11", salesPercentage: 11.9, lastWeekSales: 22, lastWeekValue: 11660 },
-  { id: 6, name: "Mouse Gamer RGB", sales: 85000, units: 150, lastSale: "2024-03-10", salesPercentage: 10.3, lastWeekSales: 18, lastWeekValue: 10200 },
-  { id: 7, name: "Teclado Mecânico", sales: 75000, units: 100, lastSale: "2024-03-09", salesPercentage: 9.1, lastWeekSales: 12, lastWeekValue: 9000 },
-  { id: 8, name: "Webcam HD", sales: 65000, units: 80, lastSale: "2024-03-08", salesPercentage: 7.9, lastWeekSales: 9, lastWeekValue: 7350 },
-  { id: 9, name: "HD Externo 2TB", sales: 55000, units: 40, lastSale: "2024-03-07", salesPercentage: 6.7, lastWeekSales: 5, lastWeekValue: 6875 },
-  { id: 10, name: "Carregador Wireless", sales: 45000, units: 200, lastSale: "2024-03-06", salesPercentage: 5.5, lastWeekSales: 25, lastWeekValue: 5625 },
+  { 
+    id: 3, 
+    name: "Monitor 4K 32'", 
+    sales: 156000, 
+    units: 65, 
+    lastSale: "2024-03-13", 
+    salesPercentage: 19.0, 
+    lastWeekSales: 8, 
+    lastWeekValue: 19200, 
+    previousWeekSales: 10,
+    previousWeekValue: 24000,
+    salesTrend: -20
+  },
+  { 
+    id: 4, 
+    name: "Tablet Air Plus", 
+    sales: 125000, 
+    units: 95, 
+    lastSale: "2024-03-12", 
+    salesPercentage: 15.2, 
+    lastWeekSales: 10, 
+    lastWeekValue: 13200,
+    previousWeekSales: 8,
+    previousWeekValue: 10560,
+    salesTrend: 25
+  },
+  { 
+    id: 5, 
+    name: "Fone Bluetooth Pro", 
+    sales: 98000, 
+    units: 180, 
+    lastSale: "2024-03-11", 
+    salesPercentage: 11.9, 
+    lastWeekSales: 22, 
+    lastWeekValue: 11660,
+    previousWeekSales: 20,
+    previousWeekValue: 10600,
+    salesTrend: 10
+  },
+  { 
+    id: 6, 
+    name: "Mouse Gamer RGB", 
+    sales: 85000, 
+    units: 150, 
+    lastSale: "2024-03-10", 
+    salesPercentage: 10.3, 
+    lastWeekSales: 18, 
+    lastWeekValue: 10200,
+    previousWeekSales: 15,
+    previousWeekValue: 8500,
+    salesTrend: 20
+  },
+  { 
+    id: 7, 
+    name: "Teclado Mecânico", 
+    sales: 75000, 
+    units: 100, 
+    lastSale: "2024-03-09", 
+    salesPercentage: 9.1, 
+    lastWeekSales: 12, 
+    lastWeekValue: 9000,
+    previousWeekSales: 14,
+    previousWeekValue: 10500,
+    salesTrend: -14.29
+  },
+  { 
+    id: 8, 
+    name: "Webcam HD", 
+    sales: 65000, 
+    units: 80, 
+    lastSale: "2024-03-08", 
+    salesPercentage: 7.9, 
+    lastWeekSales: 9, 
+    lastWeekValue: 7350,
+    previousWeekSales: 11,
+    previousWeekValue: 8980,
+    salesTrend: -18.18
+  },
+  { 
+    id: 9, 
+    name: "HD Externo 2TB", 
+    sales: 55000, 
+    units: 40, 
+    lastSale: "2024-03-07", 
+    salesPercentage: 6.7, 
+    lastWeekSales: 5, 
+    lastWeekValue: 6875,
+    previousWeekSales: 4,
+    previousWeekValue: 5500,
+    salesTrend: 25
+  },
+  { 
+    id: 10, 
+    name: "Carregador Wireless", 
+    sales: 45000, 
+    units: 200, 
+    lastSale: "2024-03-06", 
+    salesPercentage: 5.5, 
+    lastWeekSales: 25, 
+    lastWeekValue: 5625,
+    previousWeekSales: 30,
+    previousWeekValue: 6750,
+    salesTrend: -16.67
+  },
 ];
 
 const ITEMS_PER_PAGE = 5;
@@ -48,6 +145,13 @@ export const ProductRanking = () => {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
+  const formatTrend = (trend: number | undefined) => {
+    if (trend === undefined || isNaN(trend)) return "0.0";
+    if (trend === Infinity) return "+100.0";
+    if (trend === -Infinity) return "-100.0";
+    return trend.toFixed(1);
+  };
 
   return (
     <div className="space-y-4">
@@ -87,18 +191,18 @@ export const ProductRanking = () => {
                 </p>
                 <div className="text-sm space-y-1">
                   <div className="flex items-center justify-end gap-1">
-                    {product.salesTrend > 0 ? (
+                    {(product.salesTrend || 0) > 0 ? (
                       <>
                         <TrendingUp className="w-4 h-4 text-emerald-500" />
                         <span className="text-emerald-600 font-medium">
-                          +{product.salesTrend.toFixed(1)}%
+                          +{formatTrend(product.salesTrend)}%
                         </span>
                       </>
                     ) : (
                       <>
                         <TrendingDown className="w-4 h-4 text-rose-500" />
                         <span className="text-rose-600 font-medium">
-                          {product.salesTrend.toFixed(1)}%
+                          {formatTrend(product.salesTrend)}%
                         </span>
                       </>
                     )}
