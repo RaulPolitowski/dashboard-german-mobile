@@ -1,10 +1,19 @@
-
+import { useState } from "react";
 import { ArrowDown, ArrowUp, BadgeDollarSign } from "lucide-react";
 import { Card } from "../ui/card";
 import { useCardStyle } from "../../contexts/CardStyleContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export const FinancialMetrics = () => {
   const { cardStyle } = useCardStyle();
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth().toString());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
 
   const getCardStyle = (baseColor: string) => {
     const baseClasses = "p-4 hover:shadow-lg transition-all";
@@ -23,8 +32,29 @@ export const FinancialMetrics = () => {
     return `${baseClasses} ${gradientMap[baseColor as keyof typeof gradientMap]} border border-${baseColor.replace('bg-', '')}/20 dark:${baseColor} dark:text-white`;
   };
 
+  const months = [
+    { value: "0", label: "Janeiro" },
+    { value: "1", label: "Fevereiro" },
+    { value: "2", label: "Março" },
+    { value: "3", label: "Abril" },
+    { value: "4", label: "Maio" },
+    { value: "5", label: "Junho" },
+    { value: "6", label: "Julho" },
+    { value: "7", label: "Agosto" },
+    { value: "8", label: "Setembro" },
+    { value: "9", label: "Outubro" },
+    { value: "10", label: "Novembro" },
+    { value: "11", label: "Dezembro" }
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 10 }, (_, i) => {
+    const year = currentYear - i;
+    return { value: year.toString(), label: year.toString() };
+  });
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Receitas e Resultados</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         <Card className={getCardStyle("bg-emerald-500")}>
