@@ -7,16 +7,35 @@ interface PerformanceSectionProps {
   compareSeller: { id: string; name: string } | null;
 }
 
+interface DayPerformance {
+  day: string;
+  sales: number;
+  previousDaySales: number;
+  transactions: number;
+}
+
 export const PerformanceSection = ({ selectedSeller, compareSeller }: PerformanceSectionProps) => {
-  const bestDays = [
-    { day: 'Segunda', sales: 7500, percent: 12 },
-    { day: 'Terça', sales: 8200, percent: 13 },
-    { day: 'Quarta', sales: 9100, percent: 15 },
-    { day: 'Quinta', sales: 8900, percent: 14 },
-    { day: 'Sexta', sales: 10200, percent: 16 },
-    { day: 'Sábado', sales: 12000, percent: 19 },
-    { day: 'Domingo', sales: 6800, percent: 11 },
-  ];
+  const calculatePercentChange = (current: number, previous: number): string => {
+    if (previous === 0) {
+      return current > 0 ? "+100" : "0";
+    }
+    const change = ((current - previous) / previous) * 100;
+    return change > 0 ? `+${change.toFixed(1)}` : change.toFixed(1);
+  };
+
+  const getBestDays = (sellerId: string): DayPerformance[] => {
+    const rawData: DayPerformance[] = [
+      { day: 'Segunda', sales: 7500, previousDaySales: 6800, transactions: 15 },
+      { day: 'Terça', sales: 8200, previousDaySales: 7500, transactions: 18 },
+      { day: 'Quarta', sales: 9100, previousDaySales: 8200, transactions: 20 },
+      { day: 'Quinta', sales: 8900, previousDaySales: 9100, transactions: 19 },
+      { day: 'Sexta', sales: 10200, previousDaySales: 8900, transactions: 22 },
+      { day: 'Sábado', sales: 12000, previousDaySales: 10200, transactions: 25 },
+      { day: 'Domingo', sales: 6800, previousDaySales: 12000, transactions: 12 },
+    ];
+
+    return [...rawData].sort((a, b) => b.sales - a.sales);
+  };
 
   return (
     <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 backdrop-blur-sm border border-[#6366F1]/20">
@@ -59,29 +78,36 @@ export const PerformanceSection = ({ selectedSeller, compareSeller }: Performanc
                 </div>
               </div>
               <div className="space-y-4">
-                {bestDays.map((day, index) => (
-                  <div key={day.day} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#6366F1]/10 text-[#6366F1] dark:text-[#818cf8] font-medium">
-                        {index + 1}
+                {getBestDays(selectedSeller.id).map((day, index) => {
+                  const percentChange = calculatePercentChange(day.sales, day.previousDaySales);
+                  return (
+                    <div key={day.day} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#6366F1]/10 text-[#6366F1] dark:text-[#818cf8] font-medium">
+                          {index + 1}
+                        </div>
+                        <span className="text-gray-700 dark:text-gray-200">{day.day}</span>
                       </div>
-                      <span className="text-gray-700 dark:text-gray-200">{day.day}</span>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-[#6366F1] dark:text-[#818cf8]">
-                        R$ {day.sales.toLocaleString()}
-                      </p>
-                      <div className="flex items-center justify-end gap-1">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {Math.floor(Math.random() * 20 + 10)} vendas
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-[#6366F1] dark:text-[#818cf8]">
+                          R$ {day.sales.toLocaleString()}
                         </p>
-                        <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                          ({day.percent}%)
-                        </span>
+                        <div className="flex items-center justify-end gap-1">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {day.transactions} vendas
+                          </p>
+                          <span className={`text-xs font-medium ${
+                            Number(percentChange) >= 0 
+                              ? 'text-emerald-600 dark:text-emerald-400'
+                              : 'text-rose-600 dark:text-rose-400'
+                          }`}>
+                            ({percentChange}%)
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </Card>
             {compareSeller && (
@@ -97,29 +123,36 @@ export const PerformanceSection = ({ selectedSeller, compareSeller }: Performanc
                   </div>
                 </div>
                 <div className="space-y-4">
-                  {bestDays.map((day, index) => (
-                    <div key={day.day} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#6366F1]/10 text-[#6366F1] dark:text-[#818cf8] font-medium">
-                          {index + 1}
+                  {getBestDays(compareSeller.id).map((day, index) => {
+                    const percentChange = calculatePercentChange(day.sales, day.previousDaySales);
+                    return (
+                      <div key={day.day} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#6366F1]/10 text-[#6366F1] dark:text-[#818cf8] font-medium">
+                            {index + 1}
+                          </div>
+                          <span className="text-gray-700 dark:text-gray-200">{day.day}</span>
                         </div>
-                        <span className="text-gray-700 dark:text-gray-200">{day.day}</span>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-[#6366F1] dark:text-[#818cf8]">
-                          R$ {day.sales.toLocaleString()}
-                        </p>
-                        <div className="flex items-center justify-end gap-1">
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {Math.floor(Math.random() * 20 + 10)} vendas
+                        <div className="text-right">
+                          <p className="text-sm font-medium text-[#6366F1] dark:text-[#818cf8]">
+                            R$ {day.sales.toLocaleString()}
                           </p>
-                          <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                            ({day.percent}%)
-                          </span>
+                          <div className="flex items-center justify-end gap-1">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              {day.transactions} vendas
+                            </p>
+                            <span className={`text-xs font-medium ${
+                              Number(percentChange) >= 0 
+                                ? 'text-emerald-600 dark:text-emerald-400'
+                                : 'text-rose-600 dark:text-rose-400'
+                            }`}>
+                              ({percentChange}%)
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </Card>
             )}

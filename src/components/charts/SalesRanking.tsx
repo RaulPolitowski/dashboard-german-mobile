@@ -1,7 +1,7 @@
 
-import { Medal } from "lucide-react";
+import { Medal, Check } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 
 const salesData = [
   { id: '1', name: "João Silva", sales: 156000, transactions: 45, avgTicket: 3466.67 },
@@ -21,16 +21,29 @@ interface SalesRankingProps {
 export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId, compareSellerId }: SalesRankingProps) => {
   const isMobile = useIsMobile();
 
+  const handleCheckboxChange = (seller: any, checked: boolean) => {
+    if (checked) {
+      onCompareSelect(seller);
+    } else {
+      onCompareSelect(null);
+    }
+  };
+
+  const isCompareSelected = (sellerId: string) => {
+    return sellerId === compareSellerId;
+  };
+
   return (
     <div className="space-y-4">
       {salesData.map((seller, index) => (
         <div
           key={seller.id}
+          onClick={() => !isCompareSelected(seller.id) && onSellerSelect(seller)}
           className={`p-4 rounded-lg bg-gradient-to-r from-white/80 to-white/50 dark:from-gray-800/80 dark:to-gray-900/50 border ${
             selectedSellerId === seller.id ? 'border-[#6366F1] shadow-md' :
             compareSellerId === seller.id ? 'border-emerald-500 shadow-md' :
             'border-[#6366F1]/20'
-          } hover:shadow-md transition-all`}
+          } hover:shadow-md transition-all cursor-pointer`}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -47,9 +60,18 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
                   "text-blue-500"
                 }`} />
               </div>
-              <div>
-                <p className="font-medium text-gray-700 dark:text-gray-200">{seller.name}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{seller.transactions} vendas</p>
+              <div className="flex items-center gap-3">
+                <div>
+                  <p className="font-medium text-gray-700 dark:text-gray-200">{seller.name}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{seller.transactions} vendas</p>
+                </div>
+                <Checkbox
+                  checked={isCompareSelected(seller.id)}
+                  onCheckedChange={(checked) => handleCheckboxChange(seller, checked as boolean)}
+                  onClick={(e) => e.stopPropagation()}
+                  disabled={!isCompareSelected(seller.id) && compareSellerId !== null}
+                  className="ml-2"
+                />
               </div>
             </div>
             <div className="text-right">
@@ -61,31 +83,11 @@ export const SalesRanking = ({ onSellerSelect, onCompareSelect, selectedSellerId
               </p>
             </div>
           </div>
-          {isMobile && (
-            <div className="flex gap-2 mt-3">
-              <Button 
-                variant="outline" 
-                className="flex-1 bg-white/50 dark:bg-gray-800/50"
-                onClick={() => onSellerSelect(seller)}
-              >
-                Selecionar
-              </Button>
-              <Button 
-                variant="outline" 
-                className="flex-1 bg-white/50 dark:bg-gray-800/50"
-                onClick={() => onCompareSelect(seller)}
-              >
-                Comparar
-              </Button>
-            </div>
-          )}
         </div>
       ))}
-      {!isMobile && (
-        <p className="text-sm text-gray-500 dark:text-gray-400 italic mt-2">
-          Clique para selecionar um vendedor. Clique com botão direito para comparar.
-        </p>
-      )}
+      <p className="text-sm text-gray-500 dark:text-gray-400 italic mt-2">
+        Clique no card para selecionar um vendedor. Marque as caixas de seleção para comparar dois vendedores.
+      </p>
     </div>
   );
 };
