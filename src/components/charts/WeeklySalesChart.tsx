@@ -6,6 +6,7 @@ import { subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { FilterControls } from './weekly-sales/FilterControls';
 import { timeRanges, mockData } from './weekly-sales/constants';
 import { DateRange } from './weekly-sales/types';
+import { useIsMobile } from '../../hooks/use-mobile';
 
 export const WeeklySalesChart = () => {
   const [selectedRange, setSelectedRange] = useState('all');
@@ -14,6 +15,7 @@ export const WeeklySalesChart = () => {
     end: new Date()
   });
   const [dateFilter, setDateFilter] = useState<'last7' | 'currentWeek'>('last7');
+  const isMobile = useIsMobile();
 
   const handleDateFilterChange = (value: 'last7' | 'currentWeek') => {
     setDateFilter(value);
@@ -49,12 +51,19 @@ export const WeeklySalesChart = () => {
       </div>
 
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={mockData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <BarChart 
+          data={mockData} 
+          margin={isMobile ? { top: 20, right: 10, left: 10, bottom: 60 } : { top: 20, right: 30, left: 20, bottom: 5 }}
+        >
           <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
           <XAxis 
             dataKey="day" 
             tick={{ fill: '#6b7280' }}
             axisLine={{ stroke: '#e5e7eb' }}
+            interval={0}
+            angle={isMobile ? -45 : 0}
+            textAnchor={isMobile ? "end" : "middle"}
+            height={isMobile ? 80 : 30}
           />
           <YAxis 
             tick={{ fill: '#6b7280' }}
