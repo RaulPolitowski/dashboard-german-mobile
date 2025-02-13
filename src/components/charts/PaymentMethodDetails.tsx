@@ -25,15 +25,6 @@ export const PaymentMethodDetails = ({ data, period }: PaymentMethodDetailsProps
 
   return (
     <div className="space-y-4">
-      <div>
-        <p className="text-sm text-gray-600">
-          {period === 'week' ? 'Semana atual' : 
-           period === '3' ? 'Últimos 3 meses' :
-           period === '6' ? 'Últimos 6 meses' :
-           period === '12' ? 'Último ano' : 'Ano atual'}
-        </p>
-      </div>
-
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="p-3 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-400/5 border border-emerald-500/20">
           <p className="text-sm text-gray-600">Total de Entradas</p>
@@ -69,17 +60,27 @@ export const PaymentMethodDetails = ({ data, period }: PaymentMethodDetailsProps
             {currentData.map((item) => (
               <TableRow key={item.method}>
                 <TableCell className="font-medium">{item.method}</TableCell>
-                <TableCell className="text-emerald-600">
-                  R$ {item.inflow.toLocaleString()}
-                  <span className="text-xs text-gray-500 ml-1">
-                    ({((item.inflow / totalInflow) * 100).toFixed(1)}%)
-                  </span>
+                <TableCell>
+                  <div className="text-emerald-600">
+                    R$ {item.inflow.toLocaleString()}
+                    <span className="text-xs text-gray-500 ml-1">
+                      ({((item.inflow / totalInflow) * 100).toFixed(1)}%)
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {item.inflowTransactions} transações
+                  </div>
                 </TableCell>
-                <TableCell className="text-rose-600">
-                  R$ {item.outflow.toLocaleString()}
-                  <span className="text-xs text-gray-500 ml-1">
-                    ({((item.outflow / totalOutflow) * 100).toFixed(1)}%)
-                  </span>
+                <TableCell>
+                  <div className="text-rose-600">
+                    R$ {item.outflow.toLocaleString()}
+                    <span className="text-xs text-gray-500 ml-1">
+                      ({((item.outflow / totalOutflow) * 100).toFixed(1)}%)
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {item.outflowTransactions} transações
+                  </div>
                 </TableCell>
                 <TableCell className="text-center">
                   <span className="text-emerald-600">+{item.inflowTransactions}</span>
