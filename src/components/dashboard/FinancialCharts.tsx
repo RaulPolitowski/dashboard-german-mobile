@@ -9,7 +9,7 @@ import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
 import { WeeklySalesChart } from "../charts/WeeklySalesChart";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 export const FinancialCharts = () => {
   const [period, setPeriod] = useState("day");
@@ -51,6 +51,16 @@ export const FinancialCharts = () => {
     setShowDetails(true);
   };
 
+  const formatSelectedDate = (date: string | null) => {
+    if (!date) return "";
+    try {
+      return format(parseISO(date), "dd/MM/yyyy");
+    } catch (e) {
+      console.error("Error formatting date:", e);
+      return "";
+    }
+  };
+
   return (
     <div className="space-y-6">
       <WeeklySalesChart onDayClick={handleDayClick} />
@@ -65,7 +75,7 @@ export const FinancialCharts = () => {
               <div className="flex items-center justify-between">
                 <h3 className="text-base md:text-lg font-semibold text-gray-900">
                   Fluxo de Caixa
-                  {selectedDate && ` - ${format(new Date(selectedDate), "dd/MM/yyyy")}`}
+                  {selectedDate && ` - ${formatSelectedDate(selectedDate)}`}
                 </h3>
                 <ChevronDown className="w-5 h-5 text-gray-500" />
               </div>
@@ -76,7 +86,7 @@ export const FinancialCharts = () => {
                 <div>
                   <h3 className="text-base md:text-lg font-semibold text-gray-900">
                     Fluxo de Caixa
-                    {selectedDate && ` - ${format(new Date(selectedDate), "dd/MM/yyyy")}`}
+                    {selectedDate && ` - ${formatSelectedDate(selectedDate)}`}
                   </h3>
                   <p className="text-sm text-gray-600">
                     Movimentação Financeira: R$ {selectedDayTotals.result.toLocaleString()}
@@ -161,7 +171,7 @@ export const FinancialCharts = () => {
           <DialogHeader>
             <DialogTitle>
               {selectedDate ? 
-                `Detalhamento do dia ${format(new Date(selectedDate), "dd/MM/yyyy")}` : 
+                `Detalhamento do dia ${formatSelectedDate(selectedDate)}` : 
                 "Detalhamento do dia atual"
               }
             </DialogTitle>
