@@ -1,12 +1,12 @@
 
-import { Card } from "../../../../ui/card";
+import { Card } from "@/components/ui/card";
 import { Package, CheckCircle2, XCircle, Clock } from "lucide-react";
-import { MockOrdersData } from "../types/order-metrics";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../../ui/tooltip";
+import { MockOrdersData, Order } from "../types/order-metrics";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface OrderCardsProps {
   data: MockOrdersData;
-  onCardClick: (title: string, orders: any[]) => void;
+  onCardClick: (title: string, orders: Order[], type: string) => void;
 }
 
 export const OrderCards = ({ data, onCardClick }: OrderCardsProps) => {
