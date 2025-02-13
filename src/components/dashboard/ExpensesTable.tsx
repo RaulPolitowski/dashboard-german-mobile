@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { ChevronDown, ChevronUp, TrendingDown, TrendingUp } from "lucide-react";
@@ -9,7 +8,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 const expensesData = [
   { category: "Pessoal", value: 35000, previousValues: [33000, 32000, 34000] },
@@ -86,7 +84,7 @@ export const ExpensesTable = () => {
               return (
                 <TableRow key={item.category}>
                   <TableCell className="font-medium">{item.category}</TableCell>
-                  <TooltipProvider>
+                  <TooltipProvider delayDuration={0}>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <TableCell className="cursor-help">
@@ -100,7 +98,12 @@ export const ExpensesTable = () => {
                           </div>
                         </TableCell>
                       </TooltipTrigger>
-                      <TooltipContent side="right" className="w-64 p-3">
+                      <TooltipContent 
+                        side="right" 
+                        className="w-64 p-3"
+                        sideOffset={5}
+                        alignOffset={0}
+                      >
                         <div className="space-y-2">
                           <h4 className="font-semibold">Histórico de Variação</h4>
                           <div className="space-y-1">
