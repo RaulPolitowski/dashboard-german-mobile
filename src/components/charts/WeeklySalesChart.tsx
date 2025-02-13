@@ -37,6 +37,17 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
     }
   };
 
+  const getDayDate = (dayName: string) => {
+    const today = new Date();
+    const weekDays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    const currentDayIndex = today.getDay();
+    const targetDayIndex = weekDays.findIndex(day => day === dayName);
+    const diff = targetDayIndex - currentDayIndex;
+    const targetDate = new Date(today);
+    targetDate.setDate(today.getDate() + diff);
+    return format(targetDate, 'yyyy-MM-dd');
+  };
+
   // Preparar dados para visualização móvel
   const prepareMobileData = () => {
     return mockData.map(day => {
@@ -53,7 +64,9 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
 
   const handleCardClick = (dayName: string) => {
     if (onDayClick) {
-      onDayClick(dayName);
+      const formattedDate = getDayDate(dayName);
+      console.log("Clicou no dia:", dayName, "Data formatada:", formattedDate);
+      onDayClick(formattedDate);
     }
   };
 
@@ -125,8 +138,8 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
             data={mockData} 
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
             onClick={(data) => {
-              if (data && data.activePayload && onDayClick) {
-                onDayClick(data.activePayload[0].payload.day);
+              if (data && data.activePayload) {
+                handleCardClick(data.activePayload[0].payload.day);
               }
             }}
           >
