@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { DueTodayOrders } from "./DueTodayOrders";
 import { OrderCharts } from "./OrderCharts";
 import { OrderHeader } from "./components/OrderHeader";
@@ -44,24 +44,22 @@ export const OrderMetrics = () => {
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className="max-w-3xl">
-          <DialogHeader>
+          <div className="flex flex-col gap-4">
             <DialogTitle>{selectedOrders.title}</DialogTitle>
-          </DialogHeader>
-          <div className={`rounded-lg border p-4 ${
-            selectedOrders.type === "created" ? "bg-indigo-50 border-indigo-200" :
-            selectedOrders.type === "approved" ? "bg-emerald-50 border-emerald-200" :
-            selectedOrders.type === "pending" ? "bg-amber-50 border-amber-200" :
-            "bg-rose-50 border-rose-200"
-          }`}>
-            <div className="text-lg font-semibold mb-2">
-              Total: R$ {selectedOrders.orders.reduce((sum, item) => sum + item.value, 0).toLocaleString()}
+            <div className={`rounded-lg border p-4 ${
+              selectedOrders.type === "created" ? "bg-indigo-50 border-indigo-200" :
+              selectedOrders.type === "approved" ? "bg-emerald-50 border-emerald-200" :
+              selectedOrders.type === "pending" ? "bg-amber-50 border-amber-200" :
+              "bg-rose-50 border-rose-200"
+            }`}>
+              <div className="text-lg font-semibold mb-2">
+                Total: R$ {selectedOrders.orders.reduce((sum, item) => sum + item.value, 0).toLocaleString()}
+              </div>
+              <div className="text-sm text-gray-600">
+                {selectedOrders.orders.length} {selectedOrders.orders.length === 1 ? "pedido" : "pedidos"}
+              </div>
             </div>
-            <div className="text-sm text-gray-600">
-              {selectedOrders.orders.length} {selectedOrders.orders.length === 1 ? "pedido" : "pedidos"}
-            </div>
-          </div>
-          <div className="mt-4">
-            <OrderDetails orders={selectedOrders.orders} />
+            <OrderDetails orders={selectedOrders.orders} title={selectedOrders.title} />
           </div>
         </DialogContent>
       </Dialog>

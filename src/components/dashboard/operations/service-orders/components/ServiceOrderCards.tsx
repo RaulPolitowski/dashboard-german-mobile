@@ -1,10 +1,22 @@
-import { useState } from "react";
-import { Card } from "../../../../ui/card";
+import { Card } from "@/components/ui/card";
 import { Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { DueTodayOrders } from "../DueTodayOrders";
 import { mockMetrics } from "../data/mockData";
 import { ServiceOrderDetailsDialog } from "./ServiceOrderDetailsDialog";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
+interface ServiceOrder {
+  id: string;
+  client: string;
+  description: string;
+  value: number;
+  technician: string;
+  deadline: string;
+}
+
+interface ServiceOrderCardsProps {
+  handleOrderClick: (title: string, orders: ServiceOrder[], type: string) => void;
+}
 
 const mockOrders = {
   inProgress: [
@@ -21,7 +33,7 @@ const mockOrders = {
   ],
 };
 
-export const ServiceOrderCards = () => {
+export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) => {
   const [selectedOrders, setSelectedOrders] = useState<typeof mockOrders.inProgress>([]);
   const [dialogTitle, setDialogTitle] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -35,6 +47,7 @@ export const ServiceOrderCards = () => {
     setSelectedOrders(mockOrders[type]);
     setDialogTitle(titles[type]);
     setIsDialogOpen(true);
+    handleOrderClick(titles[type], mockOrders[type], type);
   };
 
   return (

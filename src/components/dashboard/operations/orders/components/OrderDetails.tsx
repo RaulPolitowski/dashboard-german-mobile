@@ -1,8 +1,13 @@
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../../ui/table";
-import { OrderDetailsProps } from "../types/order-metrics";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Order } from "../types/order-metrics";
 
-export const OrderDetails = ({ orders }: OrderDetailsProps) => (
+export interface OrderDetailsProps {
+  orders: Order[];
+  title: string;
+}
+
+export const OrderDetails = ({ orders, title }: OrderDetailsProps) => (
   <div className="overflow-auto touch-pan-x">
     <Table>
       <TableHeader>

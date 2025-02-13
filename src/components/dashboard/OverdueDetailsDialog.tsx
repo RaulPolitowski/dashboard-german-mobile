@@ -1,11 +1,9 @@
-
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
-} from "@radix-ui/react-dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@radix-ui/react-table";
+} from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface OverdueDetailsDialogProps {
   isOpen: boolean;
@@ -63,9 +61,7 @@ export const OverdueDetailsDialog = ({ isOpen, onClose, type, items }: OverdueDe
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>{getTitleByType()}</DialogTitle>
-        </DialogHeader>
+        <DialogTitle>{getTitleByType()}</DialogTitle>
         <div className={`rounded-lg border p-4 ${getHeaderColorByType()}`}>
           <div className="text-lg font-semibold mb-2">
             Total: R$ {items.reduce((sum, item) => sum + item.value, 0).toLocaleString()}
