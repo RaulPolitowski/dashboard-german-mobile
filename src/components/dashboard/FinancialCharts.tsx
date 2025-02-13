@@ -1,4 +1,3 @@
-
 import { ChartBar, ChevronDown, ChevronUp, TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
@@ -56,8 +55,9 @@ export const FinancialCharts = () => {
     try {
       const parsedDate = parseISO(date);
       const weekDay = format(parsedDate, "EEEE", { locale: ptBR });
+      const capitalizedWeekDay = weekDay.charAt(0).toUpperCase() + weekDay.slice(1);
       const formattedDate = format(parsedDate, "dd/MM/yyyy");
-      return `${weekDay}, ${formattedDate}`;
+      return `${capitalizedWeekDay}, ${formattedDate}`;
     } catch (e) {
       console.error("Error formatting date:", e);
       return "Hoje";
@@ -96,7 +96,10 @@ export const FinancialCharts = () => {
                 <div className="flex items-center gap-2">
                   <ChartBar 
                     className="w-4 h-4 md:w-5 md:h-5 text-gray-500 cursor-pointer"
-                    onClick={() => setShowDetails(true)}
+                    onClick={() => {
+                      setSelectedDate(null); // Resetar para mostrar dia atual
+                      setShowDetails(true);
+                    }}
                   />
                   <button 
                     onClick={() => setIsMinimized(true)}
@@ -168,16 +171,13 @@ export const FinancialCharts = () => {
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-xl">
-              Detalhamento Financeiro
+              Detalhamento Financeiro - {formatSelectedDateFull(selectedDate)}
             </DialogTitle>
-            <DialogDescription className="text-base text-gray-600">
-              {formatSelectedDateFull(selectedDate)}
-            </DialogDescription>
           </DialogHeader>
           <div className="mt-4">
             <PaymentMethodDetails 
-              data={selectedDate ? calculateTotals(selectedDate).paymentMethods : currentTotals.paymentMethods} 
-              period={selectedDate || "day"} 
+              data={selectedDayTotals.paymentMethods}
+              period={selectedDate || "day"}
             />
           </div>
         </DialogContent>
