@@ -1,4 +1,3 @@
-
 import { ChartBar, ChevronDown, ChevronUp, TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
@@ -158,7 +157,6 @@ export const FinancialCharts = () => {
               </div>
 
               <div className="mt-4">
-                <p className="text-sm text-gray-500 mb-2">Histórico dos últimos 7 dias</p>
                 <CashFlowChart period={selectedPeriod} />
               </div>
             </>
@@ -167,13 +165,6 @@ export const FinancialCharts = () => {
       </div>
 
       <ExpensesTable />
-
-      <Card className="p-4 md:p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribuição de Despesas</h3>
-        <div className="h-[300px]">
-          <ExpensesDistributionChart />
-        </div>
-      </Card>
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className="max-w-4xl">

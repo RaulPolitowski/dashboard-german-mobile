@@ -23,10 +23,22 @@ const timeRanges = ["7D", "15D", "30D", "90D"] as const;
 type TimeRange = (typeof timeRanges)[number];
 
 export const BudgetMetrics = () => {
-  const [selectedRange, setSelectedRange] = useState<TimeRange>("30D");
+  const [selectedRange, setSelectedRange] = useState<string>("30D");
   const [selectedSeller, setSelectedSeller] = useState<string>("all");
+  const [showGeneratedDetails, setShowGeneratedDetails] = useState(false);
+  const [showApprovedDetails, setShowApprovedDetails] = useState(false);
   const [showOverdueDetails, setShowOverdueDetails] = useState(false);
   const [showLostDetails, setShowLostDetails] = useState(false);
+
+  const generatedItems = [
+    { id: "1", date: "2024-02-15", value: 25000, entity: "Cliente A", description: "Projeto X", seller: "João Silva" },
+    { id: "2", date: "2024-02-16", value: 18000, entity: "Cliente B", description: "Serviço Y", seller: "Maria Santos" },
+  ];
+
+  const approvedItems = [
+    { id: "1", date: "2024-02-10", value: 22000, entity: "Cliente C", description: "Projeto Z", seller: "Pedro Costa" },
+    { id: "2", date: "2024-02-12", value: 15000, entity: "Cliente D", description: "Serviço W", seller: "Ana Silva" },
+  ];
 
   const overdueItems = [
     { id: "1", date: "2024-02-01", value: 12500, entity: "Cliente A", description: "Projeto X", seller: "João Silva" },
@@ -41,7 +53,7 @@ export const BudgetMetrics = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Métricas de Orçamentos</h3>
         <div className="flex flex-col md:flex-row gap-4">
           <Select value={selectedSeller} onValueChange={setSelectedSeller}>
@@ -77,7 +89,10 @@ export const BudgetMetrics = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 bg-gradient-to-br from-indigo-500/10 to-indigo-600/10 border-indigo-200">
+        <Card 
+          className="p-4 bg-gradient-to-br from-indigo-500/10 to-indigo-600/10 border-indigo-200 cursor-pointer hover:shadow-lg transition-all"
+          onClick={() => setShowGeneratedDetails(true)}
+        >
           <div className="flex justify-between items-start">
             <div>
               <div className="flex items-center gap-2">
@@ -90,7 +105,10 @@ export const BudgetMetrics = () => {
           </div>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border-emerald-200">
+        <Card 
+          className="p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border-emerald-200 cursor-pointer hover:shadow-lg transition-all"
+          onClick={() => setShowApprovedDetails(true)}
+        >
           <div className="flex justify-between items-start">
             <div>
               <div className="flex items-center gap-2">
@@ -139,6 +157,20 @@ export const BudgetMetrics = () => {
       <DueTodayBudgets />
 
       <BudgetCharts />
+
+      <OverdueDetailsDialog
+        isOpen={showGeneratedDetails}
+        onClose={() => setShowGeneratedDetails(false)}
+        type="generated"
+        items={generatedItems}
+      />
+
+      <OverdueDetailsDialog
+        isOpen={showApprovedDetails}
+        onClose={() => setShowApprovedDetails(false)}
+        type="approved"
+        items={approvedItems}
+      />
 
       <OverdueDetailsDialog
         isOpen={showOverdueDetails}
