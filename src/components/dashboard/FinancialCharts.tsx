@@ -8,25 +8,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { useIsMobile } from "../../hooks/use-mobile";
+import { WeeklySalesChart } from "../charts/WeeklySalesChart";
 import { format } from "date-fns";
 
 export const FinancialCharts = () => {
   const [period, setPeriod] = useState("day");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const totals = calculateTotals(period);
+  
+  // Calcular totais do dia atual e anterior
+  const currentTotals = calculateTotals("day");
   const yesterdayTotals = calculateTotals("yesterday");
-  const isMobile = useIsMobile();
-
-  const shouldShowPieChart = ['day', 'currentWeek', 'currentMonth'].includes(period);
-
-  const pieData = [
-    { name: 'Entrada', value: totals.revenue, color: '#10B981' },
-    { name: 'Saída', value: totals.expenses, color: '#EF4444' },
-  ];
+  
+  // Se houver uma data selecionada, calcular os totais daquele dia
+  const selectedDayTotals = selectedDate ? calculateTotals(selectedDate) : currentTotals;
 
   const getComparisonIndicator = (current: number, previous: number) => {
     const diff = current - previous;
@@ -50,8 +46,15 @@ export const FinancialCharts = () => {
     return null;
   };
 
+  const handleDayClick = (date: string) => {
+    setSelectedDate(date);
+    setShowDetails(true);
+  };
+
   return (
     <div className="space-y-6">
+      <WeeklySalesChart onDayClick={handleDayClick} />
+      
       <div className="grid grid-cols-1 gap-4 md:gap-6">
         <Card className="p-4 md:p-6">
           {isMinimized ? (
@@ -62,7 +65,7 @@ export const FinancialCharts = () => {
               <div className="flex items-center justify-between">
                 <h3 className="text-base md:text-lg font-semibold text-gray-900">
                   Fluxo de Caixa
-                  {period === "day" && ` - ${format(new Date(selectedDate), "dd/MM/yyyy")}`}
+                  {selectedDate && ` - ${format(new Date(selectedDate), "dd/MM/yyyy")}`}
                 </h3>
                 <ChevronDown className="w-5 h-5 text-gray-500" />
               </div>
@@ -73,36 +76,23 @@ export const FinancialCharts = () => {
                 <div>
                   <h3 className="text-base md:text-lg font-semibold text-gray-900">
                     Fluxo de Caixa
-                    {period === "day" && ` - ${format(new Date(selectedDate), "dd/MM/yyyy")}`}
+                    {selectedDate && ` - ${format(new Date(selectedDate), "dd/MM/yyyy")}`}
                   </h3>
-                  <p className="text-sm text-gray-600">Movimentação Financeira: R$ {totals.result.toLocaleString()}</p>
+                  <p className="text-sm text-gray-600">
+                    Movimentação Financeira: R$ {selectedDayTotals.result.toLocaleString()}
+                  </p>
                 </div>
-                <div className="flex items-center gap-2 w-full md:w-auto">
-                  <select 
-                    value={period}
-                    onChange={(e) => setPeriod(e.target.value)}
-                    className="w-full md:w-auto px-2 py-1 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white text-gray-700"
+                <div className="flex items-center gap-2">
+                  <ChartBar 
+                    className="w-4 h-4 md:w-5 md:h-5 text-gray-500 cursor-pointer"
+                    onClick={() => setShowDetails(true)}
+                  />
+                  <button 
+                    onClick={() => setIsMinimized(true)}
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                   >
-                    <option value="day">Hoje</option>
-                    <option value="currentWeek">Semana atual</option>
-                    <option value="currentMonth">Mês atual</option>
-                    <option value="3">Últimos 3 meses</option>
-                    <option value="6">Últimos 6 meses</option>
-                    <option value="12">Último ano</option>
-                    <option value="year">Ano atual</option>
-                  </select>
-                  <div className="flex gap-2">
-                    <ChartBar 
-                      className="w-4 h-4 md:w-5 md:h-5 text-gray-500 cursor-pointer"
-                      onClick={() => setShowDetails(true)}
-                    />
-                    <button 
-                      onClick={() => setIsMinimized(true)}
-                      className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                    >
-                      <ChevronUp className="w-4 h-4 text-gray-500" />
-                    </button>
-                  </div>
+                    <ChevronUp className="w-4 h-4 text-gray-500" />
+                  </button>
                 </div>
               </div>
 
@@ -110,69 +100,48 @@ export const FinancialCharts = () => {
                 <div className="p-3 rounded-lg bg-gradient-to-br from-emerald-50 via-emerald-100/40 to-emerald-50/30 border border-emerald-100">
                   <p className="text-sm text-gray-600">Movimentações de Entrada</p>
                   <p className="text-lg font-semibold text-emerald-600">
-                    R$ {totals.revenue.toLocaleString()}
+                    R$ {selectedDayTotals.revenue.toLocaleString()}
                   </p>
-                  {period === "day" && yesterdayTotals && (
+                  {!selectedDate && (
                     <div className="flex items-center mt-1">
-                      <p className="text-xs text-gray-500 mr-2">Ontem: R$ {yesterdayTotals.revenue.toLocaleString()}</p>
-                      {getComparisonIndicator(totals.revenue, yesterdayTotals.revenue)}
+                      <p className="text-xs text-gray-500 mr-2">
+                        Ontem: R$ {yesterdayTotals.revenue.toLocaleString()}
+                      </p>
+                      {getComparisonIndicator(currentTotals.revenue, yesterdayTotals.revenue)}
                     </div>
                   )}
                 </div>
                 <div className="p-3 rounded-lg bg-gradient-to-br from-rose-50 via-rose-100/40 to-rose-50/30 border border-rose-100">
                   <p className="text-sm text-gray-600">Movimentações de Saída</p>
                   <p className="text-lg font-semibold text-rose-600">
-                    R$ {totals.expenses.toLocaleString()}
+                    R$ {selectedDayTotals.expenses.toLocaleString()}
                   </p>
-                  {period === "day" && yesterdayTotals && (
+                  {!selectedDate && (
                     <div className="flex items-center mt-1">
-                      <p className="text-xs text-gray-500 mr-2">Ontem: R$ {yesterdayTotals.expenses.toLocaleString()}</p>
-                      {getComparisonIndicator(totals.expenses, yesterdayTotals.expenses)}
+                      <p className="text-xs text-gray-500 mr-2">
+                        Ontem: R$ {yesterdayTotals.expenses.toLocaleString()}
+                      </p>
+                      {getComparisonIndicator(currentTotals.expenses, yesterdayTotals.expenses)}
                     </div>
                   )}
                 </div>
                 <div className="p-3 rounded-lg bg-gradient-to-br from-blue-50 via-blue-100/40 to-blue-50/30 border border-blue-100">
                   <p className="text-sm text-gray-600">Saldo do Período</p>
                   <p className="text-lg font-semibold text-blue-600">
-                    R$ {totals.result.toLocaleString()}
+                    R$ {selectedDayTotals.result.toLocaleString()}
                   </p>
-                  {period === "day" && yesterdayTotals && (
+                  {!selectedDate && (
                     <div className="flex items-center mt-1">
-                      <p className="text-xs text-gray-500 mr-2">Ontem: R$ {yesterdayTotals.result.toLocaleString()}</p>
-                      {getComparisonIndicator(totals.result, yesterdayTotals.result)}
+                      <p className="text-xs text-gray-500 mr-2">
+                        Ontem: R$ {yesterdayTotals.result.toLocaleString()}
+                      </p>
+                      {getComparisonIndicator(currentTotals.result, yesterdayTotals.result)}
                     </div>
                   )}
                 </div>
               </div>
 
-              <div 
-                className="h-[200px] md:h-[250px] cursor-pointer"
-                onClick={() => setShowDetails(true)}
-              >
-                {shouldShowPieChart ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, value }) => `${name}: R$ ${value.toLocaleString()}`}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <CashFlowChart period={period} />
-                )}
-              </div>
+              <CashFlowChart period="7" />
             </>
           )}
         </Card>
@@ -188,12 +157,20 @@ export const FinancialCharts = () => {
       </Card>
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-[95vw] md:max-w-4xl h-[90vh] md:h-auto overflow-hidden flex flex-col p-0">
-          <DialogHeader className="p-4 md:p-6 border-b">
-            <DialogTitle>Detalhamento por Forma de Pagamento</DialogTitle>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedDate ? 
+                `Detalhamento do dia ${format(new Date(selectedDate), "dd/MM/yyyy")}` : 
+                "Detalhamento do dia atual"
+              }
+            </DialogTitle>
           </DialogHeader>
-          <div className="flex-1 overflow-auto p-4 md:p-6">
-            <PaymentMethodDetails data={totals.paymentMethods} period={period} />
+          <div className="mt-4">
+            <PaymentMethodDetails 
+              data={selectedDate ? calculateTotals(selectedDate).paymentMethods : currentTotals.paymentMethods} 
+              period={selectedDate || "day"} 
+            />
           </div>
         </DialogContent>
       </Dialog>
