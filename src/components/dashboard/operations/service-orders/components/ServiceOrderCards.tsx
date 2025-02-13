@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { DueTodayOrders } from "../DueTodayOrders";
 import { mockMetrics } from "../data/mockData";
-import { ServiceOrderDetailsDialog } from "./ServiceOrderDetailsDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ServiceOrder {
@@ -53,112 +52,94 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
   };
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <TooltipProvider delayDuration={200}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Card 
-                className="p-4 bg-gradient-to-br from-indigo-500/10 to-indigo-600/10 border-indigo-200 cursor-pointer hover:shadow-lg transition-all"
-                onClick={() => handleCardClick("inProgress")}
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-indigo-500" />
-                      <h3 className="font-semibold text-indigo-700">Em Andamento</h3>
-                    </div>
-                    <p className="text-2xl font-bold text-indigo-600 mt-2">
-                      R$ {mockMetrics.inProgressValue.toLocaleString()}
-                    </p>
-                    <p className="text-sm text-indigo-600 mt-1">
-                      {mockMetrics.inProgressCount} ordens
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            </TooltipTrigger>
-            <TooltipContent 
-              side="top" 
-              align="center"
-              className="bg-gray-800 text-white px-3 py-1.5 rounded-md text-sm z-50"
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2 md:px-0">
+      <TooltipProvider delayDuration={200}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Card 
+              className="p-6 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 bg-gradient-to-br from-indigo-50 to-white border-indigo-100"
+              onClick={() => handleCardClick("inProgress")}
             >
-              <p>Clique para ver detalhes das ordens em andamento</p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Card 
-                className="p-4 bg-gradient-to-br from-rose-500/10 to-rose-600/10 border-rose-200 cursor-pointer hover:shadow-lg transition-all"
-                onClick={() => handleCardClick("delayed")}
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <AlertTriangle className="h-5 w-5 text-rose-500" />
-                      <h3 className="font-semibold text-rose-700">Atrasadas</h3>
-                    </div>
-                    <p className="text-2xl font-bold text-rose-600 mt-2">
-                      R$ {mockMetrics.delayedValue.toLocaleString()}
-                    </p>
-                    <p className="text-sm text-rose-600 mt-1">
-                      {mockMetrics.delayedCount} ordens
-                    </p>
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-indigo-100 rounded-lg group-hover:bg-indigo-200 transition-colors">
+                    <Clock className="h-6 w-6 text-indigo-600" />
                   </div>
+                  <h3 className="font-semibold text-lg text-indigo-700">Em Andamento</h3>
                 </div>
-              </Card>
-            </TooltipTrigger>
-            <TooltipContent 
-              side="top" 
-              align="center"
-              className="bg-gray-800 text-white px-3 py-1.5 rounded-md text-sm z-50"
-            >
-              <p>Clique para ver detalhes das ordens atrasadas</p>
-            </TooltipContent>
-          </Tooltip>
+                <p className="text-3xl font-bold text-indigo-600 mb-2">
+                  R$ {mockMetrics.inProgressValue.toLocaleString()}
+                </p>
+                <p className="text-sm font-medium text-indigo-500">
+                  {mockMetrics.inProgressCount} ordens
+                </p>
+              </div>
+            </Card>
+          </TooltipTrigger>
+          <TooltipContent side="top" align="center">
+            <p>Clique para ver detalhes das ordens em andamento</p>
+          </TooltipContent>
+        </Tooltip>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Card 
-                className="p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border-emerald-200 cursor-pointer hover:shadow-lg transition-all"
-                onClick={() => handleCardClick("completed")}
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                      <h3 className="font-semibold text-emerald-700">Finalizadas</h3>
-                    </div>
-                    <p className="text-2xl font-bold text-emerald-600 mt-2">
-                      R$ {mockMetrics.completedValue.toLocaleString()}
-                    </p>
-                    <p className="text-sm text-emerald-600 mt-1">
-                      {mockMetrics.completedCount} ordens
-                    </p>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Card 
+              className="p-6 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 bg-gradient-to-br from-rose-50 to-white border-rose-100"
+              onClick={() => handleCardClick("delayed")}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-rose-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-rose-100 rounded-lg group-hover:bg-rose-200 transition-colors">
+                    <AlertTriangle className="h-6 w-6 text-rose-600" />
                   </div>
+                  <h3 className="font-semibold text-lg text-rose-700">Atrasadas</h3>
                 </div>
-              </Card>
-            </TooltipTrigger>
-            <TooltipContent 
-              side="top" 
-              align="center"
-              className="bg-gray-800 text-white px-3 py-1.5 rounded-md text-sm z-50"
+                <p className="text-3xl font-bold text-rose-600 mb-2">
+                  R$ {mockMetrics.delayedValue.toLocaleString()}
+                </p>
+                <p className="text-sm font-medium text-rose-500">
+                  {mockMetrics.delayedCount} ordens
+                </p>
+              </div>
+            </Card>
+          </TooltipTrigger>
+          <TooltipContent side="top" align="center">
+            <p>Clique para ver detalhes das ordens atrasadas</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Card 
+              className="p-6 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 bg-gradient-to-br from-emerald-50 to-white border-emerald-100"
+              onClick={() => handleCardClick("completed")}
             >
-              <p>Clique para ver detalhes das ordens finalizadas</p>
-            </TooltipContent>
-          </Tooltip>
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-emerald-100 rounded-lg group-hover:bg-emerald-200 transition-colors">
+                    <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                  </div>
+                  <h3 className="font-semibold text-lg text-emerald-700">Finalizadas</h3>
+                </div>
+                <p className="text-3xl font-bold text-emerald-600 mb-2">
+                  R$ {mockMetrics.completedValue.toLocaleString()}
+                </p>
+                <p className="text-sm font-medium text-emerald-500">
+                  {mockMetrics.completedCount} ordens
+                </p>
+              </div>
+            </Card>
+          </TooltipTrigger>
+          <TooltipContent side="top" align="center">
+            <p>Clique para ver detalhes das ordens finalizadas</p>
+          </TooltipContent>
+        </Tooltip>
 
-          <DueTodayOrders />
-        </TooltipProvider>
-      </div>
-
-      <ServiceOrderDetailsDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        orders={selectedOrders}
-        title={dialogTitle}
-      />
-    </>
+        <DueTodayOrders />
+      </TooltipProvider>
+    </div>
   );
 };
