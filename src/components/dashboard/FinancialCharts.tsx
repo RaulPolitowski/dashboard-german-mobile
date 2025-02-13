@@ -1,5 +1,5 @@
 
-import { ChartBar, ChevronDown, ChevronUp } from "lucide-react";
+import { ChartBar, ChevronDown, ChevronUp, TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
 import { ExpensesTable } from "./ExpensesTable";
@@ -10,12 +10,15 @@ import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useIsMobile } from "../../hooks/use-mobile";
+import { format } from "date-fns";
 
 export const FinancialCharts = () => {
-  const [period, setPeriod] = useState("week");
+  const [period, setPeriod] = useState("day");
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
   const [isMinimized, setIsMinimized] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const totals = calculateTotals(period);
+  const yesterdayTotals = calculateTotals("yesterday");
   const isMobile = useIsMobile();
 
   const shouldShowPieChart = ['day', 'currentWeek', 'currentMonth'].includes(period);
@@ -24,6 +27,28 @@ export const FinancialCharts = () => {
     { name: 'Entrada', value: totals.revenue, color: '#10B981' },
     { name: 'Saída', value: totals.expenses, color: '#EF4444' },
   ];
+
+  const getComparisonIndicator = (current: number, previous: number) => {
+    const diff = current - previous;
+    const percentage = previous !== 0 ? (diff / previous) * 100 : 0;
+    
+    if (diff > 0) {
+      return (
+        <div className="flex items-center text-emerald-600 text-sm">
+          <TrendingUp className="w-4 h-4 mr-1" />
+          {Math.abs(percentage).toFixed(1)}%
+        </div>
+      );
+    } else if (diff < 0) {
+      return (
+        <div className="flex items-center text-rose-600 text-sm">
+          <TrendingDown className="w-4 h-4 mr-1" />
+          {Math.abs(percentage).toFixed(1)}%
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="space-y-6">
@@ -35,7 +60,10 @@ export const FinancialCharts = () => {
               onClick={() => setIsMinimized(false)}
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-base md:text-lg font-semibold text-gray-900">Fluxo de Caixa</h3>
+                <h3 className="text-base md:text-lg font-semibold text-gray-900">
+                  Fluxo de Caixa
+                  {period === "day" && ` - ${format(new Date(selectedDate), "dd/MM/yyyy")}`}
+                </h3>
                 <ChevronDown className="w-5 h-5 text-gray-500" />
               </div>
             </div>
@@ -43,7 +71,10 @@ export const FinancialCharts = () => {
             <>
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-2 md:gap-0">
                 <div>
-                  <h3 className="text-base md:text-lg font-semibold text-gray-900">Fluxo de Caixa</h3>
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900">
+                    Fluxo de Caixa
+                    {period === "day" && ` - ${format(new Date(selectedDate), "dd/MM/yyyy")}`}
+                  </h3>
                   <p className="text-sm text-gray-600">Movimentação Financeira: R$ {totals.result.toLocaleString()}</p>
                 </div>
                 <div className="flex items-center gap-2 w-full md:w-auto">
@@ -81,18 +112,36 @@ export const FinancialCharts = () => {
                   <p className="text-lg font-semibold text-emerald-600">
                     R$ {totals.revenue.toLocaleString()}
                   </p>
+                  {period === "day" && yesterdayTotals && (
+                    <div className="flex items-center mt-1">
+                      <p className="text-xs text-gray-500 mr-2">Ontem: R$ {yesterdayTotals.revenue.toLocaleString()}</p>
+                      {getComparisonIndicator(totals.revenue, yesterdayTotals.revenue)}
+                    </div>
+                  )}
                 </div>
                 <div className="p-3 rounded-lg bg-gradient-to-br from-rose-50 via-rose-100/40 to-rose-50/30 border border-rose-100">
                   <p className="text-sm text-gray-600">Movimentações de Saída</p>
                   <p className="text-lg font-semibold text-rose-600">
                     R$ {totals.expenses.toLocaleString()}
                   </p>
+                  {period === "day" && yesterdayTotals && (
+                    <div className="flex items-center mt-1">
+                      <p className="text-xs text-gray-500 mr-2">Ontem: R$ {yesterdayTotals.expenses.toLocaleString()}</p>
+                      {getComparisonIndicator(totals.expenses, yesterdayTotals.expenses)}
+                    </div>
+                  )}
                 </div>
                 <div className="p-3 rounded-lg bg-gradient-to-br from-blue-50 via-blue-100/40 to-blue-50/30 border border-blue-100">
                   <p className="text-sm text-gray-600">Saldo do Período</p>
                   <p className="text-lg font-semibold text-blue-600">
                     R$ {totals.result.toLocaleString()}
                   </p>
+                  {period === "day" && yesterdayTotals && (
+                    <div className="flex items-center mt-1">
+                      <p className="text-xs text-gray-500 mr-2">Ontem: R$ {yesterdayTotals.result.toLocaleString()}</p>
+                      {getComparisonIndicator(totals.result, yesterdayTotals.result)}
+                    </div>
+                  )}
                 </div>
               </div>
 

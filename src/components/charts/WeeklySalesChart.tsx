@@ -2,13 +2,17 @@
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../ui/card';
-import { subDays, startOfWeek, endOfWeek } from 'date-fns';
+import { subDays, startOfWeek, endOfWeek, format } from 'date-fns';
 import { FilterControls } from './weekly-sales/FilterControls';
 import { timeRanges, mockData } from './weekly-sales/constants';
 import { DateRange } from './weekly-sales/types';
 import { useIsMobile } from '../../hooks/use-mobile';
 
-export const WeeklySalesChart = () => {
+interface WeeklySalesChartProps {
+  onDayClick?: (date: string) => void;
+}
+
+export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
   const [selectedRange, setSelectedRange] = useState('all');
   const [customDateRange, setCustomDateRange] = useState<DateRange>({
     start: subDays(new Date(), 7),
@@ -47,6 +51,12 @@ export const WeeklySalesChart = () => {
     });
   };
 
+  const handleCardClick = (dayName: string) => {
+    if (onDayClick) {
+      onDayClick(dayName);
+    }
+  };
+
   return (
     <Card className="p-4 md:p-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
@@ -65,10 +75,13 @@ export const WeeklySalesChart = () => {
       </div>
 
       {isMobile ? (
-        // Versão mobile: Lista com cards para cada dia
         <div className="space-y-3">
           {prepareMobileData().map((day, index) => (
-            <Card key={index} className="p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-800/20">
+            <Card 
+              key={index} 
+              className="p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-800/20 cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => handleCardClick(day.name)}
+            >
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-semibold text-indigo-700 dark:text-indigo-300">{day.name}</h4>
@@ -107,11 +120,15 @@ export const WeeklySalesChart = () => {
           ))}
         </div>
       ) : (
-        // Versão desktop: Gráfico de barras
         <ResponsiveContainer width="100%" height={400}>
           <BarChart 
             data={mockData} 
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            onClick={(data) => {
+              if (data && data.activePayload && onDayClick) {
+                onDayClick(data.activePayload[0].payload.day);
+              }
+            }}
           >
             <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
             <XAxis 
@@ -133,6 +150,7 @@ export const WeeklySalesChart = () => {
                   name={range.id}
                   fill={range.color}
                   radius={[4, 4, 0, 0]}
+                  cursor="pointer"
                 />
               ))
             ) : (
@@ -140,6 +158,7 @@ export const WeeklySalesChart = () => {
                 dataKey={`${selectedRange}.value`}
                 fill="#6366F1"
                 radius={[4, 4, 0, 0]}
+                cursor="pointer"
               />
             )}
           </BarChart>
