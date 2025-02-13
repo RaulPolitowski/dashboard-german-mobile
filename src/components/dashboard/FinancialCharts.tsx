@@ -9,7 +9,8 @@ import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
 import { WeeklySalesChart } from "../charts/WeeklySalesChart";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export const FinancialCharts = () => {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -48,6 +49,19 @@ export const FinancialCharts = () => {
   const handleDayClick = (date: string) => {
     setSelectedDate(date);
     setShowDetails(true);
+  };
+
+  const formatSelectedDateFull = (date: string | null) => {
+    if (!date) return "Hoje";
+    try {
+      const parsedDate = parseISO(date);
+      const weekDay = format(parsedDate, "EEEE", { locale: ptBR });
+      const formattedDate = format(parsedDate, "dd/MM/yyyy");
+      return `${weekDay}, ${formattedDate}`;
+    } catch (e) {
+      console.error("Error formatting date:", e);
+      return "Hoje";
+    }
   };
 
   return (
@@ -94,36 +108,36 @@ export const FinancialCharts = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                <div className="p-3 rounded-lg bg-gradient-to-br from-emerald-50 via-emerald-100/40 to-emerald-50/30 border border-emerald-100">
+                <div className="p-4 rounded-lg bg-gradient-to-br from-emerald-50 via-emerald-100/40 to-emerald-50/30 border border-emerald-100">
                   <p className="text-sm text-gray-600">Entradas de Hoje</p>
-                  <p className="text-lg font-semibold text-emerald-600">
+                  <p className="text-xl font-semibold text-emerald-600 mt-1">
                     R$ {currentTotals.revenue.toLocaleString()}
                   </p>
-                  <div className="flex items-center mt-1">
+                  <div className="flex items-center mt-2">
                     <p className="text-xs text-gray-500 mr-2">
                       Ontem: R$ {yesterdayTotals.revenue.toLocaleString()}
                     </p>
                     {getComparisonIndicator(currentTotals.revenue, yesterdayTotals.revenue)}
                   </div>
                 </div>
-                <div className="p-3 rounded-lg bg-gradient-to-br from-rose-50 via-rose-100/40 to-rose-50/30 border border-rose-100">
+                <div className="p-4 rounded-lg bg-gradient-to-br from-rose-50 via-rose-100/40 to-rose-50/30 border border-rose-100">
                   <p className="text-sm text-gray-600">Saídas de Hoje</p>
-                  <p className="text-lg font-semibold text-rose-600">
+                  <p className="text-xl font-semibold text-rose-600 mt-1">
                     R$ {currentTotals.expenses.toLocaleString()}
                   </p>
-                  <div className="flex items-center mt-1">
+                  <div className="flex items-center mt-2">
                     <p className="text-xs text-gray-500 mr-2">
                       Ontem: R$ {yesterdayTotals.expenses.toLocaleString()}
                     </p>
                     {getComparisonIndicator(currentTotals.expenses, yesterdayTotals.expenses)}
                   </div>
                 </div>
-                <div className="p-3 rounded-lg bg-gradient-to-br from-blue-50 via-blue-100/40 to-blue-50/30 border border-blue-100">
+                <div className="p-4 rounded-lg bg-gradient-to-br from-blue-50 via-blue-100/40 to-blue-50/30 border border-blue-100">
                   <p className="text-sm text-gray-600">Saldo de Hoje</p>
-                  <p className="text-lg font-semibold text-blue-600">
+                  <p className="text-xl font-semibold text-blue-600 mt-1">
                     R$ {currentTotals.result.toLocaleString()}
                   </p>
-                  <div className="flex items-center mt-1">
+                  <div className="flex items-center mt-2">
                     <p className="text-xs text-gray-500 mr-2">
                       Ontem: R$ {yesterdayTotals.result.toLocaleString()}
                     </p>
@@ -153,17 +167,11 @@ export const FinancialCharts = () => {
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle>
-              {selectedDate ? 
-                `Detalhamento do dia selecionado` : 
-                "Detalhamento do dia atual"
-              }
+            <DialogTitle className="text-xl">
+              Detalhamento Financeiro
             </DialogTitle>
-            <DialogDescription>
-              {selectedDate ? 
-                `Visualizando informações detalhadas do dia ${selectedDate}` : 
-                "Visualizando informações detalhadas de hoje"
-              }
+            <DialogDescription className="text-base text-gray-600">
+              {formatSelectedDateFull(selectedDate)}
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4">
