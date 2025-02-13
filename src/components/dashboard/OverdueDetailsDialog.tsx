@@ -1,3 +1,4 @@
+
 import {
   Dialog,
   DialogContent,
@@ -8,6 +9,14 @@ import { Card } from "../ui/card";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 interface OverdueItem {
   id: string;
