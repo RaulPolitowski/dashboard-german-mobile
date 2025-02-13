@@ -1,15 +1,16 @@
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../../ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
+} from "@radix-ui/react-dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@radix-ui/react-table";
 
 interface OverdueDetailsDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  type: "overdue" | "lost" | "generated" | "approved";
+  type: "overdue" | "lost" | "generated" | "approved" | "receivable" | "payable";
   items: Array<{
     id: string;
     date: string;
@@ -31,6 +32,10 @@ export const OverdueDetailsDialog = ({ isOpen, onClose, type, items }: OverdueDe
         return "Orçamentos Gerados";
       case "approved":
         return "Orçamentos Aprovados";
+      case "receivable":
+        return "Contas a Receber";
+      case "payable":
+        return "Contas a Pagar";
       default:
         return "";
     }
@@ -46,6 +51,10 @@ export const OverdueDetailsDialog = ({ isOpen, onClose, type, items }: OverdueDe
         return "bg-indigo-50 border-indigo-200";
       case "approved":
         return "bg-emerald-50 border-emerald-200";
+      case "receivable":
+        return "bg-blue-50 border-blue-200";
+      case "payable":
+        return "bg-amber-50 border-amber-200";
       default:
         return "";
     }
@@ -62,7 +71,7 @@ export const OverdueDetailsDialog = ({ isOpen, onClose, type, items }: OverdueDe
             Total: R$ {items.reduce((sum, item) => sum + item.value, 0).toLocaleString()}
           </div>
           <div className="text-sm text-gray-600">
-            {items.length} {items.length === 1 ? "orçamento" : "orçamentos"}
+            {items.length} {items.length === 1 ? "item" : "itens"}
           </div>
         </div>
         <div className="mt-4">
