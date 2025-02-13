@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../ui/card';
-import { subDays, startOfWeek, endOfWeek, format } from 'date-fns';
+import { subDays, startOfWeek, endOfWeek, format, isToday } from 'date-fns';
 import { FilterControls } from './weekly-sales/FilterControls';
 import { timeRanges, mockData } from './weekly-sales/constants';
 import { DateRange } from './weekly-sales/types';
@@ -43,32 +43,60 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
     const currentDayIndex = today.getDay();
     const targetDayIndex = weekDays.findIndex(day => day === dayName);
     const diff = targetDayIndex - currentDayIndex;
+    
+    // Se o dia alvo está à frente do dia atual, subtrai 7 dias para pegar o dia da semana anterior
+    const adjustedDiff = diff > 0 ? diff - 7 : diff;
+    
     const targetDate = new Date(today);
-    targetDate.setDate(today.getDate() + diff);
+    targetDate.setDate(today.getDate() + adjustedDiff);
     return format(targetDate, 'yyyy-MM-dd');
   };
 
   // Preparar dados para visualização móvel
   const prepareMobileData = () => {
+    const today = new Date();
     return mockData.map(day => {
+      const date = getDayDate(day.day);
+      const isPreview = isToday(new Date(date));
+      
       const dailyTotal = Object.values(day)
         .filter(value => typeof value === 'object' && value?.value)
         .reduce((sum, curr: any) => sum + curr.value, 0);
       
       return {
-        name: day.day,
-        total: dailyTotal
+        name: day.day + (isPreview ? ' (Prévia)' : ''),
+        total: dailyTotal,
+        date
       };
-    });
+    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 7); // Pega apenas os últimos 7 dias
   };
 
   const handleCardClick = (dayName: string) => {
     if (onDayClick) {
-      const formattedDate = getDayDate(dayName);
-      console.log("Clicou no dia:", dayName, "Data formatada:", formattedDate);
+      const rawDayName = dayName.replace(' (Prévia)', '');
+      const formattedDate = getDayDate(rawDayName);
+      console.log("Clicou no dia:", rawDayName, "Data formatada:", formattedDate);
       onDayClick(formattedDate);
     }
   };
+
+  // Preparar dados para o gráfico
+  const prepareChartData = () => {
+    const today = new Date();
+    return mockData.map(day => {
+      const date = getDayDate(day.day);
+      const isPreview = isToday(new Date(date));
+      return {
+        ...day,
+        day: day.day + (isPreview ? ' (Prévia)' : ''),
+        date
+      };
+    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 7); // Pega apenas os últimos 7 dias
+  };
+
+  const chartData = prepareChartData();
 
   return (
     <Card className="p-4 md:p-6">
@@ -114,7 +142,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
               {selectedRange === 'all' && (
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   {timeRanges.map(range => {
-                    const value = mockData.find(d => d.day === day.name)?.[range.id]?.value || 0;
+                    const value = mockData.find(d => d.day === day.name.replace(' (Prévia)', ''))?.[range.id]?.value || 0;
                     return (
                       <div 
                         key={range.id}
@@ -135,7 +163,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
       ) : (
         <ResponsiveContainer width="100%" height={400}>
           <BarChart 
-            data={mockData} 
+            data={chartData}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
             onClick={(data) => {
               if (data && data.activePayload) {
