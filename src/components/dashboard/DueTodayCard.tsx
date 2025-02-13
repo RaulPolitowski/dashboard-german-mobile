@@ -1,23 +1,23 @@
 
 import { useState } from 'react';
 import { Card } from "../ui/card";
-import { ArrowUp, ArrowDown, ChevronRight } from "lucide-react";
+import { ArrowUp, ArrowDown, ChevronRight, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { Button } from "../ui/button";
 
 const dueTodayData = {
   receivables: [
-    { id: 1, description: "Fatura #1234", value: 5000, dueDate: "2024-03-20", type: "receivable" },
-    { id: 2, description: "Fatura #1235", value: 3500, dueDate: "2024-03-20", type: "receivable" },
+    { id: 1, description: "Fatura #1234", value: 5000, dueDate: "2024-03-19", type: "receivable" },
+    { id: 2, description: "Fatura #1235", value: 3500, dueDate: "2024-03-19", type: "receivable" },
   ],
   payables: [
-    { id: 3, description: "Fornecedor ABC", value: 4200, dueDate: "2024-03-20", type: "payable" },
-    { id: 4, description: "Serviço XYZ", value: 1800, dueDate: "2024-03-20", type: "payable" },
+    { id: 3, description: "Fornecedor ABC", value: 4200, dueDate: "2024-03-19", type: "payable" },
+    { id: 4, description: "Serviço XYZ", value: 1800, dueDate: "2024-03-19", type: "payable" },
   ]
 };
 
@@ -72,47 +72,69 @@ export const DueTodayCard = () => {
             </div>
           </Card>
         </TooltipTrigger>
-        <TooltipContent 
-          side="top" 
-          align="center"
-          className="bg-gray-800 text-white px-3 py-1.5 rounded-md text-sm z-50"
-        >
+        <TooltipContent side="top" align="center">
           <p>Clique para ver detalhes dos vencimentos de hoje</p>
         </TooltipContent>
       </Tooltip>
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>Detalhamento de Vencimentos - Hoje</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-6">
-            <div>
-              <h4 className="text-sm font-medium text-emerald-600 mb-2">A Receber</h4>
-              <div className="space-y-2">
-                {dueTodayData.receivables.map((item) => (
-                  <div key={item.id} className="p-3 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-lg">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">{item.description}</span>
-                      <span className="text-emerald-600">R$ {item.value.toLocaleString()}</span>
-                    </div>
-                    <span className="text-sm text-gray-500">Vencimento: {new Date(item.dueDate).toLocaleDateString()}</span>
-                  </div>
-                ))}
-              </div>
+        <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-gray-900">
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-8">
+              <DialogTitle className="text-2xl font-bold">Detalhamento de Vencimentos - Hoje</DialogTitle>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => setShowDetails(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-5 w-5" />
+              </Button>
             </div>
-            <div>
-              <h4 className="text-sm font-medium text-rose-600 mb-2">A Pagar</h4>
-              <div className="space-y-2">
-                {dueTodayData.payables.map((item) => (
-                  <div key={item.id} className="p-3 bg-rose-50/50 dark:bg-rose-950/20 rounded-lg">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">{item.description}</span>
-                      <span className="text-rose-600">R$ {item.value.toLocaleString()}</span>
+
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-xl font-semibold mb-4 text-emerald-600">A Receber</h3>
+                <div className="space-y-4">
+                  {dueTodayData.receivables.map((item) => (
+                    <div 
+                      key={item.id} 
+                      className="p-4 bg-emerald-50 rounded-lg border border-emerald-100"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-900">{item.description}</h4>
+                          <p className="text-sm text-gray-500">Vencimento: {item.dueDate}</p>
+                        </div>
+                        <span className="text-lg font-bold text-emerald-600">
+                          R$ {item.value.toLocaleString()}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-sm text-gray-500">Vencimento: {new Date(item.dueDate).toLocaleDateString()}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold mb-4 text-rose-600">A Pagar</h3>
+                <div className="space-y-4">
+                  {dueTodayData.payables.map((item) => (
+                    <div 
+                      key={item.id} 
+                      className="p-4 bg-rose-50 rounded-lg border border-rose-100"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-900">{item.description}</h4>
+                          <p className="text-sm text-gray-500">Vencimento: {item.dueDate}</p>
+                        </div>
+                        <span className="text-lg font-bold text-rose-600">
+                          R$ {item.value.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
