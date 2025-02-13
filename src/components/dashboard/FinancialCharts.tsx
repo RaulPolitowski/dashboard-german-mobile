@@ -8,14 +8,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
-import { WeeklySalesChart } from "../charts/WeeklySalesChart";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 export const FinancialCharts = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("today");
   
   // Calcular totais do dia atual e anterior
   const currentTotals = calculateTotals("day");
@@ -46,22 +47,13 @@ export const FinancialCharts = () => {
     return null;
   };
 
-  const handleDayClick = (date: string) => {
-    console.log("Data selecionada:", date); // Debug
-    setSelectedDate(date);
-    setShowDetails(true);
-  };
-
   const formatSelectedDateFull = (date: string | null) => {
     if (!date) return "Hoje";
     try {
-      console.log("Formatando data:", date); // Debug
       const parsedDate = parseISO(date);
-      console.log("Data parseada:", parsedDate); // Debug
       const weekDay = format(parsedDate, "EEEE", { locale: ptBR });
       const capitalizedWeekDay = weekDay.charAt(0).toUpperCase() + weekDay.slice(1);
       const formattedDate = format(parsedDate, "dd/MM/yyyy");
-      console.log("Data formatada:", `${capitalizedWeekDay}, ${formattedDate}`); // Debug
       return `${capitalizedWeekDay}, ${formattedDate}`;
     } catch (e) {
       console.error("Erro ao formatar data:", e);
@@ -71,8 +63,6 @@ export const FinancialCharts = () => {
 
   return (
     <div className="space-y-6">
-      <WeeklySalesChart onDayClick={handleDayClick} />
-      
       <div className="grid grid-cols-1 gap-4 md:gap-6">
         <Card className="p-4 md:p-6">
           {isMinimized ? (
@@ -99,6 +89,19 @@ export const FinancialCharts = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
+                  <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Selecione o período" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="today">Hoje</SelectItem>
+                        <SelectItem value="yesterday">Ontem</SelectItem>
+                        <SelectItem value="last7">Últimos 7 dias</SelectItem>
+                        <SelectItem value="currentMonth">Mês Atual</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                   <ChartBar 
                     className="w-4 h-4 md:w-5 md:h-5 text-gray-500 cursor-pointer"
                     onClick={() => {
@@ -156,7 +159,7 @@ export const FinancialCharts = () => {
 
               <div className="mt-4">
                 <p className="text-sm text-gray-500 mb-2">Histórico dos últimos 7 dias</p>
-                <CashFlowChart period="7" />
+                <CashFlowChart period={selectedPeriod} />
               </div>
             </>
           )}
@@ -182,7 +185,7 @@ export const FinancialCharts = () => {
           <div className="mt-4">
             <PaymentMethodDetails 
               data={selectedDayTotals.paymentMethods}
-              period={selectedDate || "day"}
+              period={selectedDate || selectedPeriod}
             />
           </div>
         </DialogContent>

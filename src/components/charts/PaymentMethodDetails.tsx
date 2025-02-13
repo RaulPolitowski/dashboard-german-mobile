@@ -20,8 +20,6 @@ export const PaymentMethodDetails = ({ data, period }: PaymentMethodDetailsProps
 
   const totalInflow = data.reduce((acc, curr) => acc + curr.inflow, 0);
   const totalOutflow = data.reduce((acc, curr) => acc + curr.outflow, 0);
-  const totalInflowTransactions = data.reduce((acc, curr) => acc + curr.inflowTransactions, 0);
-  const totalOutflowTransactions = data.reduce((acc, curr) => acc + curr.outflowTransactions, 0);
 
   return (
     <div className="space-y-4">
@@ -31,17 +29,11 @@ export const PaymentMethodDetails = ({ data, period }: PaymentMethodDetailsProps
           <p className="text-lg font-semibold text-emerald-600">
             R$ {totalInflow.toLocaleString()}
           </p>
-          <p className="text-sm text-gray-500 mt-1">
-            {totalInflowTransactions} transações
-          </p>
         </div>
         <div className="p-3 rounded-lg bg-gradient-to-br from-rose-500/10 to-rose-400/5 border border-rose-500/20">
           <p className="text-sm text-gray-600">Total de Saídas</p>
           <p className="text-lg font-semibold text-rose-600">
             R$ {totalOutflow.toLocaleString()}
-          </p>
-          <p className="text-sm text-gray-500 mt-1">
-            {totalOutflowTransactions} transações
           </p>
         </div>
       </div>
@@ -53,7 +45,6 @@ export const PaymentMethodDetails = ({ data, period }: PaymentMethodDetailsProps
               <TableHead className="w-[180px]">Forma de Pagamento</TableHead>
               <TableHead>Entradas</TableHead>
               <TableHead>Saídas</TableHead>
-              <TableHead className="text-center">Trans.</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -67,9 +58,6 @@ export const PaymentMethodDetails = ({ data, period }: PaymentMethodDetailsProps
                       ({((item.inflow / totalInflow) * 100).toFixed(1)}%)
                     </span>
                   </div>
-                  <div className="text-xs text-gray-500">
-                    {item.inflowTransactions} transações
-                  </div>
                 </TableCell>
                 <TableCell>
                   <div className="text-rose-600">
@@ -78,14 +66,6 @@ export const PaymentMethodDetails = ({ data, period }: PaymentMethodDetailsProps
                       ({((item.outflow / totalOutflow) * 100).toFixed(1)}%)
                     </span>
                   </div>
-                  <div className="text-xs text-gray-500">
-                    {item.outflowTransactions} transações
-                  </div>
-                </TableCell>
-                <TableCell className="text-center">
-                  <span className="text-emerald-600">+{item.inflowTransactions}</span>
-                  {" / "}
-                  <span className="text-rose-600">-{item.outflowTransactions}</span>
                 </TableCell>
               </TableRow>
             ))}
