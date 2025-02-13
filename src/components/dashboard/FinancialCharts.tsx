@@ -4,22 +4,21 @@ import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
 import { ExpensesTable } from "./ExpensesTable";
 import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../ui/dialog";
 import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
 import { WeeklySalesChart } from "../charts/WeeklySalesChart";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 
 export const FinancialCharts = () => {
-  const [period, setPeriod] = useState("day");
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   
   // Calcular totais do dia atual e anterior
   const currentTotals = calculateTotals("day");
   const yesterdayTotals = calculateTotals("yesterday");
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   
   // Se houver uma data selecionada, calcular os totais daquele dia
   const selectedDayTotals = selectedDate ? calculateTotals(selectedDate) : currentTotals;
@@ -51,16 +50,6 @@ export const FinancialCharts = () => {
     setShowDetails(true);
   };
 
-  const formatSelectedDate = (date: string | null) => {
-    if (!date) return "";
-    try {
-      return format(parseISO(date), "dd/MM/yyyy");
-    } catch (e) {
-      console.error("Error formatting date:", e);
-      return "";
-    }
-  };
-
   return (
     <div className="space-y-6">
       <WeeklySalesChart onDayClick={handleDayClick} />
@@ -74,8 +63,7 @@ export const FinancialCharts = () => {
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-base md:text-lg font-semibold text-gray-900">
-                  Fluxo de Caixa
-                  {selectedDate && ` - ${formatSelectedDate(selectedDate)}`}
+                  Fluxo de Caixa - Prévia do Dia
                 </h3>
                 <ChevronDown className="w-5 h-5 text-gray-500" />
               </div>
@@ -85,11 +73,10 @@ export const FinancialCharts = () => {
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-2 md:gap-0">
                 <div>
                   <h3 className="text-base md:text-lg font-semibold text-gray-900">
-                    Fluxo de Caixa
-                    {selectedDate && ` - ${formatSelectedDate(selectedDate)}`}
+                    Fluxo de Caixa - Prévia do Dia
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Movimentação Financeira: R$ {selectedDayTotals.result.toLocaleString()}
+                    Movimentação Financeira: R$ {currentTotals.result.toLocaleString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -108,50 +95,47 @@ export const FinancialCharts = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                 <div className="p-3 rounded-lg bg-gradient-to-br from-emerald-50 via-emerald-100/40 to-emerald-50/30 border border-emerald-100">
-                  <p className="text-sm text-gray-600">Movimentações de Entrada</p>
+                  <p className="text-sm text-gray-600">Entradas de Hoje</p>
                   <p className="text-lg font-semibold text-emerald-600">
-                    R$ {selectedDayTotals.revenue.toLocaleString()}
+                    R$ {currentTotals.revenue.toLocaleString()}
                   </p>
-                  {!selectedDate && (
-                    <div className="flex items-center mt-1">
-                      <p className="text-xs text-gray-500 mr-2">
-                        Ontem: R$ {yesterdayTotals.revenue.toLocaleString()}
-                      </p>
-                      {getComparisonIndicator(currentTotals.revenue, yesterdayTotals.revenue)}
-                    </div>
-                  )}
+                  <div className="flex items-center mt-1">
+                    <p className="text-xs text-gray-500 mr-2">
+                      Ontem: R$ {yesterdayTotals.revenue.toLocaleString()}
+                    </p>
+                    {getComparisonIndicator(currentTotals.revenue, yesterdayTotals.revenue)}
+                  </div>
                 </div>
                 <div className="p-3 rounded-lg bg-gradient-to-br from-rose-50 via-rose-100/40 to-rose-50/30 border border-rose-100">
-                  <p className="text-sm text-gray-600">Movimentações de Saída</p>
+                  <p className="text-sm text-gray-600">Saídas de Hoje</p>
                   <p className="text-lg font-semibold text-rose-600">
-                    R$ {selectedDayTotals.expenses.toLocaleString()}
+                    R$ {currentTotals.expenses.toLocaleString()}
                   </p>
-                  {!selectedDate && (
-                    <div className="flex items-center mt-1">
-                      <p className="text-xs text-gray-500 mr-2">
-                        Ontem: R$ {yesterdayTotals.expenses.toLocaleString()}
-                      </p>
-                      {getComparisonIndicator(currentTotals.expenses, yesterdayTotals.expenses)}
-                    </div>
-                  )}
+                  <div className="flex items-center mt-1">
+                    <p className="text-xs text-gray-500 mr-2">
+                      Ontem: R$ {yesterdayTotals.expenses.toLocaleString()}
+                    </p>
+                    {getComparisonIndicator(currentTotals.expenses, yesterdayTotals.expenses)}
+                  </div>
                 </div>
                 <div className="p-3 rounded-lg bg-gradient-to-br from-blue-50 via-blue-100/40 to-blue-50/30 border border-blue-100">
-                  <p className="text-sm text-gray-600">Saldo do Período</p>
+                  <p className="text-sm text-gray-600">Saldo de Hoje</p>
                   <p className="text-lg font-semibold text-blue-600">
-                    R$ {selectedDayTotals.result.toLocaleString()}
+                    R$ {currentTotals.result.toLocaleString()}
                   </p>
-                  {!selectedDate && (
-                    <div className="flex items-center mt-1">
-                      <p className="text-xs text-gray-500 mr-2">
-                        Ontem: R$ {yesterdayTotals.result.toLocaleString()}
-                      </p>
-                      {getComparisonIndicator(currentTotals.result, yesterdayTotals.result)}
-                    </div>
-                  )}
+                  <div className="flex items-center mt-1">
+                    <p className="text-xs text-gray-500 mr-2">
+                      Ontem: R$ {yesterdayTotals.result.toLocaleString()}
+                    </p>
+                    {getComparisonIndicator(currentTotals.result, yesterdayTotals.result)}
+                  </div>
                 </div>
               </div>
 
-              <CashFlowChart period="7" />
+              <div className="mt-4">
+                <p className="text-sm text-gray-500 mb-2">Histórico dos últimos 7 dias</p>
+                <CashFlowChart period="7" />
+              </div>
             </>
           )}
         </Card>
@@ -171,10 +155,16 @@ export const FinancialCharts = () => {
           <DialogHeader>
             <DialogTitle>
               {selectedDate ? 
-                `Detalhamento do dia ${formatSelectedDate(selectedDate)}` : 
+                `Detalhamento do dia selecionado` : 
                 "Detalhamento do dia atual"
               }
             </DialogTitle>
+            <DialogDescription>
+              {selectedDate ? 
+                `Visualizando informações detalhadas do dia ${selectedDate}` : 
+                "Visualizando informações detalhadas de hoje"
+              }
+            </DialogDescription>
           </DialogHeader>
           <div className="mt-4">
             <PaymentMethodDetails 
