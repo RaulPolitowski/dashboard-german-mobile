@@ -1,9 +1,10 @@
+
 import { ChartBar, ChevronDown, ChevronUp, TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
 import { ExpensesTable } from "./ExpensesTable";
 import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
@@ -14,11 +15,11 @@ import { ptBR } from "date-fns/locale";
 export const FinancialCharts = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   
   // Calcular totais do dia atual e anterior
   const currentTotals = calculateTotals("day");
   const yesterdayTotals = calculateTotals("yesterday");
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   
   // Se houver uma data selecionada, calcular os totais daquele dia
   const selectedDayTotals = selectedDate ? calculateTotals(selectedDate) : currentTotals;
@@ -46,6 +47,7 @@ export const FinancialCharts = () => {
   };
 
   const handleDayClick = (date: string) => {
+    console.log("Data selecionada:", date); // Debug
     setSelectedDate(date);
     setShowDetails(true);
   };
@@ -53,13 +55,16 @@ export const FinancialCharts = () => {
   const formatSelectedDateFull = (date: string | null) => {
     if (!date) return "Hoje";
     try {
+      console.log("Formatando data:", date); // Debug
       const parsedDate = parseISO(date);
+      console.log("Data parseada:", parsedDate); // Debug
       const weekDay = format(parsedDate, "EEEE", { locale: ptBR });
       const capitalizedWeekDay = weekDay.charAt(0).toUpperCase() + weekDay.slice(1);
       const formattedDate = format(parsedDate, "dd/MM/yyyy");
+      console.log("Data formatada:", `${capitalizedWeekDay}, ${formattedDate}`); // Debug
       return `${capitalizedWeekDay}, ${formattedDate}`;
     } catch (e) {
-      console.error("Error formatting date:", e);
+      console.error("Erro ao formatar data:", e);
       return "Hoje";
     }
   };
@@ -97,7 +102,7 @@ export const FinancialCharts = () => {
                   <ChartBar 
                     className="w-4 h-4 md:w-5 md:h-5 text-gray-500 cursor-pointer"
                     onClick={() => {
-                      setSelectedDate(null); // Resetar para mostrar dia atual
+                      setSelectedDate(null);
                       setShowDetails(true);
                     }}
                   />
