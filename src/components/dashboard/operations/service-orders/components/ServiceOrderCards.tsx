@@ -1,10 +1,13 @@
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card } from "../../../../ui/card";
 import { Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { DueTodayOrders } from "../DueTodayOrders";
 import { mockMetrics } from "../data/mockData";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../../ui/tooltip";
+import { Dialog, DialogContent, DialogTitle } from "../../../../ui/dialog";
+import { Button } from "../../../../ui/button";
+import { X } from "lucide-react";
 
 interface ServiceOrder {
   id: string;
@@ -38,6 +41,7 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
   const [selectedOrders, setSelectedOrders] = useState<typeof mockOrders.inProgress>([]);
   const [dialogTitle, setDialogTitle] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState<string>("");
 
   const handleCardClick = (type: "inProgress" | "delayed" | "completed") => {
     const titles = {
@@ -47,8 +51,8 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
     };
     setSelectedOrders(mockOrders[type]);
     setDialogTitle(titles[type]);
+    setSelectedType(type);
     setIsDialogOpen(true);
-    handleOrderClick(titles[type], mockOrders[type], type);
   };
 
   return (
@@ -57,23 +61,22 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
         <Tooltip>
           <TooltipTrigger asChild>
             <Card 
-              className="p-6 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 bg-gradient-to-br from-indigo-50 to-white border-indigo-100"
+              className="p-6 relative overflow-hidden cursor-pointer hover:shadow-xl transition-all bg-gradient-to-br from-indigo-50 to-white border-indigo-200 dark:from-indigo-900/50 dark:to-gray-900"
               onClick={() => handleCardClick("inProgress")}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-indigo-100 rounded-lg group-hover:bg-indigo-200 transition-colors">
-                    <Clock className="h-6 w-6 text-indigo-600" />
-                  </div>
-                  <h3 className="font-semibold text-lg text-indigo-700">Em Andamento</h3>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium mb-1 text-indigo-600 dark:text-indigo-400">Em Andamento</p>
+                  <p className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">
+                    R$ {mockMetrics.inProgressValue.toLocaleString()}
+                  </p>
+                  <p className="text-xs mt-1 text-indigo-500 dark:text-indigo-400">
+                    {mockMetrics.inProgressCount} ordens
+                  </p>
                 </div>
-                <p className="text-3xl font-bold text-indigo-600 mb-2">
-                  R$ {mockMetrics.inProgressValue.toLocaleString()}
-                </p>
-                <p className="text-sm font-medium text-indigo-500">
-                  {mockMetrics.inProgressCount} ordens
-                </p>
+                <div className="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/50">
+                  <Clock className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                </div>
               </div>
             </Card>
           </TooltipTrigger>
@@ -85,23 +88,22 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
         <Tooltip>
           <TooltipTrigger asChild>
             <Card 
-              className="p-6 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 bg-gradient-to-br from-rose-50 to-white border-rose-100"
+              className="p-6 relative overflow-hidden cursor-pointer hover:shadow-xl transition-all bg-gradient-to-br from-rose-50 to-white border-rose-200 dark:from-rose-900/50 dark:to-gray-900"
               onClick={() => handleCardClick("delayed")}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-rose-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-rose-100 rounded-lg group-hover:bg-rose-200 transition-colors">
-                    <AlertTriangle className="h-6 w-6 text-rose-600" />
-                  </div>
-                  <h3 className="font-semibold text-lg text-rose-700">Atrasadas</h3>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium mb-1 text-rose-600 dark:text-rose-400">Atrasadas</p>
+                  <p className="text-2xl font-bold text-rose-700 dark:text-rose-300">
+                    R$ {mockMetrics.delayedValue.toLocaleString()}
+                  </p>
+                  <p className="text-xs mt-1 text-rose-500 dark:text-rose-400">
+                    {mockMetrics.delayedCount} ordens
+                  </p>
                 </div>
-                <p className="text-3xl font-bold text-rose-600 mb-2">
-                  R$ {mockMetrics.delayedValue.toLocaleString()}
-                </p>
-                <p className="text-sm font-medium text-rose-500">
-                  {mockMetrics.delayedCount} ordens
-                </p>
+                <div className="p-3 rounded-full bg-rose-100 dark:bg-rose-900/50">
+                  <AlertTriangle className="w-6 h-6 text-rose-600 dark:text-rose-400" />
+                </div>
               </div>
             </Card>
           </TooltipTrigger>
@@ -113,23 +115,22 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
         <Tooltip>
           <TooltipTrigger asChild>
             <Card 
-              className="p-6 relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 bg-gradient-to-br from-emerald-50 to-white border-emerald-100"
+              className="p-6 relative overflow-hidden cursor-pointer hover:shadow-xl transition-all bg-gradient-to-br from-emerald-50 to-white border-emerald-200 dark:from-emerald-900/50 dark:to-gray-900"
               onClick={() => handleCardClick("completed")}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-emerald-100 rounded-lg group-hover:bg-emerald-200 transition-colors">
-                    <CheckCircle2 className="h-6 w-6 text-emerald-600" />
-                  </div>
-                  <h3 className="font-semibold text-lg text-emerald-700">Finalizadas</h3>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium mb-1 text-emerald-600 dark:text-emerald-400">Finalizadas</p>
+                  <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">
+                    R$ {mockMetrics.completedValue.toLocaleString()}
+                  </p>
+                  <p className="text-xs mt-1 text-emerald-500 dark:text-emerald-400">
+                    {mockMetrics.completedCount} ordens
+                  </p>
                 </div>
-                <p className="text-3xl font-bold text-emerald-600 mb-2">
-                  R$ {mockMetrics.completedValue.toLocaleString()}
-                </p>
-                <p className="text-sm font-medium text-emerald-500">
-                  {mockMetrics.completedCount} ordens
-                </p>
+                <div className="p-3 rounded-full bg-emerald-100 dark:bg-emerald-900/50">
+                  <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                </div>
               </div>
             </Card>
           </TooltipTrigger>
@@ -140,6 +141,65 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
 
         <DueTodayOrders />
       </TooltipProvider>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-gray-900">
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <DialogTitle className={`text-xl font-bold ${
+                selectedType === "inProgress" ? "text-indigo-600 dark:text-indigo-400" :
+                selectedType === "delayed" ? "text-rose-600 dark:text-rose-400" :
+                "text-emerald-600 dark:text-emerald-400"
+              }`}>
+                {dialogTitle}
+              </DialogTitle>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => setIsDialogOpen(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+
+            <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+              {selectedOrders.map((order) => (
+                <div 
+                  key={order.id} 
+                  className={`p-4 rounded-lg border ${
+                    selectedType === "inProgress" ? "bg-indigo-50 border-indigo-100 dark:bg-indigo-900/20 dark:border-indigo-800" :
+                    selectedType === "delayed" ? "bg-rose-50 border-rose-100 dark:bg-rose-900/20 dark:border-rose-800" :
+                    "bg-emerald-50 border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800"
+                  }`}
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100">{order.client}</h4>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{order.description}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-xs text-gray-400 dark:text-gray-500">
+                          Prazo: {order.deadline}
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">
+                          Técnico: {order.technician}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`text-lg font-bold ${
+                      selectedType === "inProgress" ? "text-indigo-600 dark:text-indigo-400" :
+                      selectedType === "delayed" ? "text-rose-600 dark:text-rose-400" :
+                      "text-emerald-600 dark:text-emerald-400"
+                    }`}>
+                      R$ {order.value.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
