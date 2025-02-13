@@ -105,18 +105,20 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
           <h3 className="text-lg font-semibold text-gray-700">Análise de Vendas por Dia e Horário</h3>
           <p className="text-sm text-gray-500">Distribuição semanal de vendas por intervalo de horário</p>
         </div>
-        <FilterControls
-          dateFilter={dateFilter}
-          selectedRange={selectedRange}
-          customDateRange={customDateRange}
-          onDateFilterChange={handleDateFilterChange}
-          onRangeChange={setSelectedRange}
-          onCustomDateChange={setCustomDateRange}
-        />
+        <div className="mt-4 md:mt-0 w-full md:w-auto">
+          <FilterControls
+            dateFilter={dateFilter}
+            selectedRange={selectedRange}
+            customDateRange={customDateRange}
+            onDateFilterChange={handleDateFilterChange}
+            onRangeChange={setSelectedRange}
+            onCustomDateChange={setCustomDateRange}
+          />
+        </div>
       </div>
 
       {isMobile ? (
-        <div className="space-y-3">
+        <div className="space-y-3 overflow-x-hidden">
           {prepareMobileData().map((day, index) => (
             <Card 
               key={index} 
@@ -125,22 +127,22 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <h4 className="font-semibold text-indigo-700 dark:text-indigo-300">{day.name}</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Total do dia</p>
+                  <h4 className="font-semibold text-indigo-700 dark:text-indigo-300 text-sm">{day.name}</h4>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Total do dia</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                  <p className="text-base font-bold text-indigo-600 dark:text-indigo-400">
                     R$ {day.total.toLocaleString()}
                   </p>
                   {selectedRange !== 'all' && timeRanges.find(range => range.id === selectedRange) && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       {timeRanges.find(range => range.id === selectedRange)?.label}
                     </p>
                   )}
                 </div>
               </div>
               {selectedRange === 'all' && (
-                <div className="mt-3 grid grid-cols-2 gap-2">
+                <div className="mt-3 grid grid-cols-2 gap-2 overflow-x-auto">
                   {timeRanges.map(range => {
                     const value = mockData.find(d => d.day === day.name.replace(' (Prévia)', ''))?.[range.id]?.value || 0;
                     return (
@@ -148,8 +150,8 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
                         key={range.id}
                         className="p-2 rounded-md bg-white/50 dark:bg-gray-800/50"
                       >
-                        <p className="text-xs text-gray-600 dark:text-gray-400">{range.label}</p>
-                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{range.label}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
                           R$ {value.toLocaleString()}
                         </p>
                       </div>
