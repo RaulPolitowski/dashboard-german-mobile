@@ -4,7 +4,6 @@ import { Card } from "../ui/card";
 import { ExpensesTable } from "./expenses/ExpensesTable";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState, useMemo } from "react";
-import { calculateTotals } from "../charts/CashFlowChart";
 import { format, parseISO, subDays, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Button } from "../ui/button";
@@ -180,7 +179,10 @@ export const FinancialCharts = () => {
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold text-gray-900">Movimentações</h3>
           <div className="flex gap-2">
-            <Select value={dateFilter} onValueChange={(value: DateFilter) => setDateFilter(value)}>
+            <Select value={dateFilter} onValueChange={(value: DateFilter) => {
+              setDateFilter(value);
+              setCurrentPage(1); // Reset page when filter changes
+            }}>
               <SelectTrigger className="w-[180px]">
                 <Calendar className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="Selecione o período" />
