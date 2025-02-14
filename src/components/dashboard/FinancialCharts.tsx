@@ -11,55 +11,81 @@ import { TransactionsList } from "./components/TransactionsList";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 
-const ComparisonIndicator = ({ value }: { value: number | undefined }) => {
-  if (typeof value === 'undefined') return null;
+const ComparisonCard = ({ 
+  title, 
+  currentValue, 
+  previousValue, 
+  comparison, 
+  bgColor 
+}: { 
+  title: string;
+  currentValue: number;
+  previousValue: number;
+  comparison: number;
+  bgColor: string;
+}) => {
+  const isPositive = comparison > 0;
   
-  const isPositive = value > 0;
   return (
-    <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-white' : 'text-white'}`}>
-      {isPositive ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
-      <span>{Math.abs(value).toFixed(1)}%</span>
-    </div>
+    <Card className={`p-4 ${bgColor}`}>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-white">{title}</h3>
+          <div className="flex items-center gap-1 text-sm text-white">
+            {isPositive ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
+            <span>{Math.abs(comparison).toFixed(1)}%</span>
+          </div>
+        </div>
+        <p className="text-2xl font-bold text-white">
+          R$ {currentValue.toLocaleString()}
+        </p>
+        <p className="text-sm text-white/80">
+          Mesmo dia mês anterior: R$ {previousValue.toLocaleString()}
+        </p>
+      </div>
+    </Card>
   );
 };
 
 export const FinancialCharts = () => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('today');
   const [showTransactions, setShowTransactions] = useState(false);
-  const { filteredTransactions, totals } = useTransactions(dateFilter);
+  const { filteredTransactions, totals, lastMonthSameDay } = useTransactions(dateFilter);
+
+  const lastMonthInflow = lastMonthSameDay
+    .filter(t => t.type === 'inflow')
+    .reduce((sum, t) => sum + t.value, 0);
+  
+  const lastMonthOutflow = lastMonthSameDay
+    .filter(t => t.type === 'outflow')
+    .reduce((sum, t) => sum + t.value, 0);
+
+  const lastMonthResult = lastMonthInflow - lastMonthOutflow;
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4 bg-emerald-500">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-white">Receitas</h3>
-            <ComparisonIndicator value={totals.comparison.inflow} />
-          </div>
-          <p className="text-2xl font-bold text-white mt-2">
-            R$ {totals.inflow.toLocaleString()}
-          </p>
-        </Card>
-
-        <Card className="p-4 bg-rose-500">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-white">Despesas</h3>
-            <ComparisonIndicator value={totals.comparison.outflow} />
-          </div>
-          <p className="text-2xl font-bold text-white mt-2">
-            R$ {totals.outflow.toLocaleString()}
-          </p>
-        </Card>
-
-        <Card className="p-4 bg-blue-500">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-white">Resultado</h3>
-            <ComparisonIndicator value={totals.comparison.result} />
-          </div>
-          <p className="text-2xl font-bold text-white mt-2">
-            R$ {totals.result.toLocaleString()}
-          </p>
-        </Card>
+        <ComparisonCard
+          title="Receitas"
+          currentValue={totals.inflow}
+          previousValue={lastMonthInflow}
+          comparison={totals.comparison.inflow}
+          bgColor="bg-emerald-500"
+        />
+        <ComparisonCard
+          title="Despesas"
+          currentValue={totals.outflow}
+          previousValue={lastMonthOutflow}
+          comparison={totals.comparison.outflow}
+          bgColor="bg-rose-500"
+        />
+        <ComparisonCard
+          title="Resultado"
+          currentValue={totals.result}
+          previousValue={lastMonthResult}
+          comparison={totals.comparison.result}
+          bgColor="bg-blue-500"
+        />
       </div>
 
       <Card className="p-4 md:p-6">

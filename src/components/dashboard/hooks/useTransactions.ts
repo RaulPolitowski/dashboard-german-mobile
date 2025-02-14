@@ -1,3 +1,4 @@
+
 import { useMemo } from 'react';
 import { Transaction, DateFilter } from '../types/financial';
 import { subDays, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMonths, parseISO } from 'date-fns';
@@ -87,5 +88,5 @@ export const useTransactions = (dateFilter: DateFilter) => {
     };
   }, [filteredTransactions, lastMonthSameDay]);
 
-  return { filteredTransactions, totals };
+  return { filteredTransactions, totals, lastMonthSameDay };
 };
