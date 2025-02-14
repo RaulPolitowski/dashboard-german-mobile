@@ -1,5 +1,5 @@
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Card } from "../ui/card";
 import { ExpensesTable } from "./expenses/ExpensesTable";
 import { DateFilter } from "./types/financial";
@@ -10,7 +10,6 @@ import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
 
 export const FinancialCharts = () => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('today');
-
   const { filteredTransactions, totals } = useTransactions(dateFilter);
 
   return (
@@ -34,6 +33,7 @@ export const FinancialCharts = () => {
           inflow={totals.inflow}
           outflow={totals.outflow}
           result={totals.result}
+          transactions={filteredTransactions}
         />
         <div className="mt-6">
           <CashFlowChart

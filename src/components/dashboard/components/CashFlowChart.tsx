@@ -50,6 +50,8 @@ export const CashFlowChart = ({ inflow, outflow, result }: CashFlowChartProps) =
           tickRotation: 0,
           format: (value) => `R$ ${value.toLocaleString()}`
         }}
+        enableLabel={true}
+        label={d => `R$ ${d.value.toLocaleString()}`}
       />
     </div>
   );
