@@ -24,10 +24,10 @@ export const FinancialCharts = () => {
   const [selectedTransactionType, setSelectedTransactionType] = useState<'inflow' | 'outflow' | null>(null);
 
   const transactions: Transaction[] = [
-    { id: '1', date: '2024-02-20', description: 'Venda Produto A', value: 1500, type: 'inflow' as const },
-    { id: '2', date: '2024-02-19', description: 'Pagamento Fornecedor', value: 800, type: 'outflow' as const },
-    { id: '3', date: '2024-02-18', description: 'Venda Serviço B', value: 2000, type: 'inflow' as const },
-    { id: '4', date: '2024-02-17', description: 'Despesas Operacionais', value: 600, type: 'outflow' as const },
+    { id: '1', date: '2024-02-20', description: 'Venda Produto A', value: 1500, type: 'inflow' },
+    { id: '2', date: '2024-02-19', description: 'Pagamento Fornecedor', value: 800, type: 'outflow' },
+    { id: '3', date: '2024-02-18', description: 'Venda Serviço B', value: 2000, type: 'inflow' },
+    { id: '4', date: '2024-02-17', description: 'Despesas Operacionais', value: 600, type: 'outflow' },
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const totals = calculateTotals("year");
@@ -38,13 +38,6 @@ export const FinancialCharts = () => {
     setSelectedTransactionType(type);
     setShowTransactions(true);
   };
-
-  const filteredTransactions = useMemo(() => {
-    if (!selectedTransactionType) return transactions;
-    return transactions.filter(t => t.type === selectedTransactionType);
-  }, [selectedTransactionType]);
-
-  const total = filteredTransactions.reduce((sum, t) => sum + t.value, 0);
 
   return (
     <div className="space-y-6">
@@ -107,10 +100,8 @@ export const FinancialCharts = () => {
         <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-gray-900">
           <div className="p-6">
             <div className="flex justify-between items-center mb-6">
-              <DialogTitle className={`text-xl font-bold ${
-                selectedTransactionType === 'inflow' ? 'text-emerald-600' : 'text-rose-600'
-              }`}>
-                {selectedTransactionType === 'inflow' ? 'Entradas' : 'Saídas'}
+              <DialogTitle className="text-xl font-bold text-gray-900">
+                Movimentações
               </DialogTitle>
               <Button 
                 variant="ghost" 
@@ -122,28 +113,32 @@ export const FinancialCharts = () => {
               </Button>
             </div>
 
-            <div className={`mb-4 p-4 rounded-lg border ${
-              selectedTransactionType === 'inflow' 
-                ? 'bg-emerald-50 border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800'
-                : 'bg-rose-50 border-rose-100 dark:bg-rose-900/20 dark:border-rose-800'
-            }`}>
+            <div className="mb-4 p-4 rounded-lg border bg-gray-50 border-gray-100">
               <div className="flex justify-between items-center">
-                <p className={`text-sm font-medium ${
-                  selectedTransactionType === 'inflow' ? 'text-emerald-600' : 'text-rose-600'
-                }`}>Total</p>
-                <p className={`text-lg font-bold ${
-                  selectedTransactionType === 'inflow' ? 'text-emerald-600' : 'text-rose-600'
-                }`}>
-                  R$ {total.toLocaleString()}
-                </p>
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Entradas</p>
+                  <p className="text-lg font-bold text-emerald-600">
+                    R$ {transactions.filter(t => t.type === 'inflow').reduce((sum, t) => sum + t.value, 0).toLocaleString()}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-medium text-gray-600">Total Saídas</p>
+                  <p className="text-lg font-bold text-rose-600">
+                    R$ {transactions.filter(t => t.type === 'outflow').reduce((sum, t) => sum + t.value, 0).toLocaleString()}
+                  </p>
+                </div>
               </div>
             </div>
 
             <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-              {filteredTransactions.map((transaction) => (
+              {transactions.map((transaction) => (
                 <div 
                   key={transaction.id} 
-                  className="p-4 bg-gray-50 rounded-lg border border-gray-100 dark:bg-gray-800/50 dark:border-gray-700"
+                  className={`p-4 rounded-lg border ${
+                    transaction.type === 'inflow'
+                      ? 'bg-emerald-50 border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800'
+                      : 'bg-rose-50 border-rose-100 dark:bg-rose-900/20 dark:border-rose-800'
+                  }`}
                 >
                   <div className="flex justify-between items-start">
                     <div>
