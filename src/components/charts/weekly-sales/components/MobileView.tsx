@@ -50,20 +50,17 @@ export const MobileView = ({ data, selectedRange, onCardClick }: MobileViewProps
 
           {selectedRange === 'all' && (
             <div className="mt-3 grid grid-cols-2 gap-2 overflow-x-auto">
-              {timeRanges.map(range => {
-                const value = data.find(d => d.name === day.name)?.value || 0;
-                return (
-                  <div 
-                    key={range.id}
-                    className="p-2 rounded-md bg-white/50 dark:bg-gray-800/50"
-                  >
-                    <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{range.label}</p>
-                    <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
-                      R$ {value.toLocaleString()}
-                    </p>
-                  </div>
-                );
-              })}
+              {timeRanges.map(range => (
+                <div 
+                  key={range.id}
+                  className="p-2 rounded-md bg-white/50 dark:bg-gray-800/50"
+                >
+                  <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{range.label}</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                    R$ {(day[range.id]?.value || 0).toLocaleString()}
+                  </p>
+                </div>
+              ))}
             </div>
           )}
         </Card>
