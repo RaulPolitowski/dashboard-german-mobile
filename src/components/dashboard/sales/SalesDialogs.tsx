@@ -1,4 +1,3 @@
-
 import { format } from "date-fns";
 import {
   Dialog,
@@ -10,6 +9,7 @@ import { Button } from "../../ui/button";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ScrollArea } from "../../ui/scroll-area";
 
 interface Sale {
   id: number;
@@ -101,43 +101,47 @@ export const SalesDialogs = ({
 
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-xl">
-          <DialogHeader>
-            <div className="flex items-center justify-between">
-              <DialogTitle className="text-xl font-bold text-blue-600">{title}</DialogTitle>
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
-          </DialogHeader>
-
-          <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-4">
-            <div className="flex justify-between items-center">
-              <p className="text-sm font-medium text-blue-600">Total</p>
-              <p className="text-lg font-bold text-blue-700">R$ {total.toLocaleString()}</p>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {paginatedSales.map((sale) => (
-              <div key={sale.id} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="text-base font-semibold text-gray-900">
-                      {format(new Date(sale.datetime), "HH:mm")}
-                    </h4>
-                    <p className="text-sm text-gray-500">{sale.paymentMethod}</p>
-                    <p className="text-xs text-gray-400">Vendedor: {sale.seller}</p>
-                  </div>
-                  <span className="text-lg font-bold text-blue-600">
-                    R$ {sale.value.toLocaleString()}
-                  </span>
-                </div>
+        <DialogContent className="max-w-xl w-[calc(100%-2rem)] max-h-[90vh] overflow-hidden flex flex-col p-0">
+          <div className="p-6 flex-1 overflow-hidden flex flex-col">
+            <DialogHeader>
+              <div className="flex items-center justify-between mb-6">
+                <DialogTitle className="text-xl font-bold text-blue-600">{title}</DialogTitle>
+                <Button variant="ghost" size="icon" onClick={onClose}>
+                  <X className="h-5 w-5" />
+                </Button>
               </div>
-            ))}
-          </div>
+            </DialogHeader>
 
-          {renderPagination(sales.length)}
+            <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-4">
+              <div className="flex justify-between items-center">
+                <p className="text-sm font-medium text-blue-600">Total</p>
+                <p className="text-lg font-bold text-blue-700">R$ {total.toLocaleString()}</p>
+              </div>
+            </div>
+
+            <ScrollArea className="flex-1">
+              <div className="space-y-3">
+                {paginatedSales.map((sale) => (
+                  <div key={sale.id} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="text-base font-semibold text-gray-900">
+                          {format(new Date(sale.datetime), "HH:mm")}
+                        </h4>
+                        <p className="text-sm text-gray-500">{sale.paymentMethod}</p>
+                        <p className="text-xs text-gray-400">Vendedor: {sale.seller}</p>
+                      </div>
+                      <span className="text-lg font-bold text-blue-600">
+                        R$ {sale.value.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+
+            {renderPagination(sales.length)}
+          </div>
         </DialogContent>
       </Dialog>
     );

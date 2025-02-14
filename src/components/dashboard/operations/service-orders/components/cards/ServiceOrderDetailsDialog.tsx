@@ -67,67 +67,69 @@ export const ServiceOrderDetailsDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
-        <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle className={`text-xl font-bold ${getTextColor()}`}>{title}</DialogTitle>
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
-        </DialogHeader>
+      <DialogContent className="max-w-xl w-[calc(100%-2rem)] max-h-[90vh] overflow-hidden flex flex-col p-0">
+        <div className="p-6 flex-1 overflow-hidden flex flex-col">
+          <DialogHeader>
+            <div className="flex items-center justify-between mb-6">
+              <DialogTitle className={`text-xl font-bold ${getTextColor()}`}>{title}</DialogTitle>
+              <Button variant="ghost" size="icon" onClick={onClose}>
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+          </DialogHeader>
 
-        <div className={`p-4 ${getBgColor()} rounded-lg border mb-4`}>
-          <div className="flex justify-between items-center">
-            <p className={`text-sm font-medium ${getTextColor()}`}>Total</p>
-            <p className={`text-lg font-bold ${getTextColor()}`}>
-              R$ {totalValue.toLocaleString()}
-            </p>
+          <div className={`p-4 ${getBgColor()} rounded-lg border mb-4`}>
+            <div className="flex justify-between items-center">
+              <p className={`text-sm font-medium ${getTextColor()}`}>Total</p>
+              <p className={`text-lg font-bold ${getTextColor()}`}>
+                R$ {totalValue.toLocaleString()}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <ScrollArea className="flex-1">
-          <div className="space-y-3 p-1">
-            {getPaginatedOrders().map((order) => (
-              <div key={order.id} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="text-base font-semibold text-gray-900">{order.client}</h4>
-                    <p className="text-sm text-gray-500">{order.description}</p>
-                    <p className="text-xs text-gray-400">Técnico: {order.technician}</p>
+          <ScrollArea className="flex-1">
+            <div className="space-y-3">
+              {getPaginatedOrders().map((order) => (
+                <div key={order.id} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="text-base font-semibold text-gray-900">{order.client}</h4>
+                      <p className="text-sm text-gray-500">{order.description}</p>
+                      <p className="text-xs text-gray-400">Técnico: {order.technician}</p>
+                    </div>
+                    <span className={`text-lg font-bold ${getTextColor()}`}>
+                      R$ {order.value.toLocaleString()}
+                    </span>
                   </div>
-                  <span className={`text-lg font-bold ${getTextColor()}`}>
-                    R$ {order.value.toLocaleString()}
-                  </span>
                 </div>
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
+              ))}
+            </div>
+          </ScrollArea>
 
-        {totalPages > 1 && (
-          <div className="flex justify-center gap-2 mt-4 py-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <span className="flex items-center px-4 text-sm text-gray-600">
-              Página {currentPage} de {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+          {totalPages > 1 && (
+            <div className="flex justify-center gap-2 mt-4 py-2 border-t">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="flex items-center px-4 text-sm text-gray-600">
+                Página {currentPage} de {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
