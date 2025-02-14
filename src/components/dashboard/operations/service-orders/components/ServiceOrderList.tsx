@@ -1,10 +1,16 @@
 
 import { Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { ServiceOrderCard } from "./cards/ServiceOrderCard";
-import { ServiceMetrics } from "../types/serviceOrder";
 
 interface ServiceOrderListProps {
-  metrics: ServiceMetrics;
+  metrics: {
+    inProgressCount: number;
+    inProgressValue: number;
+    delayedCount: number;
+    delayedValue: number;
+    completedCount: number;
+    completedValue: number;
+  };
   onCardClick: (type: "inProgress" | "delayed" | "completed") => void;
 }
 
