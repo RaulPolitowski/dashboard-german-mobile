@@ -37,7 +37,7 @@ export const OrderDetailsDialog = ({
       <DialogContent className="max-w-xl w-[calc(100%-2rem)] max-h-[90vh] overflow-hidden flex flex-col p-0">
         <div className="p-6 flex-1 overflow-hidden flex flex-col">
           <div className="flex items-center justify-between mb-6">
-            <DialogTitle className="text-xl font-bold text-indigo-600">
+            <DialogTitle className="text-2xl font-bold text-[#9b87f5]">
               {title}
             </DialogTitle>
             <Button 
@@ -50,10 +50,10 @@ export const OrderDetailsDialog = ({
             </Button>
           </div>
 
-          <div className="mb-4 p-4 rounded-lg bg-indigo-50/50 border border-indigo-100">
+          <div className="mb-4 p-4 rounded-lg bg-[#F1F0FB] border border-[#D6BCFA]">
             <div className="flex justify-between items-center">
-              <p className="text-sm font-medium text-indigo-600">Total</p>
-              <p className="text-xl font-bold text-indigo-600">
+              <p className="text-sm font-medium text-[#7E69AB]">Total</p>
+              <p className="text-xl font-bold text-[#9b87f5]">
                 R$ {orders.reduce((sum, order) => sum + order.value, 0).toLocaleString()}
               </p>
             </div>
@@ -64,7 +64,7 @@ export const OrderDetailsDialog = ({
               {getPaginatedOrders().map((order) => (
                 <div 
                   key={order.id} 
-                  className="p-4 rounded-lg bg-gray-50/80 border border-gray-100"
+                  className="p-4 rounded-lg bg-white border border-gray-100"
                 >
                   <div className="flex justify-between items-start">
                     <div>
@@ -75,12 +75,12 @@ export const OrderDetailsDialog = ({
                         {order.description}
                       </p>
                       {order.seller && (
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-[#C8C8C9]">
                           Vendedor: {order.seller}
                         </p>
                       )}
                     </div>
-                    <span className="text-lg font-bold text-indigo-600">
+                    <span className="text-lg font-bold text-[#9b87f5]">
                       R$ {order.value.toLocaleString()}
                     </span>
                   </div>
