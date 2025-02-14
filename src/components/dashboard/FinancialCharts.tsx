@@ -11,7 +11,7 @@ import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
 
 export const FinancialCharts = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [dateFilter, setDateFilter] = useState<DateFilter>('today');
+  const [dateFilter, setDateFilter] = useState<DateFilter>('currentMonth');
   const itemsPerPage = 5;
 
   const { filteredTransactions, totals } = useTransactions(dateFilter);
