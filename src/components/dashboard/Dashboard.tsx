@@ -52,74 +52,77 @@ const Dashboard = () => {
         <FinancialOverview />
       </div>
 
-      <Tabs defaultValue="financial" className="space-y-4">
-        {isMobile ? (
-          <div className="overflow-x-auto pb-2">
-            <TabsList className="inline-flex w-auto border border-gray-200 p-1 bg-white dark:bg-gray-800 dark:border-gray-700">
-              <TabsTrigger 
-                value="financial" 
-                className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
-              >
-                <Wallet className="w-5 h-5" />
+      <div className="space-y-6">
+        <AccountsSection />
+        
+        <Tabs defaultValue="financial" className="space-y-4">
+          {isMobile ? (
+            <div className="overflow-x-auto pb-2">
+              <TabsList className="inline-flex w-auto border border-gray-200 p-1 bg-white dark:bg-gray-800 dark:border-gray-700">
+                <TabsTrigger 
+                  value="financial" 
+                  className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
+                >
+                  <Wallet className="w-5 h-5" />
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="sales" 
+                  className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
+                >
+                  <TrendingUp className="w-5 h-5" />
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="operations" 
+                  className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
+                >
+                  <FileSpreadsheet className="w-5 h-5" />
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="ranking" 
+                  className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
+                >
+                  <Medal className="w-5 h-5" />
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          ) : (
+            <TabsList>
+              <TabsTrigger value="financial" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+                <Wallet className="w-4 h-4 mr-2" />
+                Gestão Financeira
               </TabsTrigger>
-              <TabsTrigger 
-                value="sales" 
-                className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
-              >
-                <TrendingUp className="w-5 h-5" />
+              <TabsTrigger value="sales" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Análise de Vendas
               </TabsTrigger>
-              <TabsTrigger 
-                value="operations" 
-                className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
-              >
-                <FileSpreadsheet className="w-5 h-5" />
+              <TabsTrigger value="operations" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+                <FileSpreadsheet className="w-4 h-4 mr-2" />
+                Operações
               </TabsTrigger>
-              <TabsTrigger 
-                value="ranking" 
-                className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
-              >
-                <Medal className="w-5 h-5" />
+              <TabsTrigger value="ranking" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+                <Medal className="w-4 h-4 mr-2" />
+                Performance de Vendedores
               </TabsTrigger>
             </TabsList>
-          </div>
-        ) : (
-          <TabsList>
-            <TabsTrigger value="financial" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
-              <Wallet className="w-4 h-4 mr-2" />
-              Gestão Financeira
-            </TabsTrigger>
-            <TabsTrigger value="sales" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Análise de Vendas
-            </TabsTrigger>
-            <TabsTrigger value="operations" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
-              <FileSpreadsheet className="w-4 h-4 mr-2" />
-              Operações
-            </TabsTrigger>
-            <TabsTrigger value="ranking" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
-              <Medal className="w-4 h-4 mr-2" />
-              Performance de Vendedores
-            </TabsTrigger>
-          </TabsList>
-        )}
+          )}
 
-        <TabsContent value="financial" className="space-y-6">
-          <AccountsSection />
-          <MonthlyAnalysisTables />
-        </TabsContent>
+          <TabsContent value="financial" className="space-y-6">
+            <MonthlyAnalysisTables />
+          </TabsContent>
 
-        <TabsContent value="sales" className="space-y-4">
-          <SalesSection />
-        </TabsContent>
+          <TabsContent value="sales" className="space-y-4">
+            <SalesSection />
+          </TabsContent>
 
-        <TabsContent value="operations" className="space-y-4">
-          <OperationsSection />
-        </TabsContent>
+          <TabsContent value="operations" className="space-y-4">
+            <OperationsSection />
+          </TabsContent>
 
-        <TabsContent value="ranking" className="space-y-4">
-          <RankingSection />
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="ranking" className="space-y-4">
+            <RankingSection />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };
