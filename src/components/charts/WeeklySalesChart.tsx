@@ -1,7 +1,8 @@
+
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../ui/card';
-import { subDays, startOfWeek, endOfWeek, format, isToday } from 'date-fns';
+import { subDays, startOfWeek, endOfWeek, format, isToday, parseISO } from 'date-fns';
 import { FilterControls } from './weekly-sales/FilterControls';
 import { timeRanges, mockData } from './weekly-sales/constants';
 import { DateRange } from './weekly-sales/types';
@@ -68,7 +69,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
         date
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 7); // Pega apenas os últimos 7 dias
+    .slice(0, 7);
   };
 
   const handleCardClick = (dayName: string) => {
@@ -92,7 +93,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
         date
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 7); // Pega apenas os últimos 7 dias
+    .slice(0, 7);
   };
 
   const chartData = prepareChartData();
@@ -184,7 +185,15 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
                   tickFormatter={(value) => `R$ ${(value / 1000)}k`}
                 />
                 <Tooltip 
-                  labelFormatter={(value) => format(new Date(value), 'dd/MM/yyyy')}
+                  labelFormatter={(value) => {
+                    try {
+                      const date = chartData.find(item => item.day === value)?.date;
+                      return date ? format(parseISO(date), 'dd/MM/yyyy') : value;
+                    } catch (error) {
+                      console.error('Error formatting date:', error);
+                      return value;
+                    }
+                  }}
                   formatter={(value) => `R$ ${value.toLocaleString()}`}
                 />
                 {selectedRange === 'all' ? (
@@ -192,7 +201,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
                     <Bar
                       key={range.id}
                       dataKey={`${range.id}.value`}
-                      name={range.id}
+                      name={range.label}
                       fill={range.color}
                       radius={[4, 4, 0, 0]}
                       cursor="pointer"
@@ -210,7 +219,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
             </ResponsiveContainer>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-              {Object.entries(timeRanges).map(([_, range]) => (
+              {timeRanges.map((range) => (
                 <div 
                   key={range.id}
                   className="p-4 rounded-lg bg-white border border-gray-200 shadow-sm"
