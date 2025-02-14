@@ -1,10 +1,9 @@
 
 import { useState } from "react";
-import { Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { DueTodayOrders } from "../DueTodayOrders";
 import { mockMetrics } from "../data/mockData";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { ServiceOrderCard } from "./cards/ServiceOrderCard";
+import { ServiceOrderGrid } from "./ServiceOrderGrid";
+import { ServiceOrderList } from "./ServiceOrderList";
 import { ServiceOrderDetailsDialog } from "./cards/ServiceOrderDetailsDialog";
 
 interface ServiceOrder {
@@ -54,37 +53,14 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2 md:px-0">
-      <TooltipProvider delayDuration={200}>
-        <ServiceOrderCard
-          title="Em Andamento"
-          count={mockMetrics.inProgressCount}
-          value={mockMetrics.inProgressValue}
-          type="inProgress"
-          Icon={Clock}
-          onClick={() => handleCardClick("inProgress")}
+    <>
+      <ServiceOrderGrid>
+        <ServiceOrderList 
+          metrics={mockMetrics}
+          onCardClick={handleCardClick}
         />
-
-        <ServiceOrderCard
-          title="Atrasadas"
-          count={mockMetrics.delayedCount}
-          value={mockMetrics.delayedValue}
-          type="delayed"
-          Icon={AlertTriangle}
-          onClick={() => handleCardClick("delayed")}
-        />
-
-        <ServiceOrderCard
-          title="Finalizadas"
-          count={mockMetrics.completedCount}
-          value={mockMetrics.completedValue}
-          type="completed"
-          Icon={CheckCircle2}
-          onClick={() => handleCardClick("completed")}
-        />
-
         <DueTodayOrders />
-      </TooltipProvider>
+      </ServiceOrderGrid>
 
       <ServiceOrderDetailsDialog
         isOpen={isDialogOpen}
@@ -93,6 +69,6 @@ export const ServiceOrderCards = ({ handleOrderClick }: ServiceOrderCardsProps) 
         orders={selectedOrders}
         type={selectedType}
       />
-    </div>
+    </>
   );
 };
