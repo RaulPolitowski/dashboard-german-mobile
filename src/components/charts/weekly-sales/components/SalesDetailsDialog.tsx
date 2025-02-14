@@ -1,6 +1,5 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
@@ -26,62 +25,69 @@ export const SalesDetailsDialog = ({ isOpen, onClose, dayData }: SalesDetailsDia
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl w-[calc(100%-2rem)] overflow-hidden bg-gradient-to-br from-white to-gray-50/80 backdrop-blur-sm border border-gray-100 dark:from-gray-900 dark:to-gray-800/80">
-        <DialogHeader className="px-6 pt-6">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent font-bold">
-              Detalhes de Vendas - {dayData.day}
-            </DialogTitle>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={onClose}
-              className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full h-8 w-8"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        </DialogHeader>
+      <DialogContent className="max-w-3xl w-[calc(100%-2rem)] overflow-hidden bg-white dark:bg-gray-900 p-0">
+        <div className="p-8 relative">
+          {/* Close Button */}
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={onClose}
+            className="absolute right-6 top-6 rounded-full h-8 w-8 border-gray-200 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+          >
+            <X className="h-4 w-4 text-gray-500" />
+          </Button>
 
-        <div className="p-6">
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-800/20 border border-emerald-100 dark:border-emerald-800/30">
-              <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">Total de Vendas</p>
-              <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">
-                R$ {totalValue.toLocaleString()}
-              </p>
-            </div>
-            <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-100 dark:border-blue-800/30">
-              <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Total de Itens</p>
-              <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                {totalQuantity.toLocaleString()}
-              </p>
-            </div>
-          </div>
+          {/* Title */}
+          <DialogTitle className="text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-12">
+            Detalhes de Vendas - {dayData.day}
+          </DialogTitle>
 
-          <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-            <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800">
-              <div className="text-sm font-semibold text-gray-600 dark:text-gray-300">HORÁRIO</div>
-              <div className="text-sm font-semibold text-gray-600 dark:text-gray-300">QUANTIDADE</div>
-              <div className="text-sm font-semibold text-right text-gray-600 dark:text-gray-300">VALOR TOTAL</div>
+          {/* Sales Table */}
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="grid grid-cols-3 gap-8 pb-4 text-base font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              <div>Horário</div>
+              <div>Quantidade</div>
+              <div className="text-right">Valor Total</div>
             </div>
-            <div className="divide-y divide-gray-100 dark:divide-gray-700">
+
+            {/* Table Body */}
+            <div className="space-y-6">
               {timeRanges.map((range, index) => (
                 <div 
                   key={range.time}
-                  className="grid grid-cols-3 gap-4 p-4 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
+                  className="grid grid-cols-3 gap-8 py-4 border-b border-gray-100 dark:border-gray-800 group hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
                 >
-                  <div className="text-base font-medium text-gray-900 dark:text-gray-100">
+                  <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     {range.time}
                   </div>
-                  <div className="text-base text-gray-600 dark:text-gray-300">
+                  <div className="text-lg text-gray-600 dark:text-gray-300">
                     {range.quantity.toLocaleString()}
                   </div>
-                  <div className="text-base font-semibold text-right text-primary-light dark:text-primary">
+                  <div className="text-lg font-semibold text-right text-primary dark:text-primary-light">
                     R$ {range.value.toLocaleString()}
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Summary */}
+            <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-3 gap-8">
+                <div>
+                  <span className="text-base text-gray-500 dark:text-gray-400">Total</span>
+                </div>
+                <div>
+                  <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    {totalQuantity.toLocaleString()}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-lg font-bold text-primary dark:text-primary-light">
+                    R$ {totalValue.toLocaleString()}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
