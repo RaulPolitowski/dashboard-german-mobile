@@ -1,7 +1,8 @@
+
 import { ChartBar, ChevronDown, ChevronUp, TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "../ui/card";
 import { CashFlowChart } from "../charts/CashFlowChart";
-import { ExpensesTable } from "./ExpensesTable";
+import { ExpensesTable } from "./expenses/ExpensesTable";
 import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
@@ -10,18 +11,44 @@ import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+
+interface TransactionDetail {
+  time: string;
+  description: string;
+  value: number;
+  type: "entrada" | "saída";
+  method: string;
+}
+
+const mockTransactions: TransactionDetail[] = [
+  { 
+    time: "09:30", 
+    description: "Venda #1234",
+    value: 1500,
+    type: "entrada",
+    method: "Cartão de Crédito"
+  },
+  { 
+    time: "10:15", 
+    description: "Pagamento Fornecedor",
+    value: 3000,
+    type: "saída",
+    method: "Transferência"
+  },
+  // Adicione mais transações mock aqui
+];
 
 export const FinancialCharts = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [showTransactions, setShowTransactions] = useState(false);
+  const [selectedTransactionType, setSelectedTransactionType] = useState<"entrada" | "saída" | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("today");
   
-  // Calcular totais do dia atual e anterior
   const currentTotals = calculateTotals("day");
   const yesterdayTotals = calculateTotals("yesterday");
-  
-  // Se houver uma data selecionada, calcular os totais daquele dia
   const selectedDayTotals = selectedDate ? calculateTotals(selectedDate) : currentTotals;
 
   const getComparisonIndicator = (current: number, previous: number) => {
@@ -59,6 +86,10 @@ export const FinancialCharts = () => {
       return "Hoje";
     }
   };
+
+  const filteredTransactions = mockTransactions.filter(
+    transaction => !selectedTransactionType || transaction.type === selectedTransactionType
+  );
 
   return (
     <div className="space-y-6">
@@ -118,7 +149,13 @@ export const FinancialCharts = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                <div className="p-4 rounded-lg bg-gradient-to-br from-emerald-50 via-emerald-100/40 to-emerald-50/30 border border-emerald-100">
+                <div 
+                  className="p-4 rounded-lg bg-gradient-to-br from-emerald-50 via-emerald-100/40 to-emerald-50/30 border border-emerald-100 cursor-pointer hover:shadow-lg transition-all"
+                  onClick={() => {
+                    setSelectedTransactionType("entrada");
+                    setShowTransactions(true);
+                  }}
+                >
                   <p className="text-sm text-gray-600">Entradas de Hoje</p>
                   <p className="text-xl font-semibold text-emerald-600 mt-1">
                     R$ {currentTotals.revenue.toLocaleString()}
@@ -130,7 +167,13 @@ export const FinancialCharts = () => {
                     {getComparisonIndicator(currentTotals.revenue, yesterdayTotals.revenue)}
                   </div>
                 </div>
-                <div className="p-4 rounded-lg bg-gradient-to-br from-rose-50 via-rose-100/40 to-rose-50/30 border border-rose-100">
+                <div 
+                  className="p-4 rounded-lg bg-gradient-to-br from-rose-50 via-rose-100/40 to-rose-50/30 border border-rose-100 cursor-pointer hover:shadow-lg transition-all"
+                  onClick={() => {
+                    setSelectedTransactionType("saída");
+                    setShowTransactions(true);
+                  }}
+                >
                   <p className="text-sm text-gray-600">Saídas de Hoje</p>
                   <p className="text-xl font-semibold text-rose-600 mt-1">
                     R$ {currentTotals.expenses.toLocaleString()}
@@ -178,6 +221,42 @@ export const FinancialCharts = () => {
               data={selectedDayTotals.paymentMethods}
               period={selectedDate || selectedPeriod}
             />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showTransactions} onOpenChange={setShowTransactions}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl">
+              {selectedTransactionType === "entrada" ? "Entradas" : "Saídas"} de Hoje
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Horário</TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead>Método</TableHead>
+                  <TableHead className="text-right">Valor</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredTransactions.map((transaction, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{transaction.time}</TableCell>
+                    <TableCell>{transaction.description}</TableCell>
+                    <TableCell>{transaction.method}</TableCell>
+                    <TableCell className="text-right">
+                      <span className={transaction.type === "entrada" ? "text-emerald-600" : "text-rose-600"}>
+                        R$ {transaction.value.toLocaleString()}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </DialogContent>
       </Dialog>
