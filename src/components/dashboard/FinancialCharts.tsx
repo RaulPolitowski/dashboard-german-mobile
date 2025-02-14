@@ -3,7 +3,7 @@ import { ChartBar, ChevronDown, ChevronUp, TrendingDown, TrendingUp, X } from "l
 import { Card } from "../ui/card";
 import { ExpensesTable } from "./expenses/ExpensesTable";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { calculateTotals } from "../charts/CashFlowChart";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -23,11 +23,11 @@ export const FinancialCharts = () => {
   const [showTransactions, setShowTransactions] = useState(false);
   const [selectedTransactionType, setSelectedTransactionType] = useState<'inflow' | 'outflow' | null>(null);
 
-  const transactions: Transaction[] = [
-    { id: '1', date: '2024-02-20', description: 'Venda Produto A', value: 1500, type: 'inflow' },
-    { id: '2', date: '2024-02-19', description: 'Pagamento Fornecedor', value: 800, type: 'outflow' },
-    { id: '3', date: '2024-02-18', description: 'Venda Serviço B', value: 2000, type: 'inflow' },
-    { id: '4', date: '2024-02-17', description: 'Despesas Operacionais', value: 600, type: 'outflow' },
+  const transactions: readonly Transaction[] = [
+    { id: '1', date: '2024-02-20', description: 'Venda Produto A', value: 1500, type: 'inflow' } as const,
+    { id: '2', date: '2024-02-19', description: 'Pagamento Fornecedor', value: 800, type: 'outflow' } as const,
+    { id: '3', date: '2024-02-18', description: 'Venda Serviço B', value: 2000, type: 'inflow' } as const,
+    { id: '4', date: '2024-02-17', description: 'Despesas Operacionais', value: 600, type: 'outflow' } as const,
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const totals = calculateTotals("year");
