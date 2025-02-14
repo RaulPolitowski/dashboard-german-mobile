@@ -106,8 +106,8 @@ const Dashboard = () => {
               <FinancialOverview />
             </div>
             <AccountsSection />
-            <MonthlyAnalysisTables />
             <FinancialCharts />
+            <MonthlyAnalysisTables />
             <ExpensesTable />
           </TabsContent>
 
