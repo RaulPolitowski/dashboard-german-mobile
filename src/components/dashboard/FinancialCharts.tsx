@@ -16,7 +16,7 @@ const ComparisonIndicator = ({ value }: { value: number | undefined }) => {
   
   const isPositive = value > 0;
   return (
-    <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600' : 'text-rose-600'}`}>
+    <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-white' : 'text-white'}`}>
       {isPositive ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
       <span>{Math.abs(value).toFixed(1)}%</span>
     </div>
