@@ -72,7 +72,11 @@ export const ExpenseTableRow = ({ expense, total, getPercentageChange }: Expense
             </Tooltip>
           </TooltipProvider>
         )}
-        <TableCell>{percentageOfTotal.toFixed(1)}%</TableCell>
+        <TableCell>
+          <div className="flex items-center gap-1">
+            <span>{lastMonthChange > 0 ? "+" : ""}{lastMonthChange}%</span>
+          </div>
+        </TableCell>
       </TableRow>
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
