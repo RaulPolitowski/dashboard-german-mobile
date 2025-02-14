@@ -12,14 +12,47 @@ interface WeeklySalesChartProps {
   onDayClick?: (date: string) => void;
 }
 
+interface DailySalesData {
+  seller: string;
+  total: number;
+}
+
 export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
   const [selectedRange, setSelectedRange] = useState('all');
   const [customDateRange, setCustomDateRange] = useState<DateRange>({
-    start: subDays(new Date(), 7),
+    start: subDays(new Date(), 6),
     end: new Date()
   });
   const [dateFilter, setDateFilter] = useState<'last7' | 'currentWeek'>('last7');
   const isMobile = useIsMobile();
+
+  const calculateDailySales = (dayData: any): DailySalesData[] => {
+    const sellerSales: { [key: string]: number } = {};
+    Object.entries(dayData).forEach(([key, value]: [string, any]) => {
+      if (typeof value === 'object' && value?.seller) {
+        if (!sellerSales[value.seller]) {
+          sellerSales[value.seller] = 0;
+        }
+        sellerSales[value.seller] += value.value || 0;
+      }
+    });
+
+    return Object.entries(sellerSales).map(([seller, total]) => ({
+      seller,
+      total
+    }));
+  };
+
+  const getBestAndWorstSeller = (dayData: any) => {
+    const dailySales = calculateDailySales(dayData);
+    if (dailySales.length === 0) return null;
+
+    const sortedSales = [...dailySales].sort((a, b) => b.total - a.total);
+    return {
+      best: sortedSales[0],
+      worst: sortedSales[sortedSales.length - 1]
+    };
+  };
 
   const handleDateFilterChange = (value: 'last7' | 'currentWeek') => {
     setDateFilter(value);
@@ -43,10 +76,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
     const currentDayIndex = today.getDay();
     const targetDayIndex = weekDays.findIndex(day => day === dayName);
     const diff = targetDayIndex - currentDayIndex;
-    
-    // Se o dia alvo está à frente do dia atual, subtrai 7 dias para pegar o dia da semana anterior
     const adjustedDiff = diff > 0 ? diff - 7 : diff;
-    
     const targetDate = new Date(today);
     targetDate.setDate(today.getDate() + adjustedDiff);
     return format(targetDate, 'yyyy-MM-dd');
@@ -58,15 +88,18 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
     return mockData.map(day => {
       const date = getDayDate(day.day);
       const isPreview = isToday(new Date(date));
-      
       const dailyTotal = Object.values(day)
         .filter(value => typeof value === 'object' && value?.value)
         .reduce((sum, curr: any) => sum + curr.value, 0);
       
+      const performanceData = getBestAndWorstSeller(day);
+      
       return {
         name: day.day + (isPreview ? ' (Prévia)' : ''),
         total: dailyTotal,
-        date
+        date,
+        bestSeller: performanceData?.best,
+        worstSeller: performanceData?.worst
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 7);
@@ -76,7 +109,6 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
     if (onDayClick) {
       const rawDayName = dayName.replace(' (Prévia)', '');
       const formattedDate = getDayDate(rawDayName);
-      console.log("Clicou no dia:", rawDayName, "Data formatada:", formattedDate);
       onDayClick(formattedDate);
     }
   };
@@ -87,10 +119,13 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
     return mockData.map(day => {
       const date = getDayDate(day.day);
       const isPreview = isToday(new Date(date));
+      const performanceData = getBestAndWorstSeller(day);
       return {
         ...day,
         day: day.day + (isPreview ? ' (Prévia)' : ''),
-        date
+        date,
+        bestSeller: performanceData?.best,
+        worstSeller: performanceData?.worst
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 7);
@@ -133,13 +168,29 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
                     <p className="text-base font-bold text-indigo-600 dark:text-indigo-400">
                       R$ {day.total.toLocaleString()}
                     </p>
-                    {selectedRange !== 'all' && timeRanges.find(range => range.id === selectedRange) && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {timeRanges.find(range => range.id === selectedRange)?.label}
-                      </p>
-                    )}
                   </div>
                 </div>
+
+                {/* Insights de Performance */}
+                <div className="mt-3 space-y-2 border-t pt-3">
+                  {day.bestSeller && (
+                    <div className="text-sm">
+                      <span className="text-emerald-600 font-medium">Melhor vendedor:</span>
+                      <p className="text-gray-700">
+                        {day.bestSeller.seller} - R$ {day.bestSeller.total.toLocaleString()}
+                      </p>
+                    </div>
+                  )}
+                  {day.worstSeller && (
+                    <div className="text-sm">
+                      <span className="text-rose-600 font-medium">Menor desempenho:</span>
+                      <p className="text-gray-700">
+                        {day.worstSeller.seller} - R$ {day.worstSeller.total.toLocaleString()}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
                 {selectedRange === 'all' && (
                   <div className="mt-3 grid grid-cols-2 gap-2 overflow-x-auto">
                     {timeRanges.map(range => {
@@ -218,6 +269,33 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
               </BarChart>
             </ResponsiveContainer>
             
+            {/* Insights de Performance do Dia */}
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {chartData[0]?.bestSeller && (
+                <div className="p-4 rounded-lg border border-emerald-200 bg-emerald-50">
+                  <h4 className="font-medium text-emerald-700">Melhor Vendedor do Dia</h4>
+                  <p className="text-emerald-600 mt-1">
+                    {chartData[0].bestSeller.seller}
+                  </p>
+                  <p className="text-sm text-emerald-800 mt-1">
+                    R$ {chartData[0].bestSeller.total.toLocaleString()}
+                  </p>
+                </div>
+              )}
+              {chartData[0]?.worstSeller && (
+                <div className="p-4 rounded-lg border border-rose-200 bg-rose-50">
+                  <h4 className="font-medium text-rose-700">Menor Desempenho do Dia</h4>
+                  <p className="text-rose-600 mt-1">
+                    {chartData[0].worstSeller.seller}
+                  </p>
+                  <p className="text-sm text-rose-800 mt-1">
+                    R$ {chartData[0].worstSeller.total.toLocaleString()}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Resumo por Horário */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
               {timeRanges.map((range) => (
                 <div 
@@ -226,7 +304,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
                 >
                   <p className="text-sm text-gray-600">{range.label}</p>
                   <p className="text-lg font-semibold text-gray-900 mt-1">
-                    R$ {(chartData[chartData.length - 1]?.[range.id]?.value || 0).toLocaleString()}
+                    R$ {(chartData[0]?.[range.id]?.value || 0).toLocaleString()}
                   </p>
                 </div>
               ))}
