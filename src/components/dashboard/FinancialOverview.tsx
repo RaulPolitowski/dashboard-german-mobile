@@ -10,61 +10,30 @@ const ComparisonCard = ({
   currentValue, 
   previousValue, 
   comparison, 
-  type
+  bgColor
 }: { 
   title: string;
   currentValue: number;
   previousValue: number;
   comparison: number;
-  type: 'inflow' | 'outflow' | 'result';
+  bgColor: string;
 }) => {
   const isPositive = comparison > 0;
   
-  const getColors = () => {
-    switch (type) {
-      case 'inflow':
-        return {
-          bg: 'bg-[#D3E4FD]',
-          text: 'text-blue-700',
-          border: 'border-blue-100'
-        };
-      case 'outflow':
-        return {
-          bg: 'bg-[#E5DEFF]',
-          text: 'text-purple-700',
-          border: 'border-purple-100'
-        };
-      case 'result':
-        return currentValue >= 0 
-          ? {
-              bg: 'bg-[#F2FCE2]',
-              text: 'text-green-700',
-              border: 'border-green-100'
-            }
-          : {
-              bg: 'bg-red-50',
-              text: 'text-red-700',
-              border: 'border-red-100'
-            };
-    }
-  };
-
-  const { bg, text, border } = getColors();
-  
   return (
-    <Card className={`p-6 ${bg} ${border} border rounded-xl shadow-sm`}>
+    <Card className={`p-4 ${bgColor}`}>
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className={`font-semibold ${text}`}>{title}</h3>
-          <div className={`flex items-center gap-1 text-sm ${text}`}>
+          <h3 className="font-semibold text-white">{title}</h3>
+          <div className="flex items-center gap-1 text-sm text-white">
             {isPositive ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
             <span>{Math.abs(comparison).toFixed(1)}%</span>
           </div>
         </div>
-        <p className={`text-2xl font-bold ${text}`}>
+        <p className="text-2xl font-bold text-white">
           R$ {currentValue.toLocaleString()}
         </p>
-        <p className={`text-sm ${text} opacity-80`}>
+        <p className="text-sm text-white/80">
           Mesmo dia mês anterior: R$ {previousValue.toLocaleString()}
         </p>
       </div>
@@ -93,21 +62,21 @@ export const FinancialOverview = () => {
         currentValue={totals.inflow}
         previousValue={lastMonthInflow}
         comparison={totals.comparison.inflow}
-        type="inflow"
+        bgColor="bg-blue-500"
       />
       <ComparisonCard
         title="Despesas"
         currentValue={totals.outflow}
         previousValue={lastMonthOutflow}
         comparison={totals.comparison.outflow}
-        type="outflow"
+        bgColor="bg-rose-500"
       />
       <ComparisonCard
         title="Resultado"
         currentValue={totals.result}
         previousValue={lastMonthResult}
         comparison={totals.comparison.result}
-        type="result"
+        bgColor={totals.result >= 0 ? "bg-emerald-500" : "bg-rose-500"}
       />
     </>
   );
