@@ -30,7 +30,9 @@ export const FinancialCharts = () => {
     { id: '4', date: '2024-02-17', description: 'Despesas Operacionais', value: 600, type: 'outflow' },
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  const { inflow, outflow } = calculateTotals();
+  const totals = calculateTotals("year");
+  const inflow = totals.revenue;
+  const outflow = totals.expenses;
 
   const handleCardClick = (type: 'inflow' | 'outflow') => {
     setSelectedTransactionType(type);
@@ -60,7 +62,7 @@ export const FinancialCharts = () => {
                   <h3 className="font-semibold text-emerald-700">Entradas</h3>
                 </div>
                 <p className="text-2xl font-bold text-emerald-600 mt-2">
-                  R$ {inflow.toLocaleString()}
+                  R$ {inflow?.toLocaleString() ?? 0}
                 </p>
                 <div className="flex items-center gap-1 mt-1">
                   <ChevronUp className="h-4 w-4 text-emerald-500" />
@@ -81,7 +83,7 @@ export const FinancialCharts = () => {
                   <h3 className="font-semibold text-rose-700">Saídas</h3>
                 </div>
                 <p className="text-2xl font-bold text-rose-600 mt-2">
-                  R$ {outflow.toLocaleString()}
+                  R$ {outflow?.toLocaleString() ?? 0}
                 </p>
                 <div className="flex items-center gap-1 mt-1">
                   <ChevronDown className="h-4 w-4 text-rose-500" />

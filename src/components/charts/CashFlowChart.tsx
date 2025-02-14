@@ -155,13 +155,13 @@ export const calculateTotals = (period: string) => {
   if (period !== "week" && period !== "year") {
     const currentMonth = new Date().getMonth();
     const monthsToShow = Number(period);
-    filteredData = allData.slice(-monthsToShow); // Pega os últimos X meses
+    filteredData = allData.slice(-monthsToShow);
   }
 
   const totals = filteredData.reduce((acc, curr) => ({
     revenue: acc.revenue + curr.receitas,
     expenses: acc.expenses + curr.despesas,
-    result: acc.result + (curr.receitas - curr.despesas)
+    result: acc.result + curr.resultado
   }), { revenue: 0, expenses: 0, result: 0 });
 
   const paymentMethodTotals = filteredData.reduce((acc, curr) => {
