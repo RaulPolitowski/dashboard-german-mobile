@@ -35,6 +35,40 @@ export const mockServiceOrders: ServiceOrder[] = [
     dueDate: new Date("2024-03-15"),
     completedDate: new Date("2024-03-15"),
     type: "Reparo"
+  },
+  {
+    id: "4",
+    description: "Manutenção Corretiva",
+    client: "Empresa DEF",
+    value: 3800,
+    status: "in_progress",
+    technician: "Ana Costa",
+    startDate: new Date("2024-03-16"),
+    dueDate: new Date("2024-03-22"),
+    type: "Manutenção"
+  },
+  {
+    id: "5",
+    description: "Configuração de Rede",
+    client: "Empresa GHI",
+    value: 2900,
+    status: "delayed",
+    technician: "Carlos Santos",
+    startDate: new Date("2024-03-11"),
+    dueDate: new Date("2024-03-15"),
+    type: "Configuração"
+  },
+  {
+    id: "6",
+    description: "Atualização de Sistema",
+    client: "Empresa JKL",
+    value: 5200,
+    status: "completed",
+    technician: "Mariana Silva",
+    startDate: new Date("2024-03-13"),
+    dueDate: new Date("2024-03-16"),
+    completedDate: new Date("2024-03-16"),
+    type: "Atualização"
   }
 ];
 
@@ -52,4 +86,3 @@ export const mockMetrics: ServiceOrderMetrics = {
   averageCompletionTime: 3.5,
   onTimeDeliveryRate: 92
 };
-
