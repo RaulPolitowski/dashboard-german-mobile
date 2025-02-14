@@ -11,6 +11,7 @@ import { OperationsSection } from "@/components/dashboard/OperationsSection";
 import { useCardStyle } from "@/contexts/CardStyleContext";
 import { DueTodayCard } from "@/components/dashboard/DueTodayCard";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { FinancialOverview } from "@/components/dashboard/FinancialOverview";
 import {
   Tooltip,
   TooltipContent,
@@ -104,7 +105,6 @@ const Dashboard = () => {
             <FinancialOverview />
           </div>
           <AccountsSection />
-          <FinancialCharts />
           <MonthlyAnalysisTables />
         </TabsContent>
 
