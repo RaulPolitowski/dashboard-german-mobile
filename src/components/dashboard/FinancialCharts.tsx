@@ -11,20 +11,22 @@ import { TransactionsList } from "./components/TransactionsList";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 
+const ComparisonIndicator = ({ value }: { value: number | undefined }) => {
+  if (typeof value === 'undefined') return null;
+  
+  const isPositive = value > 0;
+  return (
+    <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600' : 'text-rose-600'}`}>
+      {isPositive ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
+      <span>{Math.abs(value).toFixed(1)}%</span>
+    </div>
+  );
+};
+
 export const FinancialCharts = () => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('today');
   const [showTransactions, setShowTransactions] = useState(false);
   const { filteredTransactions, totals } = useTransactions(dateFilter);
-
-  const ComparisonIndicator = ({ value }: { value: number }) => {
-    const isPositive = value > 0;
-    return (
-      <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600' : 'text-rose-600'}`}>
-        {isPositive ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
-        <span>{Math.abs(value).toFixed(1)}%</span>
-      </div>
-    );
-  };
 
   return (
     <div className="space-y-6">
@@ -32,9 +34,7 @@ export const FinancialCharts = () => {
         <Card className="p-4 bg-emerald-500">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-white">Receitas</h3>
-            {totals.comparison.inflow && (
-              <ComparisonIndicator value={totals.comparison.inflow} />
-            )}
+            <ComparisonIndicator value={totals.comparison.inflow} />
           </div>
           <p className="text-2xl font-bold text-white mt-2">
             R$ {totals.inflow.toLocaleString()}
@@ -44,9 +44,7 @@ export const FinancialCharts = () => {
         <Card className="p-4 bg-rose-500">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-white">Despesas</h3>
-            {totals.comparison.outflow && (
-              <ComparisonIndicator value={totals.comparison.outflow} />
-            )}
+            <ComparisonIndicator value={totals.comparison.outflow} />
           </div>
           <p className="text-2xl font-bold text-white mt-2">
             R$ {totals.outflow.toLocaleString()}
@@ -56,9 +54,7 @@ export const FinancialCharts = () => {
         <Card className="p-4 bg-blue-500">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-white">Resultado</h3>
-            {totals.comparison.result && (
-              <ComparisonIndicator value={totals.comparison.result} />
-            )}
+            <ComparisonIndicator value={totals.comparison.result} />
           </div>
           <p className="text-2xl font-bold text-white mt-2">
             R$ {totals.result.toLocaleString()}
