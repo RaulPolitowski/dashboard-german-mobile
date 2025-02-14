@@ -11,7 +11,7 @@ import { useCardStyle } from "../contexts/CardStyleContext";
 import { useIsMobile } from "../hooks/use-mobile";
 import { FinancialOverview } from "./dashboard/FinancialOverview";
 import { FinancialCharts } from "./dashboard/FinancialCharts";
-import { ExpensesTable } from "./dashboard/ExpensesTable";
+import { ExpensesTable } from "./dashboard/expenses/ExpensesTable";
 import {
   Tooltip,
   TooltipContent,
