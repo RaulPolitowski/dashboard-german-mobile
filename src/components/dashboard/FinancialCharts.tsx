@@ -9,6 +9,7 @@ import { ptBR } from "date-fns/locale";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { BarChart, ResponsiveContainer, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
 
 interface TransactionDetail {
   time: string;
