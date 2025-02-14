@@ -70,10 +70,10 @@ export const useSalesData = () => {
     data.forEach(day => {
       const dailySales = calculateDailySales(day);
       dailySales.forEach(({ seller, total }) => {
-        if (!sellerSales[seller]) {
-          sellerSales[seller] = 0;
+        if (!sellerTotals[seller]) {
+          sellerTotals[seller] = 0;
         }
-        sellerSales[seller] += total;
+        sellerTotals[seller] += total;
         periodTotal += total;
       });
     });
