@@ -14,12 +14,15 @@ export const useSalesData = () => {
 
   const calculateDailySales = (dayData: any) => {
     const sellerSales: { [key: string]: number } = {};
-    Object.entries(dayData).forEach(([key, value]: [string, any]) => {
-      if (typeof value === 'object' && value?.seller) {
-        if (!sellerSales[value.seller]) {
-          sellerSales[value.seller] = 0;
+    const timeRangeKeys = ['08:00-10:00', '10:00-12:00', '12:00-15:00', '15:00-18:00', '18:00-00:00'];
+    
+    timeRangeKeys.forEach(timeRange => {
+      const data = dayData[timeRange];
+      if (data?.seller && data?.value) {
+        if (!sellerSales[data.seller]) {
+          sellerSales[data.seller] = 0;
         }
-        sellerSales[value.seller] += value.value || 0;
+        sellerSales[data.seller] += data.value;
       }
     });
 
@@ -90,9 +93,11 @@ export const useSalesData = () => {
     return mockData.map(day => {
       const date = getDayDate(day.day);
       const isPreview = isToday(new Date(date));
-      const dailyTotal = Object.values(day)
-        .filter(value => typeof value === 'object' && value?.value)
-        .reduce((sum, curr: any) => sum + curr.value, 0);
+      const dailyTotal = Object.entries(day)
+        .filter(([key]) => key !== 'day')
+        .reduce((sum, [_, value]: [string, any]) => {
+          return sum + (value?.value || 0);
+        }, 0);
       
       const performanceData = getBestAndWorstSeller(day);
       
@@ -101,7 +106,8 @@ export const useSalesData = () => {
         total: dailyTotal,
         date,
         bestSeller: performanceData?.best,
-        worstSeller: performanceData?.worst
+        worstSeller: performanceData?.worst,
+        ...day
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 7);
