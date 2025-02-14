@@ -1,4 +1,5 @@
 
+import { useEffect } from "react";
 import { Card } from "../../../../ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../../../ui/select";
 
@@ -10,7 +11,10 @@ interface OrderHeaderProps {
 }
 
 export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onRangeChange }: OrderHeaderProps) => {
-  const timeRanges = ["7D", "15D", "30D", "90D"] as const;
+  useEffect(() => {
+    // Definir mês atual por padrão
+    onRangeChange("current-month");
+  }, []);
 
   return (
     <Card className="p-4 md:p-6">
@@ -20,7 +24,7 @@ export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onR
             <h3 className="text-lg font-semibold text-gray-700">Métricas de Pedidos</h3>
             <p className="text-sm text-gray-500">Acompanhe o desempenho dos pedidos</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full sm:w-auto">
             <Select value={selectedSeller} onValueChange={onSellerChange}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Selecione um vendedor" />
@@ -28,10 +32,12 @@ export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onR
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Vendedores</SelectLabel>
-                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="all">Todos os vendedores</SelectItem>
                   <SelectItem value="joao">João Silva</SelectItem>
                   <SelectItem value="maria">Maria Santos</SelectItem>
                   <SelectItem value="pedro">Pedro Oliveira</SelectItem>
+                  <SelectItem value="ana">Ana Costa</SelectItem>
+                  <SelectItem value="carlos">Carlos Souza</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -41,12 +47,27 @@ export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onR
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Período</SelectLabel>
-                  {timeRanges.map((range) => (
-                    <SelectItem key={range} value={range}>
-                      Últimos {range}
-                    </SelectItem>
-                  ))}
+                  <SelectLabel>Período Atual</SelectLabel>
+                  <SelectItem value="current-day">Hoje</SelectItem>
+                  <SelectItem value="current-week">Semana Atual</SelectItem>
+                  <SelectItem value="current-month">Mês Atual</SelectItem>
+                  <SelectItem value="current-quarter">Trimestre Atual</SelectItem>
+                  <SelectItem value="current-year">Ano Atual</SelectItem>
+                </SelectGroup>
+                <SelectGroup>
+                  <SelectLabel>Últimos Períodos</SelectLabel>
+                  <SelectItem value="7D">Últimos 7 dias</SelectItem>
+                  <SelectItem value="15D">Últimos 15 dias</SelectItem>
+                  <SelectItem value="30D">Últimos 30 dias</SelectItem>
+                  <SelectItem value="60D">Últimos 60 dias</SelectItem>
+                  <SelectItem value="90D">Últimos 90 dias</SelectItem>
+                  <SelectItem value="180D">Últimos 180 dias</SelectItem>
+                </SelectGroup>
+                <SelectGroup>
+                  <SelectLabel>Períodos Anteriores</SelectLabel>
+                  <SelectItem value="last-month">Mês Anterior</SelectItem>
+                  <SelectItem value="last-quarter">Trimestre Anterior</SelectItem>
+                  <SelectItem value="last-year">Ano Anterior</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

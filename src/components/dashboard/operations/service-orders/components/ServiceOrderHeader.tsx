@@ -17,7 +17,8 @@ export const ServiceOrderHeader = ({
   onTechnicianChange,
 }: ServiceOrderHeaderProps) => {
   useEffect(() => {
-    onPeriodChange("30");
+    // Definir mês atual por padrão
+    onPeriodChange("current-month");
   }, []);
 
   return (
@@ -28,7 +29,7 @@ export const ServiceOrderHeader = ({
             <h3 className="text-lg font-semibold text-gray-700">Gestão de Ordens de Serviço</h3>
             <p className="text-sm text-gray-500">Visualize e gerencie as ordens de serviço</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full sm:w-auto">
             <Select value={selectedTechnician} onValueChange={onTechnicianChange}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Selecione um técnico" />
@@ -36,10 +37,12 @@ export const ServiceOrderHeader = ({
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Técnicos</SelectLabel>
-                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="all">Todos os técnicos</SelectItem>
                   <SelectItem value="joao">João Silva</SelectItem>
                   <SelectItem value="maria">Maria Santos</SelectItem>
                   <SelectItem value="pedro">Pedro Oliveira</SelectItem>
+                  <SelectItem value="ana">Ana Costa</SelectItem>
+                  <SelectItem value="carlos">Carlos Souza</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -49,11 +52,27 @@ export const ServiceOrderHeader = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Período</SelectLabel>
+                  <SelectLabel>Período Atual</SelectLabel>
+                  <SelectItem value="current-day">Hoje</SelectItem>
+                  <SelectItem value="current-week">Semana Atual</SelectItem>
+                  <SelectItem value="current-month">Mês Atual</SelectItem>
+                  <SelectItem value="current-quarter">Trimestre Atual</SelectItem>
+                  <SelectItem value="current-year">Ano Atual</SelectItem>
+                </SelectGroup>
+                <SelectGroup>
+                  <SelectLabel>Últimos Períodos</SelectLabel>
                   <SelectItem value="7">Últimos 7 dias</SelectItem>
                   <SelectItem value="15">Últimos 15 dias</SelectItem>
                   <SelectItem value="30">Últimos 30 dias</SelectItem>
+                  <SelectItem value="60">Últimos 60 dias</SelectItem>
                   <SelectItem value="90">Últimos 90 dias</SelectItem>
+                  <SelectItem value="180">Últimos 180 dias</SelectItem>
+                </SelectGroup>
+                <SelectGroup>
+                  <SelectLabel>Períodos Anteriores</SelectLabel>
+                  <SelectItem value="last-month">Mês Anterior</SelectItem>
+                  <SelectItem value="last-quarter">Trimestre Anterior</SelectItem>
+                  <SelectItem value="last-year">Ano Anterior</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
