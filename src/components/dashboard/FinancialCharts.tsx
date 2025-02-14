@@ -10,7 +10,7 @@ import { PaymentMethodDetails } from "../charts/PaymentMethodDetails";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "../ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 
 interface TransactionDetail {
   time: string;
