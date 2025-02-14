@@ -38,7 +38,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
 
   const chartData = prepareChartData();
   const mobileData = prepareMobileData();
-  const { bestSellerOverall, totalPeriod } = calculateOverallPerformance(chartData);
+  const { bestSellerOverall, worstSellerOverall, totalPeriod } = calculateOverallPerformance(chartData);
 
   return (
     <Card className="p-4 md:p-6">
@@ -54,14 +54,9 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
             customDateRange={customDateRange}
             onDateFilterChange={handleDateFilterChange}
             onRangeChange={setSelectedRange}
-            onCustomDateChange={setCustomDateRange}
+            onCustomDateChange={setCustomDateChange}
           />
         </div>
-
-        <OverallInsights 
-          bestSellerOverall={bestSellerOverall}
-          totalPeriod={totalPeriod}
-        />
 
         {isMobile ? (
           <MobileView 
@@ -85,6 +80,12 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
             <TimeRangeSummary data={chartData[0]} />
           </>
         )}
+
+        <OverallInsights 
+          bestSellerOverall={bestSellerOverall}
+          worstSellerOverall={worstSellerOverall}
+          totalPeriod={totalPeriod}
+        />
       </div>
     </Card>
   );

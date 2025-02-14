@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { subDays, startOfWeek, endOfWeek, format, isToday } from 'date-fns';
 import { mockData } from '../constants';
@@ -47,12 +46,13 @@ export const useSalesData = () => {
       });
     });
 
-    const bestSeller = Object.entries(sellerTotals)
+    const sortedSellers = Object.entries(sellerTotals)
       .map(([seller, total]) => ({ seller, total }))
-      .sort((a, b) => b.total - a.total)[0];
+      .sort((a, b) => b.total - a.total);
 
     return {
-      bestSellerOverall: bestSeller,
+      bestSellerOverall: sortedSellers[0],
+      worstSellerOverall: sortedSellers[sortedSellers.length - 1],
       totalPeriod: periodTotal
     };
   };
@@ -120,7 +120,7 @@ export const useSalesData = () => {
       const isPreview = isToday(new Date(date));
       const dailyTotal = Object.entries(day)
         .filter(([key]) => key !== 'day')
-        .reduce((sum, [_, value]: [string, any]) => {
+        .reduce((sum, [value]: [string, any]) => {
           return sum + (value?.value || 0);
         }, 0);
       
