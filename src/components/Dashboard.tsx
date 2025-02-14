@@ -3,14 +3,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Medal, TrendingUp, Wallet, FileSpreadsheet, Sun, Moon } from "lucide-react";
 import { FinancialHeader } from "./dashboard/FinancialHeader";
 import { AccountsSection } from "./dashboard/AccountsSection";
-import { FinancialCharts } from "./dashboard/FinancialCharts";
 import { SalesSection } from "./dashboard/SalesSection";
 import { RankingSection } from "./dashboard/RankingSection";
 import { MonthlyAnalysisTables } from "./dashboard/MonthlyAnalysisTables";
 import { OperationsSection } from "./dashboard/OperationsSection";
 import { useCardStyle } from "../contexts/CardStyleContext";
-import { DueTodayCard } from "./dashboard/DueTodayCard";
 import { useIsMobile } from "../hooks/use-mobile";
+import { FinancialOverview } from "./dashboard/FinancialOverview";
 import {
   Tooltip,
   TooltipContent,
@@ -100,8 +99,10 @@ const Dashboard = () => {
         )}
 
         <TabsContent value="financial" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <FinancialOverview />
+          </div>
           <AccountsSection />
-          <FinancialCharts />
           <MonthlyAnalysisTables />
         </TabsContent>
 
