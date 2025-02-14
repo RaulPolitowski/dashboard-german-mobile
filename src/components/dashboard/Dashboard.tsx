@@ -8,9 +8,7 @@ import { RankingSection } from "@/components/dashboard/RankingSection";
 import { MonthlyAnalysisTables } from "@/components/dashboard/MonthlyAnalysisTables";
 import { OperationsSection } from "@/components/dashboard/OperationsSection";
 import { useCardStyle } from "@/contexts/CardStyleContext";
-import { DueTodayCard } from "@/components/dashboard/DueTodayCard";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { FinancialOverview } from "@/components/dashboard/FinancialOverview";
 import {
   Tooltip,
   TooltipContent,
@@ -23,8 +21,8 @@ const Dashboard = () => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="p-3 md:p-6 space-y-4 md:space-y-6 animate-fade-in">
-      <div className="flex justify-between items-center">
+    <div className="animate-fade-in">
+      <div className="flex justify-between items-center mb-6">
         <FinancialHeader />
         <TooltipProvider>
           <Tooltip>
@@ -46,10 +44,6 @@ const Dashboard = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <FinancialOverview />
       </div>
 
       <div className="space-y-6">
