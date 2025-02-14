@@ -21,6 +21,28 @@ export const SalesAnalysisTable = ({
     return year.toString();
   });
 
+  if (!monthlyData || monthlyData.length === 0) {
+    return (
+      <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 backdrop-blur-sm border border-[#6366F1]/20">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-[#6366F1]">Análise de Vendas Mensal</h3>
+          <select 
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20"
+          >
+            {years.map((year) => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+        </div>
+        <div className="text-center py-4 text-gray-500">
+          Não há dados disponíveis para o período selecionado.
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-4 md:p-6 bg-gradient-to-br from-white/80 to-white/50 backdrop-blur-sm border border-[#6366F1]/20">
       <div className="flex items-center justify-between mb-4">
