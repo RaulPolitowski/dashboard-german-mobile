@@ -37,37 +37,30 @@ export const OrderDetailsDialog = ({
       case "created":
         return {
           text: "text-indigo-600 dark:text-indigo-400",
-          bg: "bg-indigo-50 border-indigo-100 dark:bg-indigo-900/20 dark:border-indigo-800",
-          textDark: "text-indigo-700 dark:text-indigo-300",
-          cardBg: "bg-white dark:bg-gray-800"
+          bg: "bg-indigo-50/50 dark:bg-indigo-900/10",
+          border: "border-indigo-100 dark:border-indigo-800/30",
+          hover: "hover:bg-indigo-50/80 dark:hover:bg-indigo-900/20"
         };
       case "approved":
         return {
           text: "text-emerald-600 dark:text-emerald-400",
-          bg: "bg-emerald-50 border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800",
-          textDark: "text-emerald-700 dark:text-emerald-300",
-          cardBg: "bg-white dark:bg-gray-800"
+          bg: "bg-emerald-50/50 dark:bg-emerald-900/10",
+          border: "border-emerald-100 dark:border-emerald-800/30",
+          hover: "hover:bg-emerald-50/80 dark:hover:bg-emerald-900/20"
         };
       case "pending":
         return {
           text: "text-amber-600 dark:text-amber-400",
-          bg: "bg-amber-50 border-amber-100 dark:bg-amber-900/20 dark:border-amber-800",
-          textDark: "text-amber-700 dark:text-amber-300",
-          cardBg: "bg-white dark:bg-gray-800"
+          bg: "bg-amber-50/50 dark:bg-amber-900/10",
+          border: "border-amber-100 dark:border-amber-800/30",
+          hover: "hover:bg-amber-50/80 dark:hover:bg-amber-900/20"
         };
       case "cancelled":
         return {
           text: "text-rose-600 dark:text-rose-400",
-          bg: "bg-rose-50 border-rose-100 dark:bg-rose-900/20 dark:border-rose-800",
-          textDark: "text-rose-700 dark:text-rose-300",
-          cardBg: "bg-white dark:bg-gray-800"
-        };
-      default:
-        return {
-          text: "text-gray-600 dark:text-gray-400",
-          bg: "bg-gray-50 border-gray-100 dark:bg-gray-900/20 dark:border-gray-800",
-          textDark: "text-gray-700 dark:text-gray-300",
-          cardBg: "bg-white dark:bg-gray-800"
+          bg: "bg-rose-50/50 dark:bg-rose-900/10",
+          border: "border-rose-100 dark:border-rose-800/30",
+          hover: "hover:bg-rose-50/80 dark:hover:bg-rose-900/20"
         };
     }
   };
@@ -80,7 +73,7 @@ export const OrderDetailsDialog = ({
       <DialogContent className="max-w-xl w-[calc(100%-2rem)] max-h-[90vh] overflow-hidden flex flex-col p-0">
         <div className="p-6 flex-1 overflow-hidden flex flex-col">
           <div className="flex items-center justify-between mb-6">
-            <DialogTitle className={`text-xl font-bold ${styles.text}`}>
+            <DialogTitle className={`text-xl font-bold ${styles?.text}`}>
               {title}
             </DialogTitle>
             <Button 
@@ -93,10 +86,10 @@ export const OrderDetailsDialog = ({
             </Button>
           </div>
 
-          <div className={`mb-4 p-4 rounded-lg border ${styles.bg}`}>
+          <div className={`mb-4 p-4 rounded-lg ${styles?.bg} ${styles?.border} border`}>
             <div className="flex justify-between items-center">
-              <p className={`text-sm font-medium ${styles.text}`}>Total</p>
-              <p className={`text-lg font-bold ${styles.textDark}`}>
+              <p className={`text-sm font-medium ${styles?.text}`}>Total</p>
+              <p className={`text-lg font-bold ${styles?.text}`}>
                 R$ {total.toLocaleString()}
               </p>
             </div>
@@ -107,7 +100,7 @@ export const OrderDetailsDialog = ({
               {getPaginatedOrders().map((order) => (
                 <div 
                   key={order.id} 
-                  className={`p-4 rounded-lg border ${styles.cardBg} border-gray-100 dark:border-gray-700`}
+                  className={`p-4 rounded-lg border transition-colors ${styles?.border} ${styles?.bg} ${styles?.hover}`}
                 >
                   <div className="flex justify-between items-start">
                     <div>
@@ -123,7 +116,7 @@ export const OrderDetailsDialog = ({
                         </p>
                       )}
                     </div>
-                    <span className={`text-lg font-bold ${styles.text}`}>
+                    <span className={`text-lg font-bold ${styles?.text}`}>
                       R$ {order.value.toLocaleString()}
                     </span>
                   </div>
@@ -133,7 +126,7 @@ export const OrderDetailsDialog = ({
           </ScrollArea>
 
           {totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-4 py-2 border-t dark:border-gray-700">
+            <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
               <Button
                 variant="outline"
                 size="icon"
