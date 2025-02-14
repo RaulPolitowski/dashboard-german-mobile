@@ -4,6 +4,30 @@ import { subDays, startOfWeek, endOfWeek, format, isToday } from 'date-fns';
 import { mockData } from '../constants';
 import { DateRange } from '../types';
 
+const generateTimeRangeValue = () => {
+  const sellers = ['Pedro Oliveira', 'Maria Santos', 'João Silva', 'Ana Costa'];
+  return {
+    seller: sellers[Math.floor(Math.random() * sellers.length)],
+    value: Math.floor(Math.random() * 5000) + 1000
+  };
+};
+
+const generateDayData = (day: string) => {
+  return {
+    day,
+    '08:00-10:00': generateTimeRangeValue(),
+    '10:00-12:00': generateTimeRangeValue(),
+    '12:00-15:00': generateTimeRangeValue(),
+    '15:00-18:00': generateTimeRangeValue(),
+    '18:00-00:00': generateTimeRangeValue(),
+  };
+};
+
+const generateMockData = () => {
+  const weekDays = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+  return weekDays.map(day => generateDayData(day));
+};
+
 export const useSalesData = () => {
   const [selectedRange, setSelectedRange] = useState('all');
   const [customDateRange, setCustomDateRange] = useState<DateRange>({
@@ -32,6 +56,13 @@ export const useSalesData = () => {
     }));
   };
 
+  const calculateDayTotal = (dayData: any) => {
+    const timeRangeKeys = ['08:00-10:00', '10:00-12:00', '12:00-15:00', '15:00-18:00', '18:00-00:00'];
+    return timeRangeKeys.reduce((total, timeRange) => {
+      return total + (dayData[timeRange]?.value || 0);
+    }, 0);
+  };
+
   const calculateOverallPerformance = (data: any[]) => {
     const sellerTotals: { [key: string]: number } = {};
     let periodTotal = 0;
@@ -39,10 +70,10 @@ export const useSalesData = () => {
     data.forEach(day => {
       const dailySales = calculateDailySales(day);
       dailySales.forEach(({ seller, total }) => {
-        if (!sellerTotals[seller]) {
-          sellerTotals[seller] = 0;
+        if (!sellerSales[seller]) {
+          sellerSales[seller] = 0;
         }
-        sellerTotals[seller] += total;
+        sellerSales[seller] += total;
         periodTotal += total;
       });
     });
@@ -98,15 +129,18 @@ export const useSalesData = () => {
   };
 
   const prepareChartData = () => {
+    const generatedData = generateMockData();
     const today = new Date();
-    return mockData.map(day => {
+    return generatedData.map(day => {
       const date = getDayDate(day.day);
       const isPreview = isToday(new Date(date));
       const performanceData = getBestAndWorstSeller(day);
+      const dayTotal = calculateDayTotal(day);
       return {
         ...day,
         day: day.day + (isPreview ? ' (Prévia)' : ''),
         date,
+        total: dayTotal,
         bestSeller: performanceData?.best,
         worstSeller: performanceData?.worst
       };
@@ -115,21 +149,17 @@ export const useSalesData = () => {
   };
 
   const prepareMobileData = () => {
+    const generatedData = generateMockData();
     const today = new Date();
-    return mockData.map(day => {
+    return generatedData.map(day => {
       const date = getDayDate(day.day);
       const isPreview = isToday(new Date(date));
-      const dailyTotal = Object.entries(day)
-        .filter(([key]) => key !== 'day')
-        .reduce((sum, [_, timeRange]: [string, any]) => {
-          return sum + (timeRange?.value || 0);
-        }, 0);
-      
+      const dayTotal = calculateDayTotal(day);
       const performanceData = getBestAndWorstSeller(day);
       
       return {
         name: day.day + (isPreview ? ' (Prévia)' : ''),
-        total: dailyTotal,
+        total: dayTotal,
         date,
         bestSeller: performanceData?.best,
         worstSeller: performanceData?.worst,
