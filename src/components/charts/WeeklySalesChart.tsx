@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../ui/card';
@@ -100,12 +99,12 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
 
   return (
     <Card className="p-4 md:p-6">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-700">Análise de Vendas por Dia e Horário</h3>
-          <p className="text-sm text-gray-500">Distribuição semanal de vendas por intervalo de horário</p>
-        </div>
-        <div className="mt-4 md:mt-0 w-full md:w-auto">
+      <div className="flex flex-col space-y-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold text-gray-700">Análise de Vendas por Horário</h3>
+            <p className="text-sm text-gray-500">Distribuição semanal de vendas por intervalo</p>
+          </div>
           <FilterControls
             dateFilter={dateFilter}
             selectedRange={selectedRange}
@@ -115,98 +114,117 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
             onCustomDateChange={setCustomDateRange}
           />
         </div>
-      </div>
 
-      {isMobile ? (
-        <div className="space-y-3 overflow-x-hidden">
-          {prepareMobileData().map((day, index) => (
-            <Card 
-              key={index} 
-              className="p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-800/20 cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => handleCardClick(day.name)}
-            >
-              <div className="flex justify-between items-center">
-                <div>
-                  <h4 className="font-semibold text-indigo-700 dark:text-indigo-300 text-sm">{day.name}</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Total do dia</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-base font-bold text-indigo-600 dark:text-indigo-400">
-                    R$ {day.total.toLocaleString()}
-                  </p>
-                  {selectedRange !== 'all' && timeRanges.find(range => range.id === selectedRange) && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {timeRanges.find(range => range.id === selectedRange)?.label}
+        {isMobile ? (
+          <div className="space-y-3 overflow-x-hidden">
+            {prepareMobileData().map((day, index) => (
+              <Card 
+                key={index} 
+                className="p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-800/20 cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => handleCardClick(day.name)}
+              >
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h4 className="font-semibold text-indigo-700 dark:text-indigo-300 text-sm">{day.name}</h4>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Total do dia</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-base font-bold text-indigo-600 dark:text-indigo-400">
+                      R$ {day.total.toLocaleString()}
                     </p>
-                  )}
+                    {selectedRange !== 'all' && timeRanges.find(range => range.id === selectedRange) && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {timeRanges.find(range => range.id === selectedRange)?.label}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-              {selectedRange === 'all' && (
-                <div className="mt-3 grid grid-cols-2 gap-2 overflow-x-auto">
-                  {timeRanges.map(range => {
-                    const value = mockData.find(d => d.day === day.name.replace(' (Prévia)', ''))?.[range.id]?.value || 0;
-                    return (
-                      <div 
-                        key={range.id}
-                        className="p-2 rounded-md bg-white/50 dark:bg-gray-800/50"
-                      >
-                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{range.label}</p>
-                        <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
-                          R$ {value.toLocaleString()}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart 
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            onClick={(data) => {
-              if (data && data.activePayload) {
-                handleCardClick(data.activePayload[0].payload.day);
-              }
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
-            <XAxis 
-              dataKey="day" 
-              tick={{ fill: '#6b7280' }}
-              axisLine={{ stroke: '#e5e7eb' }}
-            />
-            <YAxis 
-              tick={{ fill: '#6b7280' }}
-              axisLine={{ stroke: '#e5e7eb' }}
-              tickFormatter={(value) => `R$ ${(value / 1000)}k`}
-            />
-            <Tooltip />
-            {selectedRange === 'all' ? (
-              timeRanges.map((range) => (
-                <Bar
-                  key={range.id}
-                  dataKey={`${range.id}.value`}
-                  name={range.id}
-                  fill={range.color}
-                  radius={[4, 4, 0, 0]}
-                  cursor="pointer"
+                {selectedRange === 'all' && (
+                  <div className="mt-3 grid grid-cols-2 gap-2 overflow-x-auto">
+                    {timeRanges.map(range => {
+                      const value = mockData.find(d => d.day === day.name.replace(' (Prévia)', ''))?.[range.id]?.value || 0;
+                      return (
+                        <div 
+                          key={range.id}
+                          className="p-2 rounded-md bg-white/50 dark:bg-gray-800/50"
+                        >
+                          <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{range.label}</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                            R$ {value.toLocaleString()}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart 
+                data={chartData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                onClick={(data) => {
+                  if (data && data.activePayload) {
+                    handleCardClick(data.activePayload[0].payload.day);
+                  }
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+                <XAxis 
+                  dataKey="day" 
+                  tick={{ fill: '#6b7280' }}
+                  axisLine={{ stroke: '#e5e7eb' }}
                 />
-              ))
-            ) : (
-              <Bar
-                dataKey={`${selectedRange}.value`}
-                fill="#6366F1"
-                radius={[4, 4, 0, 0]}
-                cursor="pointer"
-              />
-            )}
-          </BarChart>
-        </ResponsiveContainer>
-      )}
+                <YAxis 
+                  tick={{ fill: '#6b7280' }}
+                  axisLine={{ stroke: '#e5e7eb' }}
+                  tickFormatter={(value) => `R$ ${(value / 1000)}k`}
+                />
+                <Tooltip 
+                  labelFormatter={(value) => format(new Date(value), 'dd/MM/yyyy')}
+                  formatter={(value) => `R$ ${value.toLocaleString()}`}
+                />
+                {selectedRange === 'all' ? (
+                  timeRanges.map((range) => (
+                    <Bar
+                      key={range.id}
+                      dataKey={`${range.id}.value`}
+                      name={range.id}
+                      fill={range.color}
+                      radius={[4, 4, 0, 0]}
+                      cursor="pointer"
+                    />
+                  ))
+                ) : (
+                  <Bar
+                    dataKey={`${selectedRange}.value`}
+                    fill="#6366F1"
+                    radius={[4, 4, 0, 0]}
+                    cursor="pointer"
+                  />
+                )}
+              </BarChart>
+            </ResponsiveContainer>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+              {Object.entries(timeRanges).map(([_, range]) => (
+                <div 
+                  key={range.id}
+                  className="p-4 rounded-lg bg-white border border-gray-200 shadow-sm"
+                >
+                  <p className="text-sm text-gray-600">{range.label}</p>
+                  <p className="text-lg font-semibold text-gray-900 mt-1">
+                    R$ {(chartData[chartData.length - 1]?.[range.id]?.value || 0).toLocaleString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
     </Card>
   );
 };

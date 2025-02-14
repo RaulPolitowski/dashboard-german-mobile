@@ -1,11 +1,13 @@
 
+import { format } from "date-fns";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
+import { Button } from "../../ui/button";
+import { X } from "lucide-react";
 
 interface Sale {
   id: number;
@@ -32,7 +34,6 @@ export const SalesDialogs = ({
 }: SalesDialogsProps) => {
   const currentMonth = new Date().toLocaleString('default', { month: 'long' });
   
-  // Simular vendas do mês atual
   const monthSales = [
     ...todaysSales,
     { 
@@ -51,78 +52,85 @@ export const SalesDialogs = ({
     }
   ];
 
+  const renderSalesDialog = (
+    isOpen: boolean,
+    onClose: () => void,
+    title: string,
+    sales: Sale[],
+    total: number
+  ) => (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-gray-900">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <DialogTitle className="text-xl font-bold text-blue-600 dark:text-blue-400">
+              {title}
+            </DialogTitle>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={onClose}
+              className="h-8 w-8 p-0"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800">
+            <div className="flex justify-between items-center">
+              <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Total</p>
+              <p className="text-lg font-bold text-blue-700 dark:text-blue-300">
+                R$ {total.toLocaleString()}
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+            {sales.map((sale) => (
+              <div 
+                key={sale.id} 
+                className="p-4 bg-gray-50 rounded-lg border border-gray-100 dark:bg-gray-800/50 dark:border-gray-700"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                      {format(new Date(sale.datetime), "dd/MM/yyyy HH:mm")}
+                    </h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {sale.paymentMethod}
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                      Vendedor: {sale.seller}
+                    </p>
+                  </div>
+                  <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                    R$ {sale.value.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+
   return (
     <>
-      <Dialog open={showDailySales} onOpenChange={onDailySalesClose}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col dark:bg-gray-900">
-          <DialogHeader>
-            <DialogTitle className="dark:text-gray-100">Vendas do Dia</DialogTitle>
-          </DialogHeader>
-          <div className="overflow-x-auto flex-1">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="dark:text-gray-300">Horário</TableHead>
-                  <TableHead className="dark:text-gray-300">Valor</TableHead>
-                  <TableHead className="dark:text-gray-300">Forma de Pagamento</TableHead>
-                  <TableHead className="dark:text-gray-300">Vendedor</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {todaysSales.map((sale) => (
-                  <TableRow key={sale.id}>
-                    <TableCell className="dark:text-gray-300">
-                      {new Date(sale.datetime).toLocaleTimeString([], { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                      })}
-                    </TableCell>
-                    <TableCell className="dark:text-gray-300">R$ {sale.value.toLocaleString()}</TableCell>
-                    <TableCell className="dark:text-gray-300">{sale.paymentMethod}</TableCell>
-                    <TableCell className="dark:text-gray-300">{sale.seller}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={showMonthlySales} onOpenChange={onMonthlySalesClose}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col dark:bg-gray-900">
-          <DialogHeader>
-            <DialogTitle className="dark:text-gray-100">Vendas de {currentMonth}</DialogTitle>
-          </DialogHeader>
-          <div className="overflow-x-auto flex-1">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="dark:text-gray-300">Data/Hora</TableHead>
-                  <TableHead className="dark:text-gray-300">Valor</TableHead>
-                  <TableHead className="dark:text-gray-300">Forma de Pagamento</TableHead>
-                  <TableHead className="dark:text-gray-300">Vendedor</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {monthSales.map((sale) => (
-                  <TableRow key={sale.id}>
-                    <TableCell className="dark:text-gray-300">
-                      {new Date(sale.datetime).toLocaleDateString()} {' '}
-                      {new Date(sale.datetime).toLocaleTimeString([], { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                      })}
-                    </TableCell>
-                    <TableCell className="dark:text-gray-300">R$ {sale.value.toLocaleString()}</TableCell>
-                    <TableCell className="dark:text-gray-300">{sale.paymentMethod}</TableCell>
-                    <TableCell className="dark:text-gray-300">{sale.seller}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {renderSalesDialog(
+        showDailySales,
+        onDailySalesClose,
+        "Vendas do Dia",
+        todaysSales,
+        todaysSales.reduce((sum, sale) => sum + sale.value, 0)
+      )}
+      {renderSalesDialog(
+        showMonthlySales,
+        onMonthlySalesClose,
+        `Vendas de ${currentMonth}`,
+        monthSales,
+        monthSales.reduce((sum, sale) => sum + sale.value, 0)
+      )}
     </>
   );
 };

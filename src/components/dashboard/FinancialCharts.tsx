@@ -1,4 +1,3 @@
-
 import { ChartBar, ChevronDown, ChevronUp, TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "../ui/card";
 import { ExpensesTable } from "./expenses/ExpensesTable";
@@ -311,6 +310,14 @@ export const FinancialCharts = () => {
           </>
         )}
       </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card className="p-4 md:p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribuição de Despesas</h3>
+          <ExpensesDistributionChart />
+        </Card>
+        <ExpensesTable />
+      </div>
 
       <Dialog open={showTransactions} onOpenChange={setShowTransactions}>
         <DialogContent className="max-w-4xl">

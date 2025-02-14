@@ -62,16 +62,32 @@ export const OrderDetailsDialog = ({
             </Button>
           </div>
 
+          <div className={`mb-4 p-4 rounded-lg border ${styles.bg}`}>
+            <div className="flex justify-between items-center">
+              <p className={`text-sm font-medium ${styles.text}`}>Total</p>
+              <p className={`text-lg font-bold ${styles.text}`}>
+                R$ {total.toLocaleString()}
+              </p>
+            </div>
+            <p className="text-sm text-gray-600 mt-1">
+              {orders.length} {orders.length === 1 ? "pedido" : "pedidos"}
+            </p>
+          </div>
+
           <div className="space-y-4 max-h-[60vh] overflow-y-auto">
             {orders.map((order) => (
               <div 
                 key={order.id} 
-                className={`p-4 rounded-lg border ${styles.bg}`}
+                className="p-4 bg-gray-50 rounded-lg border border-gray-100 dark:bg-gray-800/50 dark:border-gray-700"
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100">{order.client}</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{order.description}</p>
+                    <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                      {order.client}
+                    </h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {order.description}
+                    </p>
                     <div className="flex items-center gap-2 mt-1">
                       <p className="text-xs text-gray-400 dark:text-gray-500">
                         Data: {order.date}
