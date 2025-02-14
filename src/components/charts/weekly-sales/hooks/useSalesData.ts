@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { subDays, startOfWeek, endOfWeek, format, isToday } from 'date-fns';
 import { mockData } from '../constants';
@@ -120,8 +121,8 @@ export const useSalesData = () => {
       const isPreview = isToday(new Date(date));
       const dailyTotal = Object.entries(day)
         .filter(([key]) => key !== 'day')
-        .reduce((sum, [value]: [string, any]) => {
-          return sum + (value?.value || 0);
+        .reduce((sum, [_, timeRange]: [string, any]) => {
+          return sum + (timeRange?.value || 0);
         }, 0);
       
       const performanceData = getBestAndWorstSeller(day);

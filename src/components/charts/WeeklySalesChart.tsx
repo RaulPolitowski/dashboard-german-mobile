@@ -54,7 +54,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
             customDateRange={customDateRange}
             onDateFilterChange={handleDateFilterChange}
             onRangeChange={setSelectedRange}
-            onCustomDateChange={setCustomDateChange}
+            onCustomDateChange={setCustomDateRange}
           />
         </div>
 
