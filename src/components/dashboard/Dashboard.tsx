@@ -100,8 +100,8 @@ const Dashboard = () => {
         )}
 
         <TabsContent value="financial" className="space-y-6">
-          <AccountsSection />
           <FinancialCharts />
+          <AccountsSection />
           <MonthlyAnalysisTables />
         </TabsContent>
 

@@ -70,7 +70,7 @@ export const FinancialCharts = () => {
           currentValue={totals.inflow}
           previousValue={lastMonthInflow}
           comparison={totals.comparison.inflow}
-          bgColor="bg-emerald-500"
+          bgColor="bg-blue-500"
         />
         <ComparisonCard
           title="Despesas"
@@ -84,7 +84,7 @@ export const FinancialCharts = () => {
           currentValue={totals.result}
           previousValue={lastMonthResult}
           comparison={totals.comparison.result}
-          bgColor="bg-blue-500"
+          bgColor={totals.result >= 0 ? "bg-emerald-500" : "bg-rose-500"}
         />
       </div>
 
