@@ -48,8 +48,6 @@ const Dashboard = () => {
         </TooltipProvider>
       </div>
 
-      <FinancialCharts />
-
       <Tabs defaultValue="financial" className="space-y-4">
         {isMobile ? (
           <div className="overflow-x-auto pb-2">
@@ -102,7 +100,11 @@ const Dashboard = () => {
         )}
 
         <TabsContent value="financial" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <FinancialOverview />
+          </div>
           <AccountsSection />
+          <FinancialCharts />
           <MonthlyAnalysisTables />
         </TabsContent>
 
