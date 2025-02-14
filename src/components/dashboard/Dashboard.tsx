@@ -1,23 +1,22 @@
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Medal, TrendingUp, Wallet, FileSpreadsheet, Sun, Moon } from "lucide-react";
-import { FinancialHeader } from "./dashboard/FinancialHeader";
-import { FinancialMetrics } from "./dashboard/FinancialMetrics";
-import { AccountsSection } from "./dashboard/AccountsSection";
-import { FinancialCharts } from "./dashboard/FinancialCharts";
-import { SalesSection } from "./dashboard/SalesSection";
-import { RankingSection } from "./dashboard/RankingSection";
-import { MonthlyAnalysisTables } from "./dashboard/MonthlyAnalysisTables";
-import { OperationsSection } from "./dashboard/OperationsSection";
-import { useCardStyle } from "../contexts/CardStyleContext";
-import { DueTodayCard } from "./dashboard/DueTodayCard";
-import { useIsMobile } from "../hooks/use-mobile";
+import { FinancialHeader } from "@/components/dashboard/FinancialHeader";
+import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
+import { AccountsSection } from "@/components/dashboard/AccountsSection";
+import { FinancialCharts } from "@/components/dashboard/FinancialCharts";
+import { SalesSection } from "@/components/dashboard/SalesSection";
+import { RankingSection } from "@/components/dashboard/RankingSection";
+import { MonthlyAnalysisTables } from "@/components/dashboard/MonthlyAnalysisTables";
+import { OperationsSection } from "@/components/dashboard/OperationsSection";
+import { useCardStyle } from "@/contexts/CardStyleContext";
+import { DueTodayCard } from "@/components/dashboard/DueTodayCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "@/components/ui/tooltip";
 
 const Dashboard = () => {
   const { cardStyle, toggleCardStyle } = useCardStyle();
