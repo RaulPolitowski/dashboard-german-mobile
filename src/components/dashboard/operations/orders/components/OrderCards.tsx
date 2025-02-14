@@ -7,14 +7,18 @@ import { OrderDetailsDialog } from "./cards/OrderDetailsDialog";
 
 interface OrderCardsProps {
   data: MockOrdersData;
-  onCardClick: (title: string, orders: Order[], type: string) => void;
+  onCardClick: (title: string, orders: Order[], type: "created" | "approved" | "pending" | "cancelled") => void;
 }
 
 export const OrderCards = ({ data, onCardClick }: OrderCardsProps) => {
-  const [selectedOrders, setSelectedOrders] = useState<{ title: string; orders: Order[]; type: string }>({ 
+  const [selectedOrders, setSelectedOrders] = useState<{ 
+    title: string; 
+    orders: Order[]; 
+    type: "created" | "approved" | "pending" | "cancelled" 
+  }>({ 
     title: "", 
     orders: [],
-    type: ""
+    type: "created"
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -35,7 +39,7 @@ export const OrderCards = ({ data, onCardClick }: OrderCardsProps) => {
         onClose={() => setIsDialogOpen(false)}
         title={selectedOrders.title}
         orders={selectedOrders.orders}
-        type={selectedOrders.type as "created" | "approved" | "pending" | "cancelled"}
+        type={selectedOrders.type}
       />
     </>
   );

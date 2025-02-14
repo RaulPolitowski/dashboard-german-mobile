@@ -1,25 +1,28 @@
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { DueTodayOrders } from "./DueTodayOrders";
 import { OrderCharts } from "./OrderCharts";
 import { OrderHeader } from "./components/OrderHeader";
 import { OrderCards } from "./components/OrderCards";
-import { OrderDetails } from "./components/OrderDetails";
 import { mockOrders } from "./data/mockOrders";
 import { Order } from "./types/order-metrics";
+import { OrderDetailsDialog } from "./components/cards/OrderDetailsDialog";
 
 export const OrderMetrics = () => {
   const [selectedRange, setSelectedRange] = useState<string>("30D");
   const [selectedSeller, setSelectedSeller] = useState<string>("all");
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedOrders, setSelectedOrders] = useState<{ title: string; orders: Order[]; type: string }>({ 
+  const [selectedOrders, setSelectedOrders] = useState<{ 
+    title: string; 
+    orders: Order[]; 
+    type: "created" | "approved" | "pending" | "cancelled" 
+  }>({ 
     title: "", 
     orders: [],
-    type: ""
+    type: "created"
   });
 
-  const handleShowDetails = (title: string, orders: Order[], type: string) => {
+  const handleShowDetails = (title: string, orders: Order[], type: "created" | "approved" | "pending" | "cancelled") => {
     setSelectedOrders({ title, orders, type });
     setShowDetails(true);
   };
@@ -42,27 +45,13 @@ export const OrderMetrics = () => {
 
       <OrderCharts />
 
-      <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-3xl">
-          <div className="flex flex-col gap-4">
-            <DialogTitle>{selectedOrders.title}</DialogTitle>
-            <div className={`rounded-lg border p-4 ${
-              selectedOrders.type === "created" ? "bg-indigo-50 border-indigo-200" :
-              selectedOrders.type === "approved" ? "bg-emerald-50 border-emerald-200" :
-              selectedOrders.type === "pending" ? "bg-amber-50 border-amber-200" :
-              "bg-rose-50 border-rose-200"
-            }`}>
-              <div className="text-lg font-semibold mb-2">
-                Total: R$ {selectedOrders.orders.reduce((sum, item) => sum + item.value, 0).toLocaleString()}
-              </div>
-              <div className="text-sm text-gray-600">
-                {selectedOrders.orders.length} {selectedOrders.orders.length === 1 ? "pedido" : "pedidos"}
-              </div>
-            </div>
-            <OrderDetails orders={selectedOrders.orders} title={selectedOrders.title} />
-          </div>
-        </DialogContent>
-      </Dialog>
+      <OrderDetailsDialog
+        isOpen={showDetails}
+        onClose={() => setShowDetails(false)}
+        title={selectedOrders.title}
+        orders={selectedOrders.orders}
+        type={selectedOrders.type}
+      />
     </div>
   );
 };
