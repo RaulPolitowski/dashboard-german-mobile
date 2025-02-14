@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Medal, TrendingUp, Wallet, FileSpreadsheet, Sun, Moon } from "lucide-react";
 import { FinancialHeader } from "@/components/dashboard/FinancialHeader";
 import { AccountsSection } from "@/components/dashboard/AccountsSection";
-import { FinancialCharts } from "@/components/dashboard/FinancialCharts";
 import { SalesSection } from "@/components/dashboard/SalesSection";
 import { RankingSection } from "@/components/dashboard/RankingSection";
 import { MonthlyAnalysisTables } from "@/components/dashboard/MonthlyAnalysisTables";
@@ -47,6 +46,10 @@ const Dashboard = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <FinancialOverview />
       </div>
 
       <Tabs defaultValue="financial" className="space-y-4">
@@ -101,9 +104,6 @@ const Dashboard = () => {
         )}
 
         <TabsContent value="financial" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <FinancialOverview />
-          </div>
           <AccountsSection />
           <MonthlyAnalysisTables />
         </TabsContent>
