@@ -1,7 +1,7 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Medal, TrendingUp, Wallet, FileSpreadsheet, Sun, Moon } from "lucide-react";
 import { FinancialHeader } from "@/components/dashboard/FinancialHeader";
-import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
 import { AccountsSection } from "@/components/dashboard/AccountsSection";
 import { FinancialCharts } from "@/components/dashboard/FinancialCharts";
 import { SalesSection } from "@/components/dashboard/SalesSection";
@@ -100,7 +100,6 @@ const Dashboard = () => {
         )}
 
         <TabsContent value="financial" className="space-y-6">
-          <FinancialMetrics />
           <AccountsSection />
           <FinancialCharts />
           <MonthlyAnalysisTables />
