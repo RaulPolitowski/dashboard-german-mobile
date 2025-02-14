@@ -32,29 +32,42 @@ export const OrderDetailsDialog = ({
     return orders.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   };
 
-  const getTypeStyles = (type: "created" | "approved" | "pending" | "cancelled") => {
-    const styles = {
-      created: {
-        text: "text-indigo-600 dark:text-indigo-400",
-        bg: "bg-indigo-50 border-indigo-100 dark:bg-indigo-900/20 dark:border-indigo-800",
-      },
-      approved: {
-        text: "text-emerald-600 dark:text-emerald-400",
-        bg: "bg-emerald-50 border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800",
-      },
-      pending: {
-        text: "text-amber-600 dark:text-amber-400",
-        bg: "bg-amber-50 border-amber-100 dark:bg-amber-900/20 dark:border-amber-800",
-      },
-      cancelled: {
-        text: "text-rose-600 dark:text-rose-400",
-        bg: "bg-rose-50 border-rose-100 dark:bg-rose-900/20 dark:border-rose-800",
-      },
-    };
-    return styles[type];
+  const getTypeStyles = () => {
+    switch (type) {
+      case "created":
+        return {
+          text: "text-indigo-600 dark:text-indigo-400",
+          bg: "bg-indigo-50 border-indigo-100 dark:bg-indigo-900/20 dark:border-indigo-800",
+          textDark: "text-indigo-700 dark:text-indigo-300"
+        };
+      case "approved":
+        return {
+          text: "text-emerald-600 dark:text-emerald-400",
+          bg: "bg-emerald-50 border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800",
+          textDark: "text-emerald-700 dark:text-emerald-300"
+        };
+      case "pending":
+        return {
+          text: "text-amber-600 dark:text-amber-400",
+          bg: "bg-amber-50 border-amber-100 dark:bg-amber-900/20 dark:border-amber-800",
+          textDark: "text-amber-700 dark:text-amber-300"
+        };
+      case "cancelled":
+        return {
+          text: "text-rose-600 dark:text-rose-400",
+          bg: "bg-rose-50 border-rose-100 dark:bg-rose-900/20 dark:border-rose-800",
+          textDark: "text-rose-700 dark:text-rose-300"
+        };
+      default:
+        return {
+          text: "text-gray-600 dark:text-gray-400",
+          bg: "bg-gray-50 border-gray-100 dark:bg-gray-900/20 dark:border-gray-800",
+          textDark: "text-gray-700 dark:text-gray-300"
+        };
+    }
   };
 
-  const styles = getTypeStyles(type);
+  const styles = getTypeStyles();
   const total = orders.reduce((sum, order) => sum + order.value, 0);
 
   return (
@@ -78,7 +91,7 @@ export const OrderDetailsDialog = ({
           <div className={`mb-4 p-4 rounded-lg border ${styles.bg}`}>
             <div className="flex justify-between items-center">
               <p className={`text-sm font-medium ${styles.text}`}>Total</p>
-              <p className={`text-lg font-bold ${styles.text}`}>
+              <p className={`text-lg font-bold ${styles.textDark}`}>
                 R$ {total.toLocaleString()}
               </p>
             </div>
