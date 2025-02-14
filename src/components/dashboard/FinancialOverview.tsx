@@ -62,21 +62,21 @@ export const FinancialOverview = () => {
         currentValue={totals.inflow}
         previousValue={lastMonthInflow}
         comparison={totals.comparison.inflow}
-        bgColor="bg-blue-500"
+        bgColor="bg-emerald-500"
       />
       <ComparisonCard
         title="Despesas"
         currentValue={totals.outflow}
         previousValue={lastMonthOutflow}
         comparison={totals.comparison.outflow}
-        bgColor="bg-rose-500"
+        bgColor="bg-red-500"
       />
       <ComparisonCard
         title="Resultado"
         currentValue={totals.result}
         previousValue={lastMonthResult}
         comparison={totals.comparison.result}
-        bgColor={totals.result >= 0 ? "bg-emerald-500" : "bg-rose-500"}
+        bgColor="bg-blue-500"
       />
     </>
   );

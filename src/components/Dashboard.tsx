@@ -10,6 +10,8 @@ import { OperationsSection } from "./dashboard/OperationsSection";
 import { useCardStyle } from "../contexts/CardStyleContext";
 import { useIsMobile } from "../hooks/use-mobile";
 import { FinancialOverview } from "./dashboard/FinancialOverview";
+import { FinancialCharts } from "./dashboard/FinancialCharts";
+import { ExpensesTable } from "./dashboard/ExpensesTable";
 import {
   Tooltip,
   TooltipContent,
@@ -22,8 +24,8 @@ const Dashboard = () => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="p-3 md:p-6 space-y-4 md:space-y-6 animate-fade-in">
-      <div className="flex justify-between items-center">
+    <div className="animate-fade-in">
+      <div className="flex justify-between items-center mb-6">
         <FinancialHeader />
         <TooltipProvider>
           <Tooltip>
@@ -47,77 +49,81 @@ const Dashboard = () => {
         </TooltipProvider>
       </div>
 
-      <Tabs defaultValue="financial" className="space-y-4">
-        {isMobile ? (
-          <div className="overflow-x-auto pb-2">
-            <TabsList className="inline-flex w-auto border border-gray-200 p-1 bg-white dark:bg-gray-800 dark:border-gray-700">
-              <TabsTrigger 
-                value="financial" 
-                className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
-              >
-                <Wallet className="w-5 h-5" />
+      <div className="space-y-6">
+        <Tabs defaultValue="financial" className="space-y-4">
+          {isMobile ? (
+            <div className="overflow-x-auto pb-2">
+              <TabsList className="inline-flex w-auto border border-gray-200 p-1 bg-white dark:bg-gray-800 dark:border-gray-700">
+                <TabsTrigger 
+                  value="financial" 
+                  className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
+                >
+                  <Wallet className="w-5 h-5" />
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="sales" 
+                  className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
+                >
+                  <TrendingUp className="w-5 h-5" />
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="operations" 
+                  className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
+                >
+                  <FileSpreadsheet className="w-5 h-5" />
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="ranking" 
+                  className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
+                >
+                  <Medal className="w-5 h-5" />
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          ) : (
+            <TabsList>
+              <TabsTrigger value="financial" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+                <Wallet className="w-4 h-4 mr-2" />
+                Gestão Financeira
               </TabsTrigger>
-              <TabsTrigger 
-                value="sales" 
-                className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
-              >
-                <TrendingUp className="w-5 h-5" />
+              <TabsTrigger value="sales" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Análise de Vendas
               </TabsTrigger>
-              <TabsTrigger 
-                value="operations" 
-                className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
-              >
-                <FileSpreadsheet className="w-5 h-5" />
+              <TabsTrigger value="operations" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+                <FileSpreadsheet className="w-4 h-4 mr-2" />
+                Operações
               </TabsTrigger>
-              <TabsTrigger 
-                value="ranking" 
-                className="flex-shrink-0 data-[state=active]:bg-[#6366F1] data-[state=active]:text-white px-4 py-2 rounded-md"
-              >
-                <Medal className="w-5 h-5" />
+              <TabsTrigger value="ranking" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
+                <Medal className="w-4 h-4 mr-2" />
+                Performance de Vendedores
               </TabsTrigger>
             </TabsList>
-          </div>
-        ) : (
-          <TabsList>
-            <TabsTrigger value="financial" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
-              <Wallet className="w-4 h-4 mr-2" />
-              Gestão Financeira
-            </TabsTrigger>
-            <TabsTrigger value="sales" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Análise de Vendas
-            </TabsTrigger>
-            <TabsTrigger value="operations" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
-              <FileSpreadsheet className="w-4 h-4 mr-2" />
-              Operações
-            </TabsTrigger>
-            <TabsTrigger value="ranking" className="data-[state=active]:bg-[#6366F1] data-[state=active]:text-white">
-              <Medal className="w-4 h-4 mr-2" />
-              Performance de Vendedores
-            </TabsTrigger>
-          </TabsList>
-        )}
+          )}
 
-        <TabsContent value="financial" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <FinancialOverview />
-          </div>
-          <AccountsSection />
-          <MonthlyAnalysisTables />
-        </TabsContent>
+          <TabsContent value="financial" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FinancialOverview />
+            </div>
+            <FinancialCharts />
+            <ExpensesTable />
+            <AccountsSection />
+            <MonthlyAnalysisTables />
+          </TabsContent>
 
-        <TabsContent value="sales" className="space-y-4">
-          <SalesSection />
-        </TabsContent>
+          <TabsContent value="sales" className="space-y-4">
+            <SalesSection />
+          </TabsContent>
 
-        <TabsContent value="operations" className="space-y-4">
-          <OperationsSection />
-        </TabsContent>
+          <TabsContent value="operations" className="space-y-4">
+            <OperationsSection />
+          </TabsContent>
 
-        <TabsContent value="ranking" className="space-y-4">
-          <RankingSection />
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="ranking" className="space-y-4">
+            <RankingSection />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };
