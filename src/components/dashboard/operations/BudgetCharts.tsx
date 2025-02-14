@@ -89,21 +89,21 @@ export const BudgetCharts = () => {
                 timeFilter={timeFilter}
               />
             </div>
-            <div className="grid grid-cols-3 gap-4 mt-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-sm">
               <div className="p-3 rounded-lg bg-emerald-50">
                 <p className="text-emerald-600 font-medium">Aprovados</p>
-                <p>Quantidade: {totals.aprovados}</p>
-                <p>Valor: {formatCurrency(totals.valorAprovados)}</p>
+                <p className="mt-1">Quantidade: {totals.aprovados}</p>
+                <p className="mt-1">Valor: {formatCurrency(totals.valorAprovados)}</p>
               </div>
               <div className="p-3 rounded-lg bg-amber-50">
                 <p className="text-amber-600 font-medium">Pendentes</p>
-                <p>Quantidade: {totals.pendentes}</p>
-                <p>Valor: {formatCurrency(totals.valorPendentes)}</p>
+                <p className="mt-1">Quantidade: {totals.pendentes}</p>
+                <p className="mt-1">Valor: {formatCurrency(totals.valorPendentes)}</p>
               </div>
               <div className="p-3 rounded-lg bg-rose-50">
                 <p className="text-rose-600 font-medium">Recusados</p>
-                <p>Quantidade: {totals.recusados}</p>
-                <p>Valor: {formatCurrency(totals.valorRecusados)}</p>
+                <p className="mt-1">Quantidade: {totals.recusados}</p>
+                <p className="mt-1">Valor: {formatCurrency(totals.valorRecusados)}</p>
               </div>
             </div>
           </>
@@ -135,22 +135,22 @@ export const BudgetCharts = () => {
             <div className="h-[300px]">
               <ConversionChart data={conversionData.slice(-Number(timeFilter))} />
             </div>
-            <div className="grid grid-cols-4 gap-4 mt-4 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
               <div className="p-3 rounded-lg bg-indigo-50">
                 <p className="text-indigo-600 font-medium">Taxa de Conversão</p>
-                <p>{conversionData[conversionData.length - 1].taxa}%</p>
+                <p className="mt-1 text-sm">{conversionData[conversionData.length - 1].taxa}%</p>
               </div>
               <div className="p-3 rounded-lg bg-emerald-50">
                 <p className="text-emerald-600 font-medium">Aprovados</p>
-                <p>{conversionData[conversionData.length - 1].aprovados}</p>
+                <p className="mt-1 text-sm">{conversionData[conversionData.length - 1].aprovados}</p>
               </div>
               <div className="p-3 rounded-lg bg-amber-50">
                 <p className="text-amber-600 font-medium">Pendentes</p>
-                <p>{conversionData[conversionData.length - 1].pendentes}</p>
+                <p className="mt-1 text-sm">{conversionData[conversionData.length - 1].pendentes}</p>
               </div>
               <div className="p-3 rounded-lg bg-rose-50">
                 <p className="text-rose-600 font-medium">Vencidos</p>
-                <p>{conversionData[conversionData.length - 1].vencidos}</p>
+                <p className="mt-1 text-sm">{conversionData[conversionData.length - 1].vencidos}</p>
               </div>
             </div>
           </>
