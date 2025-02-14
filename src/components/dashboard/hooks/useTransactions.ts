@@ -5,13 +5,17 @@ import { subDays, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMont
 
 export const transactions: readonly Transaction[] = [
   { id: '1', date: '2024-02-20T14:30:00', description: 'Venda Produto A', value: 1500, type: 'inflow' } as const,
-  { id: '2', date: '2024-02-19T09:15:00', description: 'Pagamento Fornecedor', value: 800, type: 'outflow' } as const,
-  { id: '3', date: '2024-02-18T16:45:00', description: 'Venda Serviço B', value: 2000, type: 'inflow' } as const,
-  { id: '4', date: '2024-02-17T11:20:00', description: 'Despesas Operacionais', value: 600, type: 'outflow' } as const,
+  { id: '2', date: '2024-02-20T09:15:00', description: 'Pagamento Fornecedor', value: 800, type: 'outflow' } as const,
+  { id: '3', date: '2024-02-20T16:45:00', description: 'Venda Serviço B', value: 2000, type: 'inflow' } as const,
+  { id: '4', date: '2024-02-20T11:20:00', description: 'Despesas Operacionais', value: 600, type: 'outflow' } as const,
   { id: '5', date: '2024-02-20T10:00:00', description: 'Venda Produto C', value: 1200, type: 'inflow' } as const,
   { id: '6', date: '2024-02-20T13:45:00', description: 'Manutenção', value: 450, type: 'outflow' } as const,
-  { id: '7', date: '2024-02-19T15:30:00', description: 'Venda Serviço D', value: 1800, type: 'inflow' } as const,
-  { id: '8', date: '2024-02-18T09:00:00', description: 'Material de Escritório', value: 300, type: 'outflow' } as const,
+  { id: '7', date: '2024-02-20T15:30:00', description: 'Venda Serviço D', value: 1800, type: 'inflow' } as const,
+  { id: '8', date: '2024-02-20T09:00:00', description: 'Material de Escritório', value: 300, type: 'outflow' } as const,
+  { id: '9', date: '2024-02-19T14:30:00', description: 'Venda Produto E', value: 2500, type: 'inflow' } as const,
+  { id: '10', date: '2024-02-19T10:15:00', description: 'Pagamento Internet', value: 200, type: 'outflow' } as const,
+  { id: '11', date: '2024-02-18T16:45:00', description: 'Venda Serviço F', value: 3000, type: 'inflow' } as const,
+  { id: '12', date: '2024-02-18T11:20:00', description: 'Aluguel', value: 1500, type: 'outflow' } as const,
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export const useTransactions = (dateFilter: DateFilter) => {
