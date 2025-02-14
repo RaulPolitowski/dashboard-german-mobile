@@ -1,9 +1,10 @@
+
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "../../ui/card";
 import { WeeklySalesChart } from "../../charts/WeeklySalesChart";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
+import { SalesDetailsDialog } from "../../charts/weekly-sales/components/SalesDetailsDialog";
 
 interface WeeklySalesCardProps {
   isMinimized: boolean;
@@ -19,7 +20,7 @@ export const WeeklySalesCard = ({
   onToggleInsights
 }: WeeklySalesCardProps) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [selectedDayData, setSelectedDayData] = useState<any>(null);
 
   // Dados mockados para demonstração
   const totals = {
@@ -40,7 +41,16 @@ export const WeeklySalesCard = ({
   };
 
   const handleChartClick = (day: string) => {
-    setSelectedDay(day);
+    // Simular dados do dia selecionado
+    const dayData = {
+      day,
+      "08:00-10:00": { value: 28500 },
+      "10:00-12:00": { value: 45600 },
+      "12:00-15:00": { value: 38900 },
+      "15:00-18:00": { value: 52300 },
+      "18:00-00:00": { value: 31200 }
+    };
+    setSelectedDayData(dayData);
     setShowDetails(true);
   };
 
@@ -54,7 +64,9 @@ export const WeeklySalesCard = ({
                 className="flex items-center justify-between cursor-pointer"
                 onClick={onToggleMinimize}
               >
-                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Análise de Vendas por Dia e Horário</h3>
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                  Análise de Vendas por Dia e Horário
+                </h3>
                 <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
               </div>
             </TooltipTrigger>
@@ -67,8 +79,12 @@ export const WeeklySalesCard = ({
         <>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Análise de Vendas por Dia e Horário</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Distribuição semanal de vendas por intervalo de horário</p>
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                Análise de Vendas por Dia e Horário
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Distribuição semanal de vendas por intervalo de horário
+              </p>
             </div>
             <TooltipProvider>
               <Tooltip>
@@ -140,7 +156,9 @@ export const WeeklySalesCard = ({
               <div className="mt-2 space-y-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300">Melhores Períodos</h5>
+                    <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      Melhores Períodos
+                    </h5>
                     <div className="text-sm">
                       <p className="text-gray-700 dark:text-gray-200">
                         • Melhor dia: <span className="font-medium text-emerald-600 dark:text-emerald-400">{totals.bestDay}</span>
@@ -151,7 +169,9 @@ export const WeeklySalesCard = ({
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300">Períodos para Melhorar</h5>
+                    <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      Períodos para Melhorar
+                    </h5>
                     <div className="text-sm">
                       <p className="text-gray-700 dark:text-gray-200">
                         • Dia mais fraco: <span className="font-medium text-rose-600 dark:text-rose-400">{totals.worstDay}</span>
@@ -166,47 +186,11 @@ export const WeeklySalesCard = ({
             )}
           </div>
 
-          <Dialog open={showDetails} onOpenChange={setShowDetails}>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Detalhes de Vendas - {selectedDay}</DialogTitle>
-              </DialogHeader>
-              <div className="mt-4">
-                <div className="overflow-hidden">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Horário
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Quantidade
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Valor Total
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {totals.salesByTime.map((timeSlot) => (
-                        <tr key={timeSlot.time}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {timeSlot.time}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {timeSlot.sales.toLocaleString()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            R$ {timeSlot.value.toLocaleString()}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <SalesDetailsDialog
+            isOpen={showDetails}
+            onClose={() => setShowDetails(false)}
+            dayData={selectedDayData}
+          />
         </>
       )}
     </Card>
