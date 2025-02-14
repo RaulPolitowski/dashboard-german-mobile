@@ -1,4 +1,3 @@
-
 import { useMemo } from 'react';
 import { Transaction, DateFilter } from '../types/financial';
 import { subDays, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMonths, parseISO } from 'date-fns';
@@ -7,11 +6,15 @@ import { subDays, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMont
 const today = new Date();
 const todayStr = today.toISOString();
 const yesterdayStr = subDays(today, 1).toISOString();
+const lastMonthSameDayStr = subMonths(today, 1).toISOString();
 
 export const transactions: readonly Transaction[] = [
   { id: '1', date: todayStr, description: 'Venda Produto A', value: 1500, type: 'inflow' } as const,
   { id: '2', date: todayStr, description: 'Pagamento Fornecedor', value: 800, type: 'outflow' } as const,
   { id: '3', date: todayStr, description: 'Venda Serviço B', value: 2000, type: 'inflow' } as const,
+  { id: '11', date: lastMonthSameDayStr, description: 'Venda Produto A', value: 1200, type: 'inflow' } as const,
+  { id: '12', date: lastMonthSameDayStr, description: 'Pagamento Fornecedor', value: 700, type: 'outflow' } as const,
+  { id: '13', date: lastMonthSameDayStr, description: 'Venda Serviço B', value: 1800, type: 'inflow' } as const,
   { id: '4', date: yesterdayStr, description: 'Despesas Operacionais', value: 600, type: 'outflow' } as const,
   { id: '5', date: yesterdayStr, description: 'Venda Produto C', value: 1200, type: 'inflow' } as const,
   { id: '6', date: yesterdayStr, description: 'Manutenção', value: 450, type: 'outflow' } as const,
@@ -50,6 +53,13 @@ export const useTransactions = (dateFilter: DateFilter) => {
     });
   }, [dateFilter]);
 
+  const lastMonthSameDay = useMemo(() => {
+    const lastMonth = subMonths(new Date(), 1);
+    return transactions.filter(transaction => 
+      isSameDay(parseISO(transaction.date), lastMonth)
+    );
+  }, []);
+
   const totals = useMemo(() => {
     const inflow = filteredTransactions
       .filter(t => t.type === 'inflow')
@@ -57,12 +67,25 @@ export const useTransactions = (dateFilter: DateFilter) => {
     const outflow = filteredTransactions
       .filter(t => t.type === 'outflow')
       .reduce((sum, t) => sum + t.value, 0);
+    
+    const lastMonthInflow = lastMonthSameDay
+      .filter(t => t.type === 'inflow')
+      .reduce((sum, t) => sum + t.value, 0);
+    const lastMonthOutflow = lastMonthSameDay
+      .filter(t => t.type === 'outflow')
+      .reduce((sum, t) => sum + t.value, 0);
+
     return {
       inflow,
       outflow,
-      result: inflow - outflow
+      result: inflow - outflow,
+      comparison: {
+        inflow: ((inflow - lastMonthInflow) / lastMonthInflow) * 100,
+        outflow: ((outflow - lastMonthOutflow) / lastMonthOutflow) * 100,
+        result: ((inflow - outflow - (lastMonthInflow - lastMonthOutflow)) / Math.abs(lastMonthInflow - lastMonthOutflow)) * 100
+      }
     };
-  }, [filteredTransactions]);
+  }, [filteredTransactions, lastMonthSameDay]);
 
   return { filteredTransactions, totals };
 };

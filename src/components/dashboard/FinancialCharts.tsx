@@ -9,38 +9,58 @@ import { CashFlowChart } from "./components/CashFlowChart";
 import { ExpensesDistributionChart } from "../charts/ExpensesDistributionChart";
 import { TransactionsList } from "./components/TransactionsList";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 
 export const FinancialCharts = () => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('today');
   const [showTransactions, setShowTransactions] = useState(false);
   const { filteredTransactions, totals } = useTransactions(dateFilter);
 
+  const ComparisonIndicator = ({ value }: { value: number }) => {
+    const isPositive = value > 0;
+    return (
+      <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600' : 'text-rose-600'}`}>
+        {isPositive ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
+        <span>{Math.abs(value).toFixed(1)}%</span>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border-emerald-200">
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-emerald-700">Receitas</h3>
+        <Card className="p-4 bg-emerald-500">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-white">Receitas</h3>
+            {totals.comparison.inflow && (
+              <ComparisonIndicator value={totals.comparison.inflow} />
+            )}
           </div>
-          <p className="text-2xl font-bold text-emerald-600 mt-2">
+          <p className="text-2xl font-bold text-white mt-2">
             R$ {totals.inflow.toLocaleString()}
           </p>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-rose-500/10 to-rose-600/10 border-rose-200">
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-rose-700">Despesas</h3>
+        <Card className="p-4 bg-rose-500">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-white">Despesas</h3>
+            {totals.comparison.outflow && (
+              <ComparisonIndicator value={totals.comparison.outflow} />
+            )}
           </div>
-          <p className="text-2xl font-bold text-rose-600 mt-2">
+          <p className="text-2xl font-bold text-white mt-2">
             R$ {totals.outflow.toLocaleString()}
           </p>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-200">
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-blue-700">Resultado</h3>
+        <Card className="p-4 bg-blue-500">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-white">Resultado</h3>
+            {totals.comparison.result && (
+              <ComparisonIndicator value={totals.comparison.result} />
+            )}
           </div>
-          <p className="text-2xl font-bold text-blue-600 mt-2">
+          <p className="text-2xl font-bold text-white mt-2">
             R$ {totals.result.toLocaleString()}
           </p>
         </Card>
@@ -97,14 +117,7 @@ export const FinancialCharts = () => {
           <DialogHeader>
             <DialogTitle>Movimentações</DialogTitle>
           </DialogHeader>
-          <TransactionsList
-            transactions={filteredTransactions}
-            dateFilter={dateFilter}
-            currentPage={1}
-            totalPages={Math.ceil(filteredTransactions.length / 5)}
-            onDateFilterChange={setDateFilter}
-            onPageChange={() => {}}
-          />
+          <TransactionsList transactions={filteredTransactions} />
         </DialogContent>
       </Dialog>
     </div>
