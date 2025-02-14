@@ -38,31 +38,36 @@ export const OrderDetailsDialog = ({
         return {
           text: "text-indigo-600 dark:text-indigo-400",
           bg: "bg-indigo-50 border-indigo-100 dark:bg-indigo-900/20 dark:border-indigo-800",
-          textDark: "text-indigo-700 dark:text-indigo-300"
+          textDark: "text-indigo-700 dark:text-indigo-300",
+          cardBg: "bg-white dark:bg-gray-800"
         };
       case "approved":
         return {
           text: "text-emerald-600 dark:text-emerald-400",
           bg: "bg-emerald-50 border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800",
-          textDark: "text-emerald-700 dark:text-emerald-300"
+          textDark: "text-emerald-700 dark:text-emerald-300",
+          cardBg: "bg-white dark:bg-gray-800"
         };
       case "pending":
         return {
           text: "text-amber-600 dark:text-amber-400",
           bg: "bg-amber-50 border-amber-100 dark:bg-amber-900/20 dark:border-amber-800",
-          textDark: "text-amber-700 dark:text-amber-300"
+          textDark: "text-amber-700 dark:text-amber-300",
+          cardBg: "bg-white dark:bg-gray-800"
         };
       case "cancelled":
         return {
           text: "text-rose-600 dark:text-rose-400",
           bg: "bg-rose-50 border-rose-100 dark:bg-rose-900/20 dark:border-rose-800",
-          textDark: "text-rose-700 dark:text-rose-300"
+          textDark: "text-rose-700 dark:text-rose-300",
+          cardBg: "bg-white dark:bg-gray-800"
         };
       default:
         return {
           text: "text-gray-600 dark:text-gray-400",
           bg: "bg-gray-50 border-gray-100 dark:bg-gray-900/20 dark:border-gray-800",
-          textDark: "text-gray-700 dark:text-gray-300"
+          textDark: "text-gray-700 dark:text-gray-300",
+          cardBg: "bg-white dark:bg-gray-800"
         };
     }
   };
@@ -102,7 +107,7 @@ export const OrderDetailsDialog = ({
               {getPaginatedOrders().map((order) => (
                 <div 
                   key={order.id} 
-                  className="p-4 bg-gray-50 rounded-lg border border-gray-100 dark:bg-gray-800/50 dark:border-gray-700"
+                  className={`p-4 rounded-lg border ${styles.cardBg} border-gray-100 dark:border-gray-700`}
                 >
                   <div className="flex justify-between items-start">
                     <div>
@@ -128,7 +133,7 @@ export const OrderDetailsDialog = ({
           </ScrollArea>
 
           {totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-4 py-2 border-t">
+            <div className="flex justify-center gap-2 mt-4 py-2 border-t dark:border-gray-700">
               <Button
                 variant="outline"
                 size="icon"
