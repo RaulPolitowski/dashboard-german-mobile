@@ -16,7 +16,7 @@ export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onR
   }, []);
 
   return (
-    <Card className="p-4 md:p-6 bg-white/50 backdrop-blur-sm border border-gray-100">
+    <Card className="relative p-4 md:p-6 bg-white/50 backdrop-blur-sm border border-gray-100">
       <div className="flex flex-col space-y-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-1">
@@ -25,10 +25,10 @@ export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onR
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Select value={selectedSeller} onValueChange={onSellerChange}>
-              <SelectTrigger className="w-full sm:w-[160px] h-9 px-3 text-sm bg-white/80 border-gray-100">
+              <SelectTrigger className="w-full sm:w-[160px] h-9 px-3 text-sm bg-white border-gray-200">
                 <SelectValue placeholder="Todos os vendedores" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-50 bg-white">
                 <SelectItem value="all">Todos os vendedores</SelectItem>
                 <SelectItem value="joao">João Silva</SelectItem>
                 <SelectItem value="maria">Maria Santos</SelectItem>
@@ -36,10 +36,10 @@ export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onR
               </SelectContent>
             </Select>
             <Select value={selectedRange} onValueChange={onRangeChange}>
-              <SelectTrigger className="w-full sm:w-[140px] h-9 px-3 text-sm bg-white/80 border-gray-100">
+              <SelectTrigger className="w-full sm:w-[140px] h-9 px-3 text-sm bg-white border-gray-200">
                 <SelectValue placeholder="Mês Atual" />
               </SelectTrigger>
-              <SelectContent align="end" className="w-[200px]">
+              <SelectContent align="end" className="z-50 bg-white">
                 <SelectGroup>
                   <SelectItem value="current-day">Hoje</SelectItem>
                   <SelectItem value="current-week">Semana Atual</SelectItem>

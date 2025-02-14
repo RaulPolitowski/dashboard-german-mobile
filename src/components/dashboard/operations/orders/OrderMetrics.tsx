@@ -9,7 +9,7 @@ import { Order } from "./types/order-metrics";
 import { OrderDetailsDialog } from "./components/cards/OrderDetailsDialog";
 
 export const OrderMetrics = () => {
-  const [selectedRange, setSelectedRange] = useState<string>("30D");
+  const [selectedRange, setSelectedRange] = useState<string>("current-month");
   const [selectedSeller, setSelectedSeller] = useState<string>("all");
   const [showDetails, setShowDetails] = useState(false);
   const [selectedOrders, setSelectedOrders] = useState<{ 
@@ -27,13 +27,25 @@ export const OrderMetrics = () => {
     setShowDetails(true);
   };
 
+  const handleRangeChange = (value: string) => {
+    setSelectedRange(value);
+    console.log("Range changed to:", value);
+    // Aqui você pode adicionar a lógica para filtrar os dados baseado no novo range
+  };
+
+  const handleSellerChange = (value: string) => {
+    setSelectedSeller(value);
+    console.log("Seller changed to:", value);
+    // Aqui você pode adicionar a lógica para filtrar os dados baseado no novo vendedor
+  };
+
   return (
     <div className="space-y-6">
       <OrderHeader 
         selectedSeller={selectedSeller}
         selectedRange={selectedRange}
-        onSellerChange={setSelectedSeller}
-        onRangeChange={setSelectedRange}
+        onSellerChange={handleSellerChange}
+        onRangeChange={handleRangeChange}
       />
 
       <OrderCards 
