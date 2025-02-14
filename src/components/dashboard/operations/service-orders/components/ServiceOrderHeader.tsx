@@ -49,7 +49,6 @@ export const ServiceOrderHeader = ({
                   <SelectItem value="current-day">Hoje</SelectItem>
                   <SelectItem value="current-week">Semana Atual</SelectItem>
                   <SelectItem value="current-month">Mês Atual</SelectItem>
-                  <SelectItem value="current-quarter">Trimestre Atual</SelectItem>
                   <SelectItem value="current-year">Ano Atual</SelectItem>
                 </SelectGroup>
                 <SelectGroup>
