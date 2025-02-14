@@ -9,6 +9,7 @@ import { MonthlyAnalysisTables } from "@/components/dashboard/MonthlyAnalysisTab
 import { OperationsSection } from "@/components/dashboard/OperationsSection";
 import { useCardStyle } from "@/contexts/CardStyleContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { FinancialOverview } from "@/components/dashboard/FinancialOverview";
 import {
   Tooltip,
   TooltipContent,
@@ -47,8 +48,6 @@ const Dashboard = () => {
       </div>
 
       <div className="space-y-6">
-        <AccountsSection />
-        
         <Tabs defaultValue="financial" className="space-y-4">
           {isMobile ? (
             <div className="overflow-x-auto pb-2">
@@ -101,6 +100,10 @@ const Dashboard = () => {
           )}
 
           <TabsContent value="financial" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FinancialOverview />
+            </div>
+            <AccountsSection />
             <MonthlyAnalysisTables />
           </TabsContent>
 
