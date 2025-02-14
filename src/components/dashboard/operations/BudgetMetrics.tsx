@@ -1,26 +1,17 @@
+
 import { useState } from "react";
 import { Card } from "../../ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { 
-  AlertTriangle, 
-  Clock, 
-  FileQuestion, 
-  TimerOff, 
-  TrendingUp,
+  Calendar,
   CheckCircle2,
   XCircle,
-  Calendar,
-  DollarSign
+  Clock,
 } from "lucide-react";
 import { BudgetCharts } from "./BudgetCharts";
 import { mockBudgetData } from "./data/mockBudgetData";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../ui/select";
-import { differenceInDays } from "date-fns";
 import { OverdueDetailsDialog } from "../OverdueDetailsDialog";
 import { DueTodayBudgets } from "./DueTodayBudgets";
-
-const timeRanges = ["7D", "15D", "30D", "90D"] as const;
-type TimeRange = (typeof timeRanges)[number];
 
 export const BudgetMetrics = () => {
   const [selectedRange, setSelectedRange] = useState<string>("30D");
@@ -53,40 +44,46 @@ export const BudgetMetrics = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Métricas de Orçamentos</h3>
-        <div className="flex flex-col md:flex-row gap-4">
-          <Select value={selectedSeller} onValueChange={setSelectedSeller}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Selecione um vendedor" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Vendedores</SelectLabel>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="joao">João Silva</SelectItem>
-                <SelectItem value="maria">Maria Santos</SelectItem>
-                <SelectItem value="pedro">Pedro Oliveira</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Select value={selectedRange} onValueChange={(value: TimeRange) => setSelectedRange(value)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Selecione o período" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Período</SelectLabel>
-                {timeRanges.map((range) => (
-                  <SelectItem key={range} value={range}>
-                    Últimos {range}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+      <Card className="p-4 md:p-6">
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-semibold text-gray-700">Métricas de Orçamentos</h3>
+              <p className="text-sm text-gray-500">Acompanhe o desempenho dos orçamentos</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              <Select value={selectedSeller} onValueChange={setSelectedSeller}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Selecione um vendedor" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Vendedores</SelectLabel>
+                    <SelectItem value="all">Todos</SelectItem>
+                    <SelectItem value="joao">João Silva</SelectItem>
+                    <SelectItem value="maria">Maria Santos</SelectItem>
+                    <SelectItem value="pedro">Pedro Oliveira</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <Select value={selectedRange} onValueChange={setSelectedRange}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Selecione o período" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Período</SelectLabel>
+                    <SelectItem value="7D">Últimos 7 dias</SelectItem>
+                    <SelectItem value="15D">Últimos 15 dias</SelectItem>
+                    <SelectItem value="30D">Últimos 30 dias</SelectItem>
+                    <SelectItem value="90D">Últimos 90 dias</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
-      </div>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card 
@@ -128,7 +125,7 @@ export const BudgetMetrics = () => {
           <div className="flex justify-between items-start">
             <div>
               <div className="flex items-center gap-2">
-                <TimerOff className="h-5 w-5 text-amber-500" />
+                <Clock className="h-5 w-5 text-amber-500" />
                 <h3 className="font-semibold text-amber-700">Orçamentos Vencidos</h3>
               </div>
               <p className="text-2xl font-bold text-amber-600 mt-2">8</p>
