@@ -5,6 +5,8 @@ import { DateRange } from './types';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 import { Button } from '../../ui/button';
 import { Calendar } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
+import { Calendar as CalendarComponent } from '../../ui/calendar';
 
 interface FilterControlsProps {
   dateFilter: 'last7' | 'currentWeek';
@@ -24,9 +26,9 @@ export const FilterControls = ({
   onCustomDateChange
 }: FilterControlsProps) => {
   return (
-    <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
+    <div className="flex flex-wrap gap-2 items-center">
       <Select value={dateFilter} onValueChange={onDateFilterChange}>
-        <SelectTrigger className="w-full md:w-[180px]">
+        <SelectTrigger className="w-[160px] bg-white">
           <SelectValue placeholder="Período" />
         </SelectTrigger>
         <SelectContent>
@@ -38,7 +40,7 @@ export const FilterControls = ({
       </Select>
 
       <Select value={selectedRange} onValueChange={onRangeChange}>
-        <SelectTrigger className="w-full md:w-[180px]">
+        <SelectTrigger className="w-[160px] bg-white">
           <SelectValue placeholder="Horário" />
         </SelectTrigger>
         <SelectContent>
@@ -51,25 +53,40 @@ export const FilterControls = ({
         </SelectContent>
       </Select>
 
-      <div className="flex flex-col md:flex-row gap-2">
-        <div className="relative">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-          <input
-            type="date"
-            value={format(customDateRange.start, 'yyyy-MM-dd')}
-            onChange={(e) => onCustomDateChange({ ...customDateRange, start: new Date(e.target.value) })}
-            className="pl-10 pr-3 py-2 w-full md:w-[150px] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-        </div>
-        <div className="relative">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-          <input
-            type="date"
-            value={format(customDateRange.end, 'yyyy-MM-dd')}
-            onChange={(e) => onCustomDateChange({ ...customDateRange, end: new Date(e.target.value) })}
-            className="pl-10 pr-3 py-2 w-full md:w-[150px] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
-        </div>
+      <div className="flex gap-2">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="w-[160px] pl-3 text-left font-normal bg-white">
+              <Calendar className="mr-2 h-4 w-4" />
+              {format(customDateRange.start, 'dd/MM/yyyy')}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <CalendarComponent
+              mode="single"
+              selected={customDateRange.start}
+              onSelect={(date) => date && onCustomDateChange({ ...customDateRange, start: date })}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="w-[160px] pl-3 text-left font-normal bg-white">
+              <Calendar className="mr-2 h-4 w-4" />
+              {format(customDateRange.end, 'dd/MM/yyyy')}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <CalendarComponent
+              mode="single"
+              selected={customDateRange.end}
+              onSelect={(date) => date && onCustomDateChange({ ...customDateRange, end: date })}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

@@ -32,6 +32,31 @@ export const useSalesData = () => {
     }));
   };
 
+  const calculateOverallPerformance = (data: any[]) => {
+    const sellerTotals: { [key: string]: number } = {};
+    let periodTotal = 0;
+
+    data.forEach(day => {
+      const dailySales = calculateDailySales(day);
+      dailySales.forEach(({ seller, total }) => {
+        if (!sellerTotals[seller]) {
+          sellerTotals[seller] = 0;
+        }
+        sellerTotals[seller] += total;
+        periodTotal += total;
+      });
+    });
+
+    const bestSeller = Object.entries(sellerTotals)
+      .map(([seller, total]) => ({ seller, total }))
+      .sort((a, b) => b.total - a.total)[0];
+
+    return {
+      bestSellerOverall: bestSeller,
+      totalPeriod: periodTotal
+    };
+  };
+
   const getBestAndWorstSeller = (dayData: any) => {
     const dailySales = calculateDailySales(dayData);
     if (dailySales.length === 0) return null;
@@ -122,6 +147,7 @@ export const useSalesData = () => {
     handleDateFilterChange,
     prepareChartData,
     prepareMobileData,
+    calculateOverallPerformance,
     getDayDate
   };
 };

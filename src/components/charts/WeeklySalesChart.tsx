@@ -6,6 +6,7 @@ import { SalesBarChart } from './weekly-sales/components/SalesBarChart';
 import { MobileView } from './weekly-sales/components/MobileView';
 import { PerformanceInsights } from './weekly-sales/components/PerformanceInsights';
 import { TimeRangeSummary } from './weekly-sales/components/TimeRangeSummary';
+import { OverallInsights } from './weekly-sales/components/OverallInsights';
 import { useSalesData } from './weekly-sales/hooks/useSalesData';
 
 interface WeeklySalesChartProps {
@@ -23,6 +24,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
     handleDateFilterChange,
     prepareChartData,
     prepareMobileData,
+    calculateOverallPerformance,
     getDayDate
   } = useSalesData();
 
@@ -36,6 +38,7 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
 
   const chartData = prepareChartData();
   const mobileData = prepareMobileData();
+  const { bestSellerOverall, totalPeriod } = calculateOverallPerformance(chartData);
 
   return (
     <Card className="p-4 md:p-6">
@@ -54,6 +57,11 @@ export const WeeklySalesChart = ({ onDayClick }: WeeklySalesChartProps) => {
             onCustomDateChange={setCustomDateRange}
           />
         </div>
+
+        <OverallInsights 
+          bestSellerOverall={bestSellerOverall}
+          totalPeriod={totalPeriod}
+        />
 
         {isMobile ? (
           <MobileView 
