@@ -13,17 +13,17 @@ export const CashFlowChart = ({ inflow, outflow, result }: CashFlowChartProps) =
     return [
       {
         type: "Entradas",
-        value: inflow,
+        valor: inflow,
         color: "rgb(16, 185, 129)"
       },
       {
         type: "Saídas",
-        value: outflow,
+        valor: outflow,
         color: "rgb(244, 63, 94)"
       },
       {
         type: "Resultado",
-        value: result,
+        valor: result,
         color: "rgb(59, 130, 246)"
       }
     ];
@@ -33,7 +33,7 @@ export const CashFlowChart = ({ inflow, outflow, result }: CashFlowChartProps) =
     <div className="h-[200px]">
       <ResponsiveBar
         data={chartData}
-        keys={['value']}
+        keys={['valor']}
         indexBy="type"
         margin={{ top: 10, right: 10, bottom: 40, left: 80 }}
         padding={0.3}
@@ -52,6 +52,11 @@ export const CashFlowChart = ({ inflow, outflow, result }: CashFlowChartProps) =
         }}
         enableLabel={true}
         label={d => `R$ ${d.value.toLocaleString()}`}
+        tooltip={({ data, value }) => (
+          <div className="bg-white p-2 shadow rounded border border-gray-200">
+            <strong>{data.type}</strong>: R$ {value.toLocaleString()}
+          </div>
+        )}
       />
     </div>
   );

@@ -1,7 +1,6 @@
 
 import { ChartBar, TrendingDown, TrendingUp } from "lucide-react";
 import { Card } from "../../ui/card";
-import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -21,22 +20,18 @@ interface CashFlowMetricsProps {
 }
 
 export const CashFlowMetrics = ({ inflow, outflow, result, transactions }: CashFlowMetricsProps) => {
-  const [selectedType, setSelectedType] = useState<"inflow" | "outflow" | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleCardClick = (type: "inflow" | "outflow") => {
-    setSelectedType(type);
-    setIsDialogOpen(true);
-  };
-
-  const filteredTransactions = transactions.filter(t => t.type === selectedType);
+  const sortedTransactions = [...transactions].sort((a, b) => 
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
 
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card 
           className="p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border-emerald-200 cursor-pointer hover:bg-emerald-50 transition-colors"
-          onClick={() => handleCardClick("inflow")}
+          onClick={() => setIsDialogOpen(true)}
         >
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-emerald-500" />
@@ -49,7 +44,7 @@ export const CashFlowMetrics = ({ inflow, outflow, result, transactions }: CashF
 
         <Card 
           className="p-4 bg-gradient-to-br from-rose-500/10 to-rose-600/10 border-rose-200 cursor-pointer hover:bg-rose-50 transition-colors"
-          onClick={() => handleCardClick("outflow")}
+          onClick={() => setIsDialogOpen(true)}
         >
           <div className="flex items-center gap-2">
             <TrendingDown className="h-5 w-5 text-rose-500" />
@@ -74,12 +69,10 @@ export const CashFlowMetrics = ({ inflow, outflow, result, transactions }: CashF
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>
-              {selectedType === "inflow" ? "Entradas" : "Saídas"} Detalhadas
-            </DialogTitle>
+            <DialogTitle>Movimentações</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {filteredTransactions.map((transaction) => (
+            {sortedTransactions.map((transaction) => (
               <div
                 key={transaction.id}
                 className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"

@@ -105,10 +105,10 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FinancialOverview />
             </div>
-            <FinancialCharts />
-            <ExpensesTable />
             <AccountsSection />
             <MonthlyAnalysisTables />
+            <FinancialCharts />
+            <ExpensesTable />
           </TabsContent>
 
           <TabsContent value="sales" className="space-y-4">
