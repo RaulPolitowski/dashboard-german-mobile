@@ -9,12 +9,12 @@ import {
 } from "lucide-react";
 import { BudgetCharts } from "./BudgetCharts";
 import { mockBudgetData } from "./data/mockBudgetData";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { OverdueDetailsDialog } from "../OverdueDetailsDialog";
 import { DueTodayBudgets } from "./DueTodayBudgets";
 
 export const BudgetMetrics = () => {
-  const [selectedRange, setSelectedRange] = useState<string>("30D");
+  const [selectedRange, setSelectedRange] = useState<string>("current-month");
   const [selectedSeller, setSelectedSeller] = useState<string>("all");
   const [showGeneratedDetails, setShowGeneratedDetails] = useState(false);
   const [showApprovedDetails, setShowApprovedDetails] = useState(false);
@@ -51,32 +51,34 @@ export const BudgetMetrics = () => {
               <h3 className="text-lg font-semibold text-gray-700">Métricas de Orçamentos</h3>
               <p className="text-sm text-gray-500">Acompanhe o desempenho dos orçamentos</p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <Select value={selectedSeller} onValueChange={setSelectedSeller}>
-                <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Selecione um vendedor" />
+                <SelectTrigger className="w-full sm:w-[160px] h-9 px-3 text-sm bg-white border-gray-200">
+                  <SelectValue placeholder="Todos os vendedores" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Vendedores</SelectLabel>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="joao">João Silva</SelectItem>
-                    <SelectItem value="maria">Maria Santos</SelectItem>
-                    <SelectItem value="pedro">Pedro Oliveira</SelectItem>
-                  </SelectGroup>
+                <SelectContent className="z-50 bg-white">
+                  <SelectItem value="all">Todos os vendedores</SelectItem>
+                  <SelectItem value="joao">João Silva</SelectItem>
+                  <SelectItem value="maria">Maria Santos</SelectItem>
+                  <SelectItem value="pedro">Pedro Oliveira</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={selectedRange} onValueChange={setSelectedRange}>
-                <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Selecione o período" />
+                <SelectTrigger className="w-full sm:w-[140px] h-9 px-3 text-sm bg-white border-gray-200">
+                  <SelectValue placeholder="Mês Atual" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent align="end" className="z-50 bg-white">
                   <SelectGroup>
-                    <SelectLabel>Período</SelectLabel>
+                    <SelectItem value="current-day">Hoje</SelectItem>
+                    <SelectItem value="current-week">Semana Atual</SelectItem>
+                    <SelectItem value="current-month">Mês Atual</SelectItem>
+                    <SelectItem value="current-year">Ano Atual</SelectItem>
+                  </SelectGroup>
+                  <SelectGroup>
                     <SelectItem value="7D">Últimos 7 dias</SelectItem>
                     <SelectItem value="15D">Últimos 15 dias</SelectItem>
                     <SelectItem value="30D">Últimos 30 dias</SelectItem>
-                    <SelectItem value="90D">Últimos 90 dias</SelectItem>
+                    <SelectItem value="60D">Últimos 60 dias</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
