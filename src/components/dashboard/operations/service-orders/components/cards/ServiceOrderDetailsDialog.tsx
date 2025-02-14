@@ -51,42 +51,63 @@ export const ServiceOrderDetailsDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl">
-        <div className="flex flex-col gap-4">
-          <DialogTitle>{title}</DialogTitle>
-          <div className={`rounded-lg border p-4 ${styles.bg}`}>
-            <div className="text-lg font-semibold mb-2">
-              Total: R$ {total.toLocaleString()}
-            </div>
-            <div className="text-sm text-gray-600">
-              {orders.length} {orders.length === 1 ? "ordem de serviço" : "ordens de serviço"}
-            </div>
+      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-gray-900">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <DialogTitle className={`text-xl font-bold ${styles.text}`}>
+              {title}
+            </DialogTitle>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={onClose}
+              className="h-8 w-8 p-0"
+            >
+              <X className="h-5 w-5" />
+            </Button>
           </div>
-          <div className="mt-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Cliente</TableHead>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead>Técnico</TableHead>
-                  <TableHead>Prazo</TableHead>
-                  <TableHead className="text-right">Valor</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell className="font-medium">{order.client}</TableCell>
-                    <TableCell>{order.description}</TableCell>
-                    <TableCell>{order.technician}</TableCell>
-                    <TableCell>{order.deadline}</TableCell>
-                    <TableCell className="text-right">
-                      R$ {order.value.toLocaleString()}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+
+          <div className={`mb-4 p-4 rounded-lg border ${styles.bg}`}>
+            <div className="flex justify-between items-center">
+              <p className={`text-sm font-medium ${styles.text}`}>Total</p>
+              <p className={`text-lg font-bold ${styles.text}`}>
+                R$ {total.toLocaleString()}
+              </p>
+            </div>
+            <p className="text-sm text-gray-600 mt-1">
+              {orders.length} {orders.length === 1 ? "ordem de serviço" : "ordens de serviço"}
+            </p>
+          </div>
+
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+            {orders.map((order) => (
+              <div 
+                key={order.id} 
+                className="p-4 bg-gray-50 rounded-lg border border-gray-100 dark:bg-gray-800/50 dark:border-gray-700"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                      {order.client}
+                    </h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {order.description}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
+                        Prazo: {order.deadline}
+                      </p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
+                        Técnico: {order.technician}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`text-lg font-bold ${styles.text}`}>
+                    R$ {order.value.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </DialogContent>
