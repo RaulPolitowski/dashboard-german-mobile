@@ -9,6 +9,7 @@ import { ThemeProvider } from "./hooks/use-theme";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
+// Create QueryClient
 const queryClient = new QueryClient();
 
 const App = () => (
