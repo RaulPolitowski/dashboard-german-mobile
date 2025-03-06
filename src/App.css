@@ -1,0 +1,119 @@
+
+/* Keep minimal styles that don't conflict with our tailwind system */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.dark #root {
+  background-color: transparent;
+  color: #f3f4f6;
+}
+
+/* Chart customizations for dark mode */
+.dark .recharts-responsive-container .recharts-surface {
+  filter: brightness(0.9);
+}
+
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+.dark .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: rgba(31, 41, 55, 0.9) !important;
+  border-color: rgba(55, 65, 81, 0.5) !important;
+  color: #e5e7eb !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Chart legends in dark mode */
+.dark .recharts-legend-item-text {
+  color: #e5e7eb !important;
+}
+
+/* Axis labels */
+.dark .recharts-cartesian-axis-tick-value tspan {
+  fill: #d1d5db !important;
+}
+
+/* Chart tooltips enhanced */
+.dark .recharts-tooltip-cursor {
+  stroke: rgba(139, 92, 246, 0.5) !important;
+}
+
+/* Specific financial card styles - preserved colors as requested */
+.dark .finance-card-inflow {
+  background: linear-gradient(to right, #10b981, #059669) !important;
+  color: white !important;
+  border-color: rgba(5, 150, 105, 0.5) !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
+}
+
+.dark .finance-card-outflow {
+  background: linear-gradient(to right, #ef4444, #dc2626) !important;
+  color: white !important;
+  border-color: rgba(220, 38, 38, 0.5) !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+.dark .finance-card-result {
+  background: linear-gradient(to right, #3b82f6, #2563eb) !important;
+  color: white !important;
+  border-color: rgba(37, 99, 235, 0.5) !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Glow effects for data points in charts */
+.dark .recharts-layer .recharts-active-dot {
+  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.7));
+}
+
+/* Enhanced area charts in dark mode */
+.dark .recharts-area-area {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+/* Animated gradient background for page */
+.dark .page-background {
+  background: linear-gradient(-45deg, #111827, #1a202c, #0f172a, #1e1b4b);
+  background-size: 400% 400%;
+  animation: gradientBg 15s ease infinite;
+}
+
+@keyframes gradientBg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Glassmorphism elements */
+.dark .glass-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}

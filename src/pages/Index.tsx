@@ -1,0 +1,16 @@
+
+import Dashboard from "@/components/Dashboard";
+import { useTheme } from "@/hooks/use-theme";
+
+const Index = () => {
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
+
+  return (
+    <div className={`min-h-screen ${isDarkMode ? 'bg-dashboard-background' : 'bg-gradient-to-br from-white to-gray-50'}`}>
+      <Dashboard />
+    </div>
+  );
+};
+
+export default Index;

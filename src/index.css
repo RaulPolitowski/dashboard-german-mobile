@@ -1,0 +1,258 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 142.1 76.2% 36.3%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 225 30% 8%;
+    --foreground: 213 31% 91%;
+    --card: 225 32% 10%;
+    --card-foreground: 213 31% 91%;
+    --popover: 225 32% 10%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 273 100% 60%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 215 27% 16.9%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 215 27% 16.9%;
+    --muted-foreground: 217 24% 72.9%;
+    --accent: 215 27% 16.9%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 215 27% 16.9%;
+    --input: 215 27% 16.9%;
+    --ring: 273 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+.dark .glassmorphism {
+  @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-lg;
+}
+
+.light .glassmorphism {
+  @apply bg-white/80 backdrop-blur-sm border border-gray-100 shadow-md;
+}
+
+.dark .card-gradient {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(219, 39, 119, 0.1) 100%);
+  @apply border-purple-900/20;
+}
+
+.light .card-gradient {
+  background: linear-gradient(135deg, rgba(249, 250, 251, 1) 0%, rgba(243, 244, 246, 1) 100%);
+  @apply border-gray-200;
+}
+
+/* Custom Scrollbar - Light Mode */
+.light ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.light ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Custom Scrollbar - Dark Mode */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Dark mode specific styles based on the reference image */
+.dark {
+  background: linear-gradient(to bottom, #0f1729, #111827);
+  color: #f3f4f6;
+}
+
+.dark .dialog-content {
+  @apply bg-gradient-to-br from-[#151b2b] to-[#1a2035] border-[#2d3748]/80 shadow-[0_0_15px_rgba(99,102,241,0.2)];
+}
+
+.dark .dashboard-card {
+  @apply bg-gradient-to-br from-[#151b2b] to-[#1a2035] border-[#2d3748]/80 shadow-[0_0_15px_rgba(99,102,241,0.2)];
+}
+
+.dark .nav-item {
+  @apply hover:bg-[#1f2937] hover:shadow-[0_0_8px_rgba(99,102,241,0.3)];
+}
+
+.dark .tab-active {
+  @apply bg-gradient-to-r from-[#6d28d9] to-[#7c3aed] text-white shadow-[0_0_10px_rgba(109,40,217,0.5)];
+}
+
+/* Light mode specific styles */
+.light .dialog-content {
+  @apply bg-white border-gray-200;
+}
+
+.light .dashboard-card {
+  @apply bg-white border-gray-200;
+}
+
+.light .nav-item {
+  @apply hover:bg-gray-100;
+}
+
+.light .tab-active {
+  @apply bg-indigo-600 text-white;
+}
+
+/* Table styles for dark mode */
+.dark .table-container {
+  @apply bg-gradient-to-br from-[#151b2b] to-[#1a2035] border-[#2d3748]/80;
+}
+
+.dark table {
+  @apply bg-transparent text-gray-200;
+}
+
+.dark thead tr {
+  @apply bg-gradient-to-r from-[#1e2433] to-[#1e2837] text-gray-300 border-b border-[#2d3748];
+}
+
+.dark tbody tr {
+  @apply border-[#2d3748]/50;
+}
+
+.dark tbody tr:hover {
+  @apply bg-gradient-to-r from-[#1e2433]/70 to-[#1e2837]/70;
+}
+
+.dark td, .dark th {
+  @apply border-[#2d3748]/50;
+}
+
+/* Financial card styles based on reference image - PRESERVED COLORS */
+.dark .finance-card-inflow {
+  @apply bg-gradient-to-r from-[#10b981] to-[#059669] text-white border-emerald-800 shadow-[0_0_12px_rgba(16,185,129,0.4)];
+}
+
+.dark .finance-card-outflow {
+  @apply bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white border-rose-800 shadow-[0_0_12px_rgba(239,68,68,0.4)];
+}
+
+.dark .finance-card-result {
+  @apply bg-gradient-to-r from-[#3b82f6] to-[#2563eb] text-white border-blue-800 shadow-[0_0_12px_rgba(59,130,246,0.4)];
+}
+
+/* Overdue accounts cards */
+.dark .overdue-receivable-card {
+  @apply bg-gradient-to-r from-[#581c87] to-[#4c1d95] text-white border-purple-900 shadow-[0_0_12px_rgba(88,28,135,0.4)];
+}
+
+.dark .overdue-payable-card {
+  @apply bg-gradient-to-r from-[#7c2d12] to-[#9a3412] text-white border-amber-900 shadow-[0_0_12px_rgba(124,45,18,0.4)];
+}
+
+/* Due today cards */
+.dark .due-today-receivable {
+  @apply bg-gradient-to-r from-[#065f46] to-[#047857] text-white shadow-[0_0_12px_rgba(6,95,70,0.4)];
+}
+
+.dark .due-today-payable {
+  @apply bg-gradient-to-r from-[#9f1239] to-[#be123c] text-white shadow-[0_0_12px_rgba(159,18,57,0.4)];
+}
+
+.dark .due-today-balance {
+  @apply bg-gradient-to-r from-[#1e3a8a] to-[#1e40af] text-white shadow-[0_0_12px_rgba(30,58,138,0.4)];
+}
+
+/* Account summary cards */
+.dark .account-summary-card {
+  @apply bg-gradient-to-br from-[#1e293b] to-[#1e2431] text-white border-[#334155] shadow-[0_0_12px_rgba(30,41,59,0.4)];
+}
+
+/* Dark mode styles for charts */
+.dark .recharts-text {
+  fill: #d1d5db !important;
+}
+
+.dark .recharts-cartesian-grid line {
+  stroke: #374151 !important;
+}
+
+.dark .recharts-cartesian-axis-line {
+  stroke: #4b5563 !important;
+}
+
+/* Neon and glow effects for interactive elements */
+.dark .glow-button {
+  @apply relative overflow-hidden;
+  text-shadow: 0 0 5px rgba(139, 92, 246, 0.7);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3), inset 0 0 5px rgba(139, 92, 246, 0.2);
+}
+
+.dark .glow-button:hover {
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5), inset 0 0 8px rgba(139, 92, 246, 0.3);
+}
+
+.dark .neon-border {
+  box-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+  border-color: rgba(139, 92, 246, 0.7);
+}
+
+.dark .neon-text {
+  text-shadow: 0 0 3px rgba(139, 92, 246, 0.7);
+}
+
+/* Gradient buttons */
+.dark .gradient-button {
+  @apply bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-md;
+}
