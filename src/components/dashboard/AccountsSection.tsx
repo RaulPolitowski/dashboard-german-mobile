@@ -52,10 +52,10 @@ export const AccountsSection = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Card
-                className={`p-4 cursor-pointer hover:shadow-lg transition-all ${
+                className={`p-4 cursor-pointer transition-all ${
                   isDarkMode 
-                    ? 'bg-[#581c87] text-white border-purple-900' 
-                    : 'bg-gradient-to-br from-rose-50 to-white border border-rose-200'
+                    ? 'bg-gradient-to-r from-purple-900/70 via-fuchsia-900/60 to-purple-800/70 text-white border-purple-700/40 shadow-[0_0_15px_rgba(192,132,252,0.5)] hover:shadow-[0_0_25px_rgba(192,132,252,0.7)]' 
+                    : 'bg-gradient-to-br from-rose-50 to-white border border-rose-200 hover:shadow-[0_4px_20px_rgba(244,114,182,0.25)]'
                 }`}
                 onClick={() => setShowReceivablesDialog(true)}
               >
@@ -78,7 +78,7 @@ export const AccountsSection = () => {
                     </p>
                   </div>
                   <div className={`p-3 rounded-full ${
-                    isDarkMode ? 'bg-purple-800/50' : 'bg-rose-100'
+                    isDarkMode ? 'bg-purple-700/40 backdrop-blur-sm' : 'bg-rose-100'
                   }`}>
                     <Clock className={`w-6 h-6 ${
                       isDarkMode ? 'text-white' : 'text-rose-600'
@@ -97,10 +97,10 @@ export const AccountsSection = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Card
-                className={`p-4 cursor-pointer hover:shadow-lg transition-all ${
+                className={`p-4 cursor-pointer transition-all ${
                   isDarkMode 
-                    ? 'bg-[#7c2d12] text-white border-amber-900' 
-                    : 'bg-gradient-to-br from-amber-50 to-white border border-amber-200'
+                    ? 'bg-gradient-to-r from-amber-900/70 via-orange-800/60 to-amber-800/70 text-white border-amber-700/40 shadow-[0_0_15px_rgba(251,191,36,0.5)] hover:shadow-[0_0_25px_rgba(251,191,36,0.7)]' 
+                    : 'bg-gradient-to-br from-amber-50 to-white border border-amber-200 hover:shadow-[0_4px_20px_rgba(251,191,36,0.25)]'
                 }`}
                 onClick={() => setShowPayablesDialog(true)}
               >
@@ -123,7 +123,7 @@ export const AccountsSection = () => {
                     </p>
                   </div>
                   <div className={`p-3 rounded-full ${
-                    isDarkMode ? 'bg-amber-800/50' : 'bg-amber-100'
+                    isDarkMode ? 'bg-amber-700/40 backdrop-blur-sm' : 'bg-amber-100'
                   }`}>
                     <Clock className={`w-6 h-6 ${
                       isDarkMode ? 'text-white' : 'text-amber-600'
@@ -143,10 +143,10 @@ export const AccountsSection = () => {
 
       <div className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-          <Card className={`p-4 hover:shadow-lg transition-all ${
+          <Card className={`p-4 transition-all ${
             isDarkMode 
-              ? 'bg-[#1e293b] text-white border-[#334155]' 
-              : 'bg-gradient-to-br from-indigo-50 to-white border border-indigo-200'
+              ? 'bg-gradient-to-br from-indigo-900/70 to-indigo-800/70 text-white border-indigo-700/50 shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:shadow-[0_0_25px_rgba(129,140,248,0.7)]' 
+              : 'bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 hover:shadow-[0_4px_20px_rgba(99,102,241,0.25)]'
           }`}>
             <div className="flex items-center justify-between">
               <div>
@@ -176,10 +176,10 @@ export const AccountsSection = () => {
             </div>
           </Card>
 
-          <Card className={`p-4 hover:shadow-lg transition-all ${
+          <Card className={`p-4 transition-all ${
             isDarkMode 
-              ? 'bg-[#1e293b] text-white border-[#334155]' 
-              : 'bg-gradient-to-br from-blue-50 to-white border border-blue-200'
+              ? 'bg-gradient-to-br from-amber-900/70 to-amber-800/70 text-white border-amber-700/50 shadow-[0_0_15px_rgba(252,211,77,0.5)] hover:shadow-[0_0_25px_rgba(252,211,77,0.7)]' 
+              : 'bg-gradient-to-br from-amber-50 to-white border border-amber-100 hover:shadow-[0_4px_20px_rgba(251,191,36,0.25)]'
           }`}>
             <div className="flex items-center justify-between">
               <div>
@@ -209,10 +209,10 @@ export const AccountsSection = () => {
             </div>
           </Card>
 
-          <Card className={`p-4 hover:shadow-lg transition-all ${
+          <Card className={`p-4 transition-all ${
             isDarkMode 
-              ? 'bg-[#1e293b] text-white border-[#334155]' 
-              : 'bg-gradient-to-br from-emerald-50 to-white border border-emerald-200'
+              ? 'bg-gradient-to-br from-emerald-900/70 to-emerald-800/70 text-white border-emerald-700/50 shadow-[0_0_15px_rgba(52,211,153,0.5)] hover:shadow-[0_0_25px_rgba(52,211,153,0.7)]' 
+              : 'bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 hover:shadow-[0_4px_20px_rgba(16,185,129,0.25)]'
           }`}>
             <div className="flex items-center justify-between">
               <div>

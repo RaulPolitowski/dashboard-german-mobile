@@ -1,4 +1,3 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Medal, TrendingUp, Wallet, FileSpreadsheet, Sun, Moon } from "lucide-react";
 import { FinancialHeader } from "./dashboard/FinancialHeader";
@@ -7,7 +6,6 @@ import { SalesSection } from "./dashboard/SalesSection";
 import { RankingSection } from "./dashboard/RankingSection";
 import { MonthlyAnalysisTables } from "./dashboard/MonthlyAnalysisTables";
 import { OperationsSection } from "./dashboard/OperationsSection";
-import { useCardStyle } from "../contexts/CardStyleContext";
 import { useIsMobile } from "../hooks/use-mobile";
 import { useTheme } from "../hooks/use-theme";
 import { FinancialOverview } from "./dashboard/FinancialOverview";
@@ -21,7 +19,6 @@ import {
 } from "./ui/tooltip";
 
 const Dashboard = () => {
-  const { cardStyle, toggleCardStyle } = useCardStyle();
   const isMobile = useIsMobile();
   const { theme, toggleTheme } = useTheme();
   const isDarkMode = theme === 'dark';
@@ -36,11 +33,11 @@ const Dashboard = () => {
               <TooltipTrigger asChild>
                 <button
                   onClick={toggleTheme}
-                  className={`p-2 rounded-full transition-colors ${isDarkMode ? 'bg-dashboard-card border-dashboard-border hover:bg-dashboard-hover' : 'bg-white border-gray-200 hover:bg-gray-100'} border`}
+                  className={`p-2 rounded-full transition-all ${isDarkMode ? 'bg-blue-900/40 border-blue-700/50 hover:bg-blue-800/50 shadow-[0_0_10px_rgba(56,189,248,0.3)] hover:shadow-[0_0_15px_rgba(56,189,248,0.5)]' : 'bg-white border-gray-200 hover:bg-gray-100 hover:shadow-md'} border`}
                   aria-label="Alternar tema claro/escuro"
                 >
                   {isDarkMode ? (
-                    <Sun className="w-5 h-5 text-yellow-300" />
+                    <Sun className="w-5 h-5 text-yellow-300 drop-shadow-[0_0_3px_rgba(253,224,71,0.7)]" />
                   ) : (
                     <Moon className="w-5 h-5 text-gray-600" />
                   )}
@@ -51,27 +48,6 @@ const Dashboard = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={toggleCardStyle}
-                  className={`p-2 rounded-full transition-colors border ${isDarkMode ? 'bg-dashboard-card border-dashboard-border hover:bg-dashboard-hover' : 'bg-white border-gray-200 hover:bg-gray-100'}`}
-                  aria-label="Alternar estilo dos cards"
-                >
-                  {cardStyle === "solid" ? (
-                    <Sun className={`w-5 h-5 ${isDarkMode ? 'text-primary' : 'text-gray-600'}`} />
-                  ) : (
-                    <Moon className={`w-5 h-5 ${isDarkMode ? 'text-primary' : 'text-gray-600'}`} />
-                  )}
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Alternar entre cores sólidas e gradientes</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
         </div>
       </div>
 
@@ -79,7 +55,7 @@ const Dashboard = () => {
         <Tabs defaultValue="financial" className="space-y-4">
           {isMobile ? (
             <div className="overflow-x-auto pb-2">
-              <TabsList className={`inline-flex w-auto border p-1 ${isDarkMode ? 'bg-dashboard-card border-dashboard-border' : 'bg-white border-gray-200'}`}>
+              <TabsList className={`inline-flex w-auto border p-1 transition-all ${isDarkMode ? 'bg-gradient-to-r from-slate-900/90 to-blue-900/80 border-blue-800/30 shadow-[0_0_15px_rgba(56,189,248,0.3)]' : 'bg-white border-gray-200'}`}>
                 <TabsTrigger 
                   value="financial" 
                   className="flex-shrink-0 data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white px-4 py-2 rounded-md"
@@ -107,20 +83,20 @@ const Dashboard = () => {
               </TabsList>
             </div>
           ) : (
-            <TabsList className={`${isDarkMode ? 'bg-dashboard-card border border-dashboard-border' : ''}`}>
-              <TabsTrigger value="financial" className="data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white">
+            <TabsList className={`transition-all ${isDarkMode ? 'bg-gradient-to-r from-slate-900/90 to-blue-900/80 border border-blue-800/30 shadow-[0_0_15px_rgba(56,189,248,0.3)]' : ''}`}>
+              <TabsTrigger value="financial" className="transition-all data-[state=active]:bg-blue-700 data-[state=active]:shadow-[0_0_10px_rgba(56,189,248,0.5)] data-[state=active]:text-white hover:bg-blue-800/40">
                 <Wallet className="w-4 h-4 mr-2" />
                 Gestão Financeira
               </TabsTrigger>
-              <TabsTrigger value="sales" className="data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white">
+              <TabsTrigger value="sales" className="transition-all data-[state=active]:bg-blue-700 data-[state=active]:shadow-[0_0_10px_rgba(56,189,248,0.5)] data-[state=active]:text-white hover:bg-blue-800/40">
                 <TrendingUp className="w-4 h-4 mr-2" />
                 Análise de Vendas
               </TabsTrigger>
-              <TabsTrigger value="operations" className="data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white">
+              <TabsTrigger value="operations" className="transition-all data-[state=active]:bg-blue-700 data-[state=active]:shadow-[0_0_10px_rgba(56,189,248,0.5)] data-[state=active]:text-white hover:bg-blue-800/40">
                 <FileSpreadsheet className="w-4 h-4 mr-2" />
                 Operações
               </TabsTrigger>
-              <TabsTrigger value="ranking" className="data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white">
+              <TabsTrigger value="ranking" className="transition-all data-[state=active]:bg-blue-700 data-[state=active]:shadow-[0_0_10px_rgba(56,189,248,0.5)] data-[state=active]:text-white hover:bg-blue-800/40">
                 <Medal className="w-4 h-4 mr-2" />
                 Performance de Vendedores
               </TabsTrigger>

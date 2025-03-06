@@ -23,13 +23,13 @@ export const ExpensesTable = () => {
       <div 
         className={`p-4 cursor-pointer rounded-lg hover:shadow-md transition-all ${
           isDarkMode 
-            ? 'bg-gradient-to-br from-dashboard-card to-dashboard-cardAlt border border-dashboard-border/50 shadow-card-glow hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]' 
+            ? 'bg-gradient-to-br from-gray-900/90 to-amber-900/30 border border-amber-800/40 shadow-[0_0_15px_rgba(251,191,36,0.15)] hover:shadow-[0_0_25px_rgba(251,191,36,0.25)]' 
             : 'bg-white shadow'
         }`}
         onClick={() => setIsMinimized(false)}
       >
         <div className="flex items-center justify-between">
-          <h3 className={`text-base font-semibold ${isDarkMode ? 'text-gray-200 drop-shadow-sm' : 'text-gray-900'}`}>
+          <h3 className={`text-base font-semibold ${isDarkMode ? 'text-amber-100 drop-shadow-[0_0_2px_rgba(251,191,36,0.3)]' : 'text-gray-900'}`}>
             Distribuição de Despesas
           </h3>
           <ChevronDown className={`w-5 h-5 ${
@@ -43,15 +43,15 @@ export const ExpensesTable = () => {
   return (
     <Card className={`p-4 rounded-lg ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-dashboard-card to-dashboard-cardAlt border-dashboard-border/50 shadow-card-glow' 
+        ? 'bg-gradient-to-br from-gray-900/90 to-amber-900/30 border-amber-800/40 shadow-[0_0_15px_rgba(251,191,36,0.15)]' 
         : 'bg-white shadow'
     }`}>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className={`text-base font-semibold ${isDarkMode ? 'text-gray-200 drop-shadow-sm' : 'text-gray-900'}`}>
+          <h3 className={`text-base font-semibold ${isDarkMode ? 'text-amber-100 drop-shadow-[0_0_2px_rgba(251,191,36,0.3)]' : 'text-gray-900'}`}>
             Distribuição de Despesas
           </h3>
-          <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <p className={`text-sm ${isDarkMode ? 'text-gray-300/90' : 'text-gray-600'}`}>
             Total do Mês Atual: R$ {total.toLocaleString()}
           </p>
         </div>
@@ -59,21 +59,21 @@ export const ExpensesTable = () => {
           onClick={() => setIsMinimized(true)}
           className={`p-2 ${
             isDarkMode 
-              ? 'hover:bg-dashboard-hover/50 text-primary hover:text-primary-glow hover:shadow-neon' 
+              ? 'hover:bg-amber-900/40 text-amber-300 hover:text-amber-200 hover:shadow-[0_0_10px_rgba(251,191,36,0.3)]' 
               : 'hover:bg-gray-100'
           } rounded-full transition-all duration-300`}
         >
-          <ChevronUp className={`w-5 h-5 ${isDarkMode ? 'text-primary' : 'text-gray-500'}`} />
+          <ChevronUp className={`w-5 h-5 ${isDarkMode ? 'text-amber-300 drop-shadow-[0_0_3px_rgba(251,191,36,0.4)]' : 'text-gray-500'}`} />
         </button>
       </div>
 
       <div className="overflow-x-auto">
-        <Table className={isDarkMode ? 'table-container rounded-md overflow-hidden' : ''}>
-          <TableHeader>
+        <Table className={isDarkMode ? 'table-container rounded-md overflow-hidden border-amber-900/20' : ''}>
+          <TableHeader className={isDarkMode ? 'bg-amber-900/20 border-amber-800/30' : ''}>
             <TableRow>
-              <TableHead className={isDarkMode ? 'text-gray-300 font-medium' : ''}>Categoria</TableHead>
-              <TableHead className={isDarkMode ? 'text-gray-300 font-medium' : ''}>Valor Atual</TableHead>
-              <TableHead className={isDarkMode ? 'text-gray-300 font-medium' : ''}>% do Total</TableHead>
+              <TableHead className={isDarkMode ? 'text-amber-300 font-medium drop-shadow-[0_0_2px_rgba(251,191,36,0.2)]' : ''}>Categoria</TableHead>
+              <TableHead className={isDarkMode ? 'text-amber-300 font-medium drop-shadow-[0_0_2px_rgba(251,191,36,0.2)]' : ''}>Valor Atual</TableHead>
+              <TableHead className={isDarkMode ? 'text-amber-300 font-medium drop-shadow-[0_0_2px_rgba(251,191,36,0.2)]' : ''}>% do Total</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
