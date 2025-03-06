@@ -1,5 +1,5 @@
-
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
+import { useTheme } from '@/hooks/use-theme';
 
 interface ServiceOrderEvolutionChartProps {
   timeFilter: string;
@@ -21,11 +21,43 @@ const mockEvolutionData = {
   ]
 };
 
-const COLORS = ['#10B981', '#6366F1', '#EF4444'];
+// Componente personalizado para o Tooltip do Recharts
+const CustomTooltip = ({ active, payload, label, isDarkMode }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className={`p-3 rounded-md shadow-md ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+        <p className={`text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{`${label || ''}`}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={`item-${index}`} className="text-xs" style={{ color: entry.color }}>
+            {`${entry.name}: ${entry.value.toLocaleString()} ${entry.payload && entry.payload.amount ? `(R$ ${entry.payload.amount.toLocaleString()})` : ''}`}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 
 const formatCurrency = (value: number) => `R$ ${value.toLocaleString()}`;
 
 export const ServiceOrderEvolutionChart = ({ timeFilter }: ServiceOrderEvolutionChartProps) => {
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
+
+  // Cores adaptadas para modo escuro e claro
+  const chartColors = {
+    completed: isDarkMode ? '#34D399' : '#10B981',      // Emerald mais claro para dark mode
+    completedValue: isDarkMode ? '#6EE7B7' : '#34D399', // Emerald ainda mais claro
+    inProgress: isDarkMode ? '#818CF8' : '#6366F1',     // Indigo mais claro para dark mode
+    inProgressValue: isDarkMode ? '#A5B4FC' : '#818CF8', // Indigo ainda mais claro
+    delayed: isDarkMode ? '#F87171' : '#EF4444',        // Rose mais claro para dark mode
+    delayedValue: isDarkMode ? '#FCA5A5' : '#F87171',   // Rose ainda mais claro
+    grid: isDarkMode ? '#374151' : '#E5E7EB',           // Cor da grade adaptada
+    text: isDarkMode ? '#D1D5DB' : '#6B7280',           // Cor do texto adaptada
+  };
+
+  const COLORS = [chartColors.completed, chartColors.inProgress, chartColors.delayed];
+
   const totals = mockEvolutionData.monthly.reduce((acc, curr) => ({
     completed: acc.completed + curr.completed,
     completedValue: acc.completedValue + curr.completedValue,
@@ -46,20 +78,20 @@ export const ServiceOrderEvolutionChart = ({ timeFilter }: ServiceOrderEvolution
     return (
       <div className="h-full">
         <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
-          <div className="p-3 rounded-lg bg-emerald-50">
-            <p className="text-emerald-600 font-medium">Finalizadas</p>
-            <p>Quantidade: {mockEvolutionData.daily[0].value} ordens</p>
-            <p>Valor: {formatCurrency(mockEvolutionData.daily[0].amount)}</p>
+          <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-emerald-900/60 border-emerald-700/80' : 'bg-emerald-50'}`}>
+            <p className={`font-medium ${isDarkMode ? 'text-emerald-200' : 'text-emerald-600'}`}>Finalizadas</p>
+            <p className={isDarkMode ? 'text-emerald-300' : ''}>Quantidade: {mockEvolutionData.daily[0].value} ordens</p>
+            <p className={isDarkMode ? 'text-emerald-300' : ''}>Valor: {formatCurrency(mockEvolutionData.daily[0].amount)}</p>
           </div>
-          <div className="p-3 rounded-lg bg-indigo-50">
-            <p className="text-indigo-600 font-medium">Em Andamento</p>
-            <p>Quantidade: {mockEvolutionData.daily[1].value} ordens</p>
-            <p>Valor: {formatCurrency(mockEvolutionData.daily[1].amount)}</p>
+          <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-indigo-900/60 border-indigo-700/80' : 'bg-indigo-50'}`}>
+            <p className={`font-medium ${isDarkMode ? 'text-indigo-200' : 'text-indigo-600'}`}>Em Andamento</p>
+            <p className={isDarkMode ? 'text-indigo-300' : ''}>Quantidade: {mockEvolutionData.daily[1].value} ordens</p>
+            <p className={isDarkMode ? 'text-indigo-300' : ''}>Valor: {formatCurrency(mockEvolutionData.daily[1].amount)}</p>
           </div>
-          <div className="p-3 rounded-lg bg-rose-50">
-            <p className="text-rose-600 font-medium">Atrasadas</p>
-            <p>Quantidade: {mockEvolutionData.daily[2].value} ordens</p>
-            <p>Valor: {formatCurrency(mockEvolutionData.daily[2].amount)}</p>
+          <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-rose-900/60 border-rose-700/80' : 'bg-rose-50'}`}>
+            <p className={`font-medium ${isDarkMode ? 'text-rose-200' : 'text-rose-600'}`}>Atrasadas</p>
+            <p className={isDarkMode ? 'text-rose-300' : ''}>Quantidade: {mockEvolutionData.daily[2].value} ordens</p>
+            <p className={isDarkMode ? 'text-rose-300' : ''}>Valor: {formatCurrency(mockEvolutionData.daily[2].amount)}</p>
           </div>
         </div>
 
@@ -79,8 +111,8 @@ export const ServiceOrderEvolutionChart = ({ timeFilter }: ServiceOrderEvolution
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip />
-            <Legend />
+            <Tooltip content={<CustomTooltip isDarkMode={isDarkMode} />} />
+            <Legend wrapperStyle={{ color: chartColors.text }} />
           </PieChart>
         </ResponsiveContainer>
       </div>
@@ -90,37 +122,37 @@ export const ServiceOrderEvolutionChart = ({ timeFilter }: ServiceOrderEvolution
   return (
     <div className="h-full">
       <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
-        <div className="p-3 rounded-lg bg-emerald-50">
-          <p className="text-emerald-600 font-medium">Total Finalizadas</p>
-          <p>Quantidade: {totals.completed} ordens</p>
-          <p>Valor: {formatCurrency(totals.completedValue)}</p>
+        <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-emerald-900/60 border-emerald-700/80' : 'bg-emerald-50'}`}>
+          <p className={`font-medium ${isDarkMode ? 'text-emerald-200' : 'text-emerald-600'}`}>Total Finalizadas</p>
+          <p className={isDarkMode ? 'text-emerald-300' : ''}>Quantidade: {totals.completed} ordens</p>
+          <p className={isDarkMode ? 'text-emerald-300' : ''}>Valor: {formatCurrency(totals.completedValue)}</p>
         </div>
-        <div className="p-3 rounded-lg bg-indigo-50">
-          <p className="text-indigo-600 font-medium">Total em Andamento</p>
-          <p>Quantidade: {totals.inProgress} ordens</p>
-          <p>Valor: {formatCurrency(totals.inProgressValue)}</p>
+        <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-indigo-900/60 border-indigo-700/80' : 'bg-indigo-50'}`}>
+          <p className={`font-medium ${isDarkMode ? 'text-indigo-200' : 'text-indigo-600'}`}>Total em Andamento</p>
+          <p className={isDarkMode ? 'text-indigo-300' : ''}>Quantidade: {totals.inProgress} ordens</p>
+          <p className={isDarkMode ? 'text-indigo-300' : ''}>Valor: {formatCurrency(totals.inProgressValue)}</p>
         </div>
-        <div className="p-3 rounded-lg bg-rose-50">
-          <p className="text-rose-600 font-medium">Total Atrasadas</p>
-          <p>Quantidade: {totals.delayed} ordens</p>
-          <p>Valor: {formatCurrency(totals.delayedValue)}</p>
+        <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-rose-900/60 border-rose-700/80' : 'bg-rose-50'}`}>
+          <p className={`font-medium ${isDarkMode ? 'text-rose-200' : 'text-rose-600'}`}>Total Atrasadas</p>
+          <p className={isDarkMode ? 'text-rose-300' : ''}>Quantidade: {totals.delayed} ordens</p>
+          <p className={isDarkMode ? 'text-rose-300' : ''}>Valor: {formatCurrency(totals.delayedValue)}</p>
         </div>
       </div>
 
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={mockEvolutionData.monthly}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis yAxisId="left" />
-          <YAxis yAxisId="right" orientation="right" tickFormatter={formatCurrency} />
-          <Tooltip />
-          <Legend />
-          <Bar yAxisId="left" dataKey="completed" name="Finalizadas (Qtd)" fill="#10B981" />
-          <Bar yAxisId="right" dataKey="completedValue" name="Finalizadas (R$)" fill="#34D399" />
-          <Bar yAxisId="left" dataKey="inProgress" name="Em Andamento (Qtd)" fill="#6366F1" />
-          <Bar yAxisId="right" dataKey="inProgressValue" name="Em Andamento (R$)" fill="#818CF8" />
-          <Bar yAxisId="left" dataKey="delayed" name="Atrasadas (Qtd)" fill="#EF4444" />
-          <Bar yAxisId="right" dataKey="delayedValue" name="Atrasadas (R$)" fill="#F87171" />
+          <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+          <XAxis dataKey="month" tick={{ fill: chartColors.text }} />
+          <YAxis yAxisId="left" tick={{ fill: chartColors.text }} />
+          <YAxis yAxisId="right" orientation="right" tickFormatter={formatCurrency} tick={{ fill: chartColors.text }} />
+          <Tooltip content={<CustomTooltip isDarkMode={isDarkMode} />} />
+          <Legend wrapperStyle={{ color: chartColors.text }} />
+          <Bar yAxisId="left" dataKey="completed" name="Finalizadas (Qtd)" fill={chartColors.completed} />
+          <Bar yAxisId="right" dataKey="completedValue" name="Finalizadas (R$)" fill={chartColors.completedValue} />
+          <Bar yAxisId="left" dataKey="inProgress" name="Em Andamento (Qtd)" fill={chartColors.inProgress} />
+          <Bar yAxisId="right" dataKey="inProgressValue" name="Em Andamento (R$)" fill={chartColors.inProgressValue} />
+          <Bar yAxisId="left" dataKey="delayed" name="Atrasadas (Qtd)" fill={chartColors.delayed} />
+          <Bar yAxisId="right" dataKey="delayedValue" name="Atrasadas (R$)" fill={chartColors.delayedValue} />
         </BarChart>
       </ResponsiveContainer>
     </div>

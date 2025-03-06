@@ -1,5 +1,5 @@
-
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { useTheme } from '@/hooks/use-theme';
 
 interface ServiceOrderPerformanceChartProps {
   timeFilter: string;
@@ -7,115 +7,96 @@ interface ServiceOrderPerformanceChartProps {
 
 const mockPerformanceData = {
   monthly: [
-    { month: 'Jan', completionTime: 3.2, onTimeRate: 92, delayRate: 8 },
-    { month: 'Fev', completionTime: 3.5, onTimeRate: 89, delayRate: 11 },
-    { month: 'Mar', completionTime: 3.1, onTimeRate: 94, delayRate: 6 },
-    { month: 'Abr', completionTime: 3.3, onTimeRate: 91, delayRate: 9 },
-    { month: 'Mai', completionTime: 3.0, onTimeRate: 95, delayRate: 5 },
-    { month: 'Jun', completionTime: 2.8, onTimeRate: 96, delayRate: 4 },
+    { month: 'Jan', sla: 95, avgTime: 2.5, onTime: 98 },
+    { month: 'Fev', sla: 93, avgTime: 2.7, onTime: 95 },
+    { month: 'Mar', sla: 97, avgTime: 2.2, onTime: 99 },
+    { month: 'Abr', sla: 94, avgTime: 2.6, onTime: 96 },
+    { month: 'Mai', sla: 96, avgTime: 2.3, onTime: 97 },
+    { month: 'Jun', sla: 98, avgTime: 2.1, onTime: 99 },
   ],
   daily: [
-    { name: 'No Prazo', value: 96, color: '#10B981' },
-    { name: 'Atrasadas', value: 4, color: '#EF4444' },
+    { day: 'Seg', sla: 96, avgTime: 2.3, onTime: 97 },
+    { day: 'Ter', sla: 95, avgTime: 2.4, onTime: 96 },
+    { day: 'Qua', sla: 97, avgTime: 2.2, onTime: 98 },
+    { day: 'Qui', sla: 94, avgTime: 2.5, onTime: 95 },
+    { day: 'Sex', sla: 98, avgTime: 2.1, onTime: 99 },
+    { day: 'Sáb', sla: 93, avgTime: 2.6, onTime: 94 },
+    { day: 'Dom', sla: 92, avgTime: 2.7, onTime: 93 },
   ]
 };
 
-const COLORS = ['#10B981', '#EF4444'];
-
-export const ServiceOrderPerformanceChart = ({ timeFilter }: ServiceOrderPerformanceChartProps) => {
-  const averages = {
-    completionTime: Number((mockPerformanceData.monthly.reduce((acc, curr) => acc + curr.completionTime, 0) / mockPerformanceData.monthly.length).toFixed(1)),
-    onTimeRate: Number((mockPerformanceData.monthly.reduce((acc, curr) => acc + curr.onTimeRate, 0) / mockPerformanceData.monthly.length).toFixed(1)),
-    delayRate: Number((mockPerformanceData.monthly.reduce((acc, curr) => acc + curr.delayRate, 0) / mockPerformanceData.monthly.length).toFixed(1))
-  };
-
-  if (timeFilter === 'daily' || timeFilter === 'current-month') {
+// Componente personalizado para o Tooltip do Recharts
+const CustomTooltip = ({ active, payload, label, isDarkMode }: any) => {
+  if (active && payload && payload.length) {
     return (
-      <div className="h-full">
-        <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-          <div className="p-3 rounded-lg bg-emerald-50">
-            <p className="text-emerald-600 font-medium">No Prazo</p>
-            <p>{mockPerformanceData.daily[0].value}%</p>
-          </div>
-          <div className="p-3 rounded-lg bg-rose-50">
-            <p className="text-rose-600 font-medium">Atrasadas</p>
-            <p>{mockPerformanceData.daily[1].value}%</p>
-          </div>
-        </div>
-
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={mockPerformanceData.daily}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={({ name, value }) => `${name}: ${value}%`}
-              outerRadius={100}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {mockPerformanceData.daily.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+      <div className={`p-3 rounded-md shadow-md ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+        <p className={`text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{`${label || ''}`}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={`item-${index}`} className="text-xs" style={{ color: entry.color }}>
+            {`${entry.name}: ${entry.value}${entry.name.includes('SLA') || entry.name.includes('Pontualidade') ? '%' : entry.name.includes('Tempo') ? ' dias' : ''}`}
+          </p>
+        ))}
       </div>
     );
   }
+  return null;
+};
+
+export const ServiceOrderPerformanceChart = ({ timeFilter }: ServiceOrderPerformanceChartProps) => {
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
+
+  // Cores adaptadas para modo escuro e claro
+  const chartColors = {
+    sla: isDarkMode ? '#34D399' : '#10B981',      // Emerald mais claro para dark mode
+    avgTime: isDarkMode ? '#818CF8' : '#6366F1',  // Indigo mais claro para dark mode
+    onTime: isDarkMode ? '#F59E0B' : '#D97706',   // Amber mais claro para dark mode
+    grid: isDarkMode ? '#374151' : '#E5E7EB',     // Cor da grade adaptada
+    text: isDarkMode ? '#D1D5DB' : '#6B7280',     // Cor do texto adaptada
+  };
+
+  const data = timeFilter === 'daily' ? mockPerformanceData.daily : mockPerformanceData.monthly;
+  const xKey = timeFilter === 'daily' ? 'day' : 'month';
+
+  // Calcular médias para os indicadores de desempenho
+  const averages = data.reduce((acc, curr) => ({
+    sla: acc.sla + curr.sla,
+    avgTime: acc.avgTime + curr.avgTime,
+    onTime: acc.onTime + curr.onTime,
+  }), { sla: 0, avgTime: 0, onTime: 0 });
+
+  const totalItems = data.length;
+  const avgSLA = (averages.sla / totalItems).toFixed(1);
+  const avgTime = (averages.avgTime / totalItems).toFixed(1);
+  const avgOnTime = (averages.onTime / totalItems).toFixed(1);
 
   return (
     <div className="h-full">
       <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
-        <div className="p-3 rounded-lg bg-indigo-50">
-          <p className="text-indigo-600 font-medium">Tempo Médio</p>
-          <p>{averages.completionTime} dias</p>
+        <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-emerald-900/60 border-emerald-700/80' : 'bg-emerald-50'}`}>
+          <p className={`font-medium ${isDarkMode ? 'text-emerald-200' : 'text-emerald-600'}`}>SLA Médio</p>
+          <p className={`text-lg font-semibold ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>{avgSLA}%</p>
         </div>
-        <div className="p-3 rounded-lg bg-emerald-50">
-          <p className="text-emerald-600 font-medium">Taxa Média no Prazo</p>
-          <p>{averages.onTimeRate}%</p>
+        <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-indigo-900/60 border-indigo-700/80' : 'bg-indigo-50'}`}>
+          <p className={`font-medium ${isDarkMode ? 'text-indigo-200' : 'text-indigo-600'}`}>Tempo Médio</p>
+          <p className={`text-lg font-semibold ${isDarkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>{avgTime} dias</p>
         </div>
-        <div className="p-3 rounded-lg bg-rose-50">
-          <p className="text-rose-600 font-medium">Taxa Média de Atraso</p>
-          <p>{averages.delayRate}%</p>
+        <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-amber-900/60 border-amber-700/80' : 'bg-amber-50'}`}>
+          <p className={`font-medium ${isDarkMode ? 'text-amber-200' : 'text-amber-600'}`}>Pontualidade</p>
+          <p className={`text-lg font-semibold ${isDarkMode ? 'text-amber-300' : 'text-amber-700'}`}>{avgOnTime}%</p>
         </div>
       </div>
 
       <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={mockPerformanceData.monthly}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis yAxisId="left" />
-          <YAxis yAxisId="right" orientation="right" />
-          <Tooltip />
-          <Legend />
-          <Line
-            yAxisId="left"
-            type="monotone"
-            dataKey="completionTime"
-            name="Tempo Médio (dias)"
-            stroke="#6366F1"
-            activeDot={{ r: 8 }}
-          />
-          <Line
-            yAxisId="right"
-            type="monotone"
-            dataKey="onTimeRate"
-            name="Taxa de Entrega no Prazo (%)"
-            stroke="#10B981"
-            activeDot={{ r: 8 }}
-          />
-          <Line
-            yAxisId="right"
-            type="monotone"
-            dataKey="delayRate"
-            name="Taxa de Atraso (%)"
-            stroke="#EF4444"
-            activeDot={{ r: 8 }}
-          />
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+          <XAxis dataKey={xKey} tick={{ fill: chartColors.text }} />
+          <YAxis tick={{ fill: chartColors.text }} />
+          <Tooltip content={<CustomTooltip isDarkMode={isDarkMode} />} />
+          <Legend wrapperStyle={{ color: chartColors.text }} />
+          <Line type="monotone" dataKey="sla" name="SLA (%)" stroke={chartColors.sla} activeDot={{ r: 8 }} />
+          <Line type="monotone" dataKey="avgTime" name="Tempo Médio (dias)" stroke={chartColors.avgTime} />
+          <Line type="monotone" dataKey="onTime" name="Pontualidade (%)" stroke={chartColors.onTime} />
         </LineChart>
       </ResponsiveContainer>
     </div>

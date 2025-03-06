@@ -18,31 +18,31 @@ const getCardStyle = (type: "created" | "approved" | "pending" | "cancelled", is
     switch (type) {
       case "created":
         return {
-          bg: "bg-indigo-900/60 border-indigo-800/60",
-          text: "text-indigo-300",
-          textDark: "text-indigo-200",
-          iconBg: "bg-indigo-800/60",
+          bg: "bg-indigo-900/60 border-indigo-700/80",
+          text: "text-indigo-200",
+          textDark: "text-indigo-100",
+          iconBg: "bg-indigo-800/80",
         };
       case "approved":
         return {
-          bg: "bg-emerald-900/60 border-emerald-800/60",
-          text: "text-emerald-300",
-          textDark: "text-emerald-200",
-          iconBg: "bg-emerald-800/60",
+          bg: "bg-emerald-900/60 border-emerald-700/80",
+          text: "text-emerald-200",
+          textDark: "text-emerald-100",
+          iconBg: "bg-emerald-800/80",
         };
       case "pending":
         return {
-          bg: "bg-amber-900/60 border-amber-800/60",
-          text: "text-amber-300",
-          textDark: "text-amber-200",
-          iconBg: "bg-amber-800/60",
+          bg: "bg-amber-900/60 border-amber-700/80",
+          text: "text-amber-200",
+          textDark: "text-amber-100",
+          iconBg: "bg-amber-800/80",
         };
       case "cancelled":
         return {
-          bg: "bg-rose-900/60 border-rose-800/60",
-          text: "text-rose-300",
-          textDark: "text-rose-200",
-          iconBg: "bg-rose-800/60",
+          bg: "bg-rose-900/60 border-rose-700/80",
+          text: "text-rose-200",
+          textDark: "text-rose-100",
+          iconBg: "bg-rose-800/80",
         };
     }
   } else {

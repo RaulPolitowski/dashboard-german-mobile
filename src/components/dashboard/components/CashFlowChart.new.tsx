@@ -101,7 +101,9 @@ export const CashFlowChart = ({ inflow, outflow, result }: CashFlowChartProps) =
           tickSize: 5,
           tickPadding: 8,
           tickRotation: 0,
-          // Removida a legenda que estava sobreposta aos números
+          legend: 'Valores (R$)',
+          legendPosition: 'middle',
+          legendOffset: -65,
           format: (value) => `R$ ${value.toLocaleString()}`
         }}
         enableLabel={true}

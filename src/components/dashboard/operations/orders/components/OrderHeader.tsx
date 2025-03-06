@@ -1,7 +1,7 @@
-
 import { useEffect } from "react";
 import { Card } from "../../../../ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../../../ui/select";
+import { useTheme } from "@/hooks/use-theme";
 
 interface OrderHeaderProps {
   selectedSeller: string;
@@ -11,24 +11,27 @@ interface OrderHeaderProps {
 }
 
 export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onRangeChange }: OrderHeaderProps) => {
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
+  
   useEffect(() => {
     onRangeChange("current-month");
   }, []);
 
   return (
-    <Card className="relative p-4 md:p-6 bg-white/50 backdrop-blur-sm border border-gray-100">
+    <Card className={`relative p-4 md:p-6 ${isDarkMode ? 'bg-gray-900/80 backdrop-blur-sm border-gray-800' : 'bg-white/50 backdrop-blur-sm border-gray-100'}`}>
       <div className="flex flex-col space-y-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-1">
-            <h3 className="text-lg font-semibold text-gray-700">Métricas de Pedidos</h3>
-            <p className="text-sm text-gray-500">Acompanhe o desempenho dos pedidos</p>
+            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-700'}`}>Métricas de Pedidos</h3>
+            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Acompanhe o desempenho dos pedidos</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Select value={selectedSeller} onValueChange={onSellerChange}>
-              <SelectTrigger className="w-full sm:w-[160px] h-9 px-3 text-sm bg-white border-gray-200">
+              <SelectTrigger className={`w-full sm:w-[160px] h-9 px-3 text-sm ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200'}`}>
                 <SelectValue placeholder="Todos os vendedores" />
               </SelectTrigger>
-              <SelectContent className="z-50 bg-white">
+              <SelectContent className={`z-50 ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white'}`}>
                 <SelectItem value="all">Todos os vendedores</SelectItem>
                 <SelectItem value="joao">João Silva</SelectItem>
                 <SelectItem value="maria">Maria Santos</SelectItem>
@@ -36,10 +39,10 @@ export const OrderHeader = ({ selectedSeller, selectedRange, onSellerChange, onR
               </SelectContent>
             </Select>
             <Select value={selectedRange} onValueChange={onRangeChange}>
-              <SelectTrigger className="w-full sm:w-[140px] h-9 px-3 text-sm bg-white border-gray-200">
+              <SelectTrigger className={`w-full sm:w-[140px] h-9 px-3 text-sm ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200'}`}>
                 <SelectValue placeholder="Mês Atual" />
               </SelectTrigger>
-              <SelectContent align="end" className="z-50 bg-white">
+              <SelectContent align="end" className={`z-50 ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white'}`}>
                 <SelectGroup>
                   <SelectItem value="current-day">Hoje</SelectItem>
                   <SelectItem value="current-week">Semana Atual</SelectItem>
