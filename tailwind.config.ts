@@ -140,6 +140,24 @@ export default {
         "slide-in": "slide-in 0.3s ease-out",
         "pulse-glow": "pulse-glow 2s infinite ease-in-out",
         "float": "float 3s infinite ease-in-out",
+        "fade-in": "fadeIn 0.5s ease-in-out",
+        "fade-in-down": "fadeInDown 0.6s ease-in-out",
+        "fade-in-up": "fadeInUp 0.7s ease-in-out",
+        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        fadeInDown: {
+          "0%": { opacity: "0", transform: "translateY(-10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       boxShadow: {
         neon: "0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3)",
