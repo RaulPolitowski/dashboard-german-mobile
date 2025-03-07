@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ServiceOrderHeader } from "./components/ServiceOrderHeader";
@@ -23,6 +24,7 @@ export const ServiceOrderMetrics = () => {
 
   const [selectedPeriod, setSelectedPeriod] = useState("30");
   const [selectedTechnician, setSelectedTechnician] = useState("all");
+  const [selectedFilter, setSelectedFilter] = useState("all");
   const [showEvolutionChart, setShowEvolutionChart] = useState(true);
   const [showPerformanceChart, setShowPerformanceChart] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
@@ -37,6 +39,10 @@ export const ServiceOrderMetrics = () => {
     setShowDetails(true);
   };
 
+  const handleFilterChange = (filter: string) => {
+    setSelectedFilter(filter);
+  };
+
   return (
     <div className="space-y-6">
       <ServiceOrderHeader
@@ -44,6 +50,7 @@ export const ServiceOrderMetrics = () => {
         selectedTechnician={selectedTechnician}
         onPeriodChange={setSelectedPeriod}
         onTechnicianChange={setSelectedTechnician}
+        onFilterChange={handleFilterChange}
       />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">

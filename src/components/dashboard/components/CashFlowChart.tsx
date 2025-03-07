@@ -1,3 +1,4 @@
+
 import { useMemo } from "react";
 import { ResponsiveBar } from "@nivo/bar";
 import { useTheme } from "@/hooks/use-theme";
@@ -43,7 +44,7 @@ export const CashFlowChart = ({ inflow, outflow, result }: CashFlowChartProps) =
         valueScale={{ type: 'linear' }}
         colors={({ data }) => data.color}
         theme={{
-          fontSize: 12,
+          // Remove fontSize from the root level
           textColor: isDarkMode ? '#e5e7eb' : '#374151',
           axis: {
             domain: {
