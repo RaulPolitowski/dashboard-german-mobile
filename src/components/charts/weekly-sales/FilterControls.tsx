@@ -1,3 +1,4 @@
+
 import { format } from 'date-fns';
 import { timeRanges } from './constants';
 import { DateRange } from './types';
@@ -6,6 +7,8 @@ import { Button } from '../../ui/button';
 import { Calendar } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { Calendar as CalendarComponent } from '../../ui/calendar';
+import { cn } from '@/lib/utils';
+import { useTheme } from '@/hooks/use-theme';
 
 interface FilterControlsProps {
   dateFilter: 'last7' | 'currentWeek';
@@ -24,6 +27,9 @@ export const FilterControls = ({
   onRangeChange,
   onCustomDateChange
 }: FilterControlsProps) => {
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
+
   return (
     <div className="flex flex-wrap gap-2 items-center">
       <Select value={dateFilter} onValueChange={onDateFilterChange}>
@@ -55,7 +61,15 @@ export const FilterControls = ({
       <div className="flex gap-2">
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-[160px] pl-3 text-left font-normal bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+            <Button 
+              variant="outline" 
+              className={cn(
+                "w-[160px] pl-3 text-left font-normal",
+                isDarkMode 
+                  ? "bg-gray-800 border-gray-700 text-gray-100" 
+                  : "bg-white"
+              )}
+            >
               <Calendar className="mr-2 h-4 w-4" />
               {format(customDateRange.start, 'dd/MM/yyyy')}
             </Button>
@@ -72,7 +86,15 @@ export const FilterControls = ({
 
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-[160px] pl-3 text-left font-normal bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+            <Button 
+              variant="outline" 
+              className={cn(
+                "w-[160px] pl-3 text-left font-normal",
+                isDarkMode 
+                  ? "bg-gray-800 border-gray-700 text-gray-100" 
+                  : "bg-white"
+              )}
+            >
               <Calendar className="mr-2 h-4 w-4" />
               {format(customDateRange.end, 'dd/MM/yyyy')}
             </Button>

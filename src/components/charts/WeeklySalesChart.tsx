@@ -1,3 +1,4 @@
+
 import { Card } from '../ui/card';
 import { useIsMobile } from '../../hooks/use-mobile';
 import { FilterControls } from './weekly-sales/FilterControls';
