@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { subDays, startOfWeek, endOfWeek, format, isToday } from 'date-fns';
+import { subDays, startOfWeek, endOfWeek, format, isToday, isBefore, isAfter, parseISO } from 'date-fns';
 import { mockData } from '../constants';
 import { DateRange } from '../types';
 
@@ -128,10 +128,22 @@ export const useSalesData = () => {
     }
   };
 
+  const filterDataByDateRange = (data: any[]) => {
+    return data.filter(day => {
+      try {
+        const date = parseISO(day.date);
+        return !isBefore(date, customDateRange.start) && !isAfter(date, customDateRange.end);
+      } catch (error) {
+        console.error('Error parsing date:', error);
+        return true; // Incluir em caso de erro
+      }
+    });
+  };
+
   const prepareChartData = () => {
     const generatedData = generateMockData();
     const today = new Date();
-    return generatedData.map(day => {
+    const data = generatedData.map(day => {
       const date = getDayDate(day.day);
       const isPreview = isToday(new Date(date));
       const performanceData = getBestAndWorstSeller(day);
@@ -146,12 +158,14 @@ export const useSalesData = () => {
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 7);
+    
+    return filterDataByDateRange(data);
   };
 
   const prepareMobileData = () => {
     const generatedData = generateMockData();
     const today = new Date();
-    return generatedData.map(day => {
+    const data = generatedData.map(day => {
       const date = getDayDate(day.day);
       const isPreview = isToday(new Date(date));
       const dayTotal = calculateDayTotal(day);
@@ -167,6 +181,8 @@ export const useSalesData = () => {
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 7);
+    
+    return filterDataByDateRange(data);
   };
 
   return {

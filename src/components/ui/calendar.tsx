@@ -21,7 +21,7 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3 pointer-events-auto", isDarkMode ? "text-gray-200" : "", className)}
+      className={cn("p-3 pointer-events-auto select-none", isDarkMode ? "text-gray-200" : "", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
@@ -30,7 +30,7 @@ function Calendar({
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 pointer-events-auto",
           isDarkMode ? "border-gray-700 hover:bg-gray-800 text-gray-300" : ""
         ),
         nav_button_previous: "absolute left-1",
@@ -43,33 +43,33 @@ function Calendar({
         ),
         row: "flex w-full mt-2",
         cell: cn(
-          "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+          "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 pointer-events-auto",
           isDarkMode ? "text-gray-300" : ""
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
+          "h-9 w-9 p-0 font-normal aria-selected:opacity-100 pointer-events-auto",
           isDarkMode ? "hover:bg-gray-800 text-gray-300" : ""
         ),
         day_range_end: "day-range-end",
         day_selected: cn(
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground pointer-events-auto",
           isDarkMode ? "bg-dashboard-highlight text-gray-100 shadow-neon" : ""
         ),
         day_today: cn(
-          "bg-accent text-accent-foreground",
+          "bg-accent text-accent-foreground pointer-events-auto",
           isDarkMode ? "bg-gray-800 text-primary-glow font-medium border border-primary/30" : ""
         ),
         day_outside: cn(
-          "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
+          "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30 pointer-events-auto",
           isDarkMode ? "text-gray-500" : ""
         ),
         day_disabled: cn(
-          "text-muted-foreground opacity-50",
+          "text-muted-foreground opacity-50 pointer-events-none",
           isDarkMode ? "text-gray-600" : ""
         ),
         day_range_middle: cn(
-          "aria-selected:bg-accent aria-selected:text-accent-foreground",
+          "aria-selected:bg-accent aria-selected:text-accent-foreground pointer-events-auto",
           isDarkMode ? "aria-selected:bg-gray-800 aria-selected:text-gray-300" : ""
         ),
         day_hidden: "invisible",

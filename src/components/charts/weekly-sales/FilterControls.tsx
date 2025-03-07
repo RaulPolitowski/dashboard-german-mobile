@@ -64,22 +64,23 @@ export const FilterControls = ({
             <Button 
               variant="outline" 
               className={cn(
-                "w-[160px] pl-3 text-left font-normal",
+                "w-[160px] pl-3 text-left font-normal justify-start",
                 isDarkMode 
-                  ? "bg-gray-800 border-gray-700 text-gray-100" 
-                  : "bg-white"
+                  ? "bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700" 
+                  : "bg-white hover:bg-gray-100"
               )}
             >
               <Calendar className="mr-2 h-4 w-4" />
               {format(customDateRange.start, 'dd/MM/yyyy')}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0 z-50" align="start">
             <CalendarComponent
               mode="single"
               selected={customDateRange.start}
               onSelect={(date) => date && onCustomDateChange({ ...customDateRange, start: date })}
               initialFocus
+              className="pointer-events-auto"
             />
           </PopoverContent>
         </Popover>
@@ -89,22 +90,23 @@ export const FilterControls = ({
             <Button 
               variant="outline" 
               className={cn(
-                "w-[160px] pl-3 text-left font-normal",
+                "w-[160px] pl-3 text-left font-normal justify-start",
                 isDarkMode 
-                  ? "bg-gray-800 border-gray-700 text-gray-100" 
-                  : "bg-white"
+                  ? "bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700" 
+                  : "bg-white hover:bg-gray-100"
               )}
             >
               <Calendar className="mr-2 h-4 w-4" />
               {format(customDateRange.end, 'dd/MM/yyyy')}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0 z-50" align="start">
             <CalendarComponent
               mode="single"
               selected={customDateRange.end}
               onSelect={(date) => date && onCustomDateChange({ ...customDateRange, end: date })}
               initialFocus
+              className="pointer-events-auto"
             />
           </PopoverContent>
         </Popover>

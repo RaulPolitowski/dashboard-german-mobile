@@ -1,8 +1,8 @@
+
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "../../ui/card";
 import { WeeklySalesChart } from "../../charts/WeeklySalesChart";
 import { useState } from "react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
 import { SalesDetailsDialog } from "../../charts/weekly-sales/components/SalesDetailsDialog";
 
 interface WeeklySalesCardProps {
@@ -85,9 +85,7 @@ export const WeeklySalesCard = ({
                 </p>
               </div>
             </div>
-            <div onClick={() => handleChartClick("Segunda")}>
-              <WeeklySalesChart />
-            </div>
+            <WeeklySalesChart onDayClick={handleChartClick} />
           </>
         )}
 
