@@ -44,8 +44,11 @@ export const CashFlowChart = ({ inflow, outflow, result }: CashFlowChartProps) =
         valueScale={{ type: 'linear' }}
         colors={({ data }) => data.color}
         theme={{
-          // Remove fontSize from the root level
-          textColor: isDarkMode ? '#e5e7eb' : '#374151',
+          // Remove invalid properties
+          text: {
+            fontSize: 12,
+            fill: isDarkMode ? '#e5e7eb' : '#374151',
+          },
           axis: {
             domain: {
               line: {
