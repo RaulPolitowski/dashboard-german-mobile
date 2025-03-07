@@ -17,15 +17,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem("theme") as Theme;
       
-      // Check if device prefers dark mode
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      
-      // Return saved theme if exists, otherwise use device preference
-      return savedTheme || (prefersDark ? "dark" : "light");
+      // Return saved theme if exists, otherwise use dark theme as default
+      return savedTheme || "dark";
     }
     
-    // Default to light theme if window is not available (SSR)
-    return "light";
+    // Default to dark theme if window is not available (SSR)
+    return "dark";
   });
 
   useEffect(() => {
