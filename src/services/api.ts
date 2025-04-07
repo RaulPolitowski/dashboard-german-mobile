@@ -1,5 +1,5 @@
 // Configuração base da API
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:9006';
 
 // Função auxiliar para fazer requisições
 export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
@@ -23,54 +23,16 @@ export const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   }
 };
 
-// Serviços específicos
+// Serviço financeiro
 export const financialService = {
-  getAll: () => fetchApi('/financial'),
-  getById: (id: number) => fetchApi(`/financial/${id}`),
-  getSummary: () => fetchApi('/financial/summary'),
-  create: (data: any) => fetchApi('/financial', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  }),
-  update: (id: number, data: any) => fetchApi(`/financial/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  }),
-  delete: (id: number) => fetchApi(`/financial/${id}`, {
-    method: 'DELETE',
-  }),
+  getAll: () => fetchApi('/dados'),
 };
 
+// Mantendo os outros serviços como fallback
 export const salesService = {
-  getAll: () => fetchApi('/sales'),
-  getById: (id: number) => fetchApi(`/sales/${id}`),
-  getSummary: () => fetchApi('/sales/summary'),
-  create: (data: any) => fetchApi('/sales', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  }),
-  update: (id: number, data: any) => fetchApi(`/sales/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  }),
-  delete: (id: number) => fetchApi(`/sales/${id}`, {
-    method: 'DELETE',
-  }),
+  getAll: () => Promise.resolve([]),
 };
 
 export const expensesService = {
-  getAll: () => fetchApi('/expenses'),
-  getById: (id: number) => fetchApi(`/expenses/${id}`),
-  getByCategory: () => fetchApi('/expenses/category'),
-  create: (data: any) => fetchApi('/expenses', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  }),
-  update: (id: number, data: any) => fetchApi(`/expenses/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  }),
-  delete: (id: number) => fetchApi(`/expenses/${id}`, {
-    method: 'DELETE',
-  }),
+  getAll: () => Promise.resolve([]),
 };

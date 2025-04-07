@@ -56,26 +56,26 @@ const Dashboard = () => {
           {isMobile ? (
             <div className="overflow-x-auto pb-2">
               <TabsList className={`inline-flex w-auto border p-1 transition-all ${isDarkMode ? 'bg-gradient-to-r from-slate-900/90 to-blue-900/80 border-blue-800/30 shadow-[0_0_15px_rgba(56,189,248,0.3)]' : 'bg-white border-gray-200'}`}>
-                <TabsTrigger 
-                  value="financial" 
+                <TabsTrigger
+                  value="financial"
                   className="flex-shrink-0 data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white px-4 py-2 rounded-md"
                 >
                   <Wallet className="w-5 h-5" />
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="sales" 
+                <TabsTrigger
+                  value="sales"
                   className="flex-shrink-0 data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white px-4 py-2 rounded-md"
                 >
                   <TrendingUp className="w-5 h-5" />
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="operations" 
+                <TabsTrigger
+                  value="operations"
                   className="flex-shrink-0 data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white px-4 py-2 rounded-md"
                 >
                   <FileSpreadsheet className="w-5 h-5" />
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="ranking" 
+                <TabsTrigger
+                  value="ranking"
                   className="flex-shrink-0 data-[state=active]:bg-dashboard-highlight data-[state=active]:text-white px-4 py-2 rounded-md"
                 >
                   <Medal className="w-5 h-5" />
