@@ -1,28 +1,24 @@
 import { Card } from "../ui/card";
-import { ArrowDownIcon, ArrowUpIcon, Loader2 } from "lucide-react";
-import { useTransactions } from "./hooks/useTransactions";
-import { useState } from "react";
-import { DateFilter } from "./types/financial";
+import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
-import { Alert, AlertDescription } from "../ui/alert";
+import { useFinancial } from "@/contexts/FinancialContext";
 
-const ComparisonCard = ({ 
-  title, 
-  currentValue, 
-  previousValue, 
-  comparison, 
+const ComparisonCard = ({
+  title,
+  currentValue,
+  previousValue,
   type
-}: { 
+}: {
   title: string;
   currentValue: number;
   previousValue: number;
-  comparison: number;
   type: "inflow" | "outflow" | "result";
 }) => {
+  const comparison = previousValue ? ((currentValue - previousValue) / previousValue) * 100 : 0;
   const isPositive = comparison > 0;
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
-  
+
   const getCardStyles = () => {
     if (type === "inflow") {
       return isDarkMode ? "finance-card-inflow" : "bg-emerald-500 text-white";
@@ -32,7 +28,7 @@ const ComparisonCard = ({
       return isDarkMode ? "finance-card-result" : "bg-blue-500 text-white";
     }
   };
-  
+
   return (
     <Card className={`p-4 ${getCardStyles()} transition-all duration-300 ${isDarkMode ? 'shadow-lg border border-opacity-30' : ''}`}>
       <div className="space-y-3">
@@ -59,88 +55,28 @@ const ComparisonCard = ({
 };
 
 export const FinancialOverview = () => {
-  const [dateFilter] = useState<DateFilter>('today');
-  const { totals, lastMonthSameDay, isLoading, error } = useTransactions(dateFilter);
-  const { theme } = useTheme();
-  const isDarkMode = theme === 'dark';
-
-  // Calcular valores do mês anterior (com proteção contra valores indefinidos)
-  const lastMonthInflow = lastMonthSameDay
-    ? lastMonthSameDay
-        .filter(t => t.type === 'inflow')
-        .reduce((sum, t) => sum + t.value, 0)
-    : 0;
-  
-  const lastMonthOutflow = lastMonthSameDay
-    ? lastMonthSameDay
-        .filter(t => t.type === 'outflow')
-        .reduce((sum, t) => sum + t.value, 0)
-    : 0;
-
+  const { inflow, outflow, lastMonthInflow, lastMonthOutflow } = useFinancial();
+  const result = inflow - outflow;
   const lastMonthResult = lastMonthInflow - lastMonthOutflow;
-
-  // Exibir loader enquanto carrega
-  if (isLoading) {
-    return (
-      <div className={`flex flex-col items-center justify-center w-full h-40 gap-4 rounded-lg ${isDarkMode ? 'bg-slate-800/50 border border-slate-700/50' : 'bg-gray-50 border border-gray-100'}`}>
-        <Loader2 className={`h-10 w-10 animate-spin ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-        <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Carregando dados financeiros...</p>
-      </div>
-    );
-  }
-
-  // Exibir mensagem de erro, se houver
-  if (error) {
-    // Mesmo com erro, vamos mostrar os cards com os dados de exemplo
-    // Apenas exibimos uma notificação discreta sobre o uso de dados de exemplo
-    return (
-      <>
-        <ComparisonCard
-          title="Receitas"
-          currentValue={totals.inflow}
-          previousValue={lastMonthInflow}
-          comparison={totals.comparison.inflow}
-          type="inflow"
-        />
-        <ComparisonCard
-          title="Despesas"
-          currentValue={totals.outflow}
-          previousValue={lastMonthOutflow}
-          comparison={totals.comparison.outflow}
-          type="outflow"
-        />
-        <ComparisonCard
-          title="Resultado"
-          currentValue={totals.result}
-          previousValue={lastMonthResult}
-          comparison={totals.comparison.result}
-          type="result"
-        />
-      </>
-    );
-  }
 
   return (
     <>
       <ComparisonCard
         title="Receitas"
-        currentValue={totals.inflow}
+        currentValue={inflow}
         previousValue={lastMonthInflow}
-        comparison={totals.comparison.inflow}
         type="inflow"
       />
       <ComparisonCard
         title="Despesas"
-        currentValue={totals.outflow}
+        currentValue={outflow}
         previousValue={lastMonthOutflow}
-        comparison={totals.comparison.outflow}
         type="outflow"
       />
       <ComparisonCard
         title="Resultado"
-        currentValue={totals.result}
+        currentValue={result}
         previousValue={lastMonthResult}
-        comparison={totals.comparison.result}
         type="result"
       />
     </>

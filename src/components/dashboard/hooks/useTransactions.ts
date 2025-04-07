@@ -1,157 +1,64 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Transaction, DateFilter } from '../types/financial';
-import { subDays, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMonths, parseISO } from 'date-fns';
-import { financialService, salesService, expensesService } from '../../../services/api';
+import { DateFilter } from '../types/financial';
+import { financialService } from '../../../services/api';
 
-// Funções para converter dados da API para o formato de transações
-const mapFinancialToTransactions = (financialData: any[]): Transaction[] => {
-  return financialData.map(item => ({
-    id: item.id.toString(),
-    date: item.date || new Date().toISOString(),
-    description: `Registro Financeiro - ${item.month}/${item.year}`,
-    value: parseFloat(item.inflow) || 0,
-    type: 'inflow' as const
-  })).concat(
-    financialData.map(item => ({
-      id: `out-${item.id}`,
-      date: item.date || new Date().toISOString(),
-      description: `Despesas - ${item.month}/${item.year}`,
-      value: parseFloat(item.outflow) || 0,
-      type: 'outflow' as const
-    }))
-  );
-};
-
-const mapSalesToTransactions = (salesData: any[]): Transaction[] => {
-  return salesData.map(item => ({
-    id: `sale-${item.id}`,
-    date: item.date || new Date().toISOString(),
-    description: `Venda: ${item.product || 'Produto'} - ${item.customer || 'Cliente'}`,
-    value: parseFloat(item.totalAmount) || 0,
-    type: 'inflow' as const
-  }));
-};
-
-const mapExpensesToTransactions = (expensesData: any[]): Transaction[] => {
-  return expensesData.map(item => ({
-    id: `exp-${item.id}`,
-    date: item.date || new Date().toISOString(),
-    description: `${item.category || 'Despesa'}: ${item.description || 'Sem descrição'}`,
-    value: parseFloat(item.amount) || 0,
-    type: 'outflow' as const
-  }));
-};
+interface FinancialData {
+  mensagem: string;
+  receitaTotal: number;
+  despesaTotal: number;
+  receitaMesAnterior: number;
+  despesaMesAnterior: number;
+}
 
 export const useTransactions = (dateFilter: DateFilter) => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [data, setData] = useState<FinancialData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Buscar dados da API
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        
-        // Buscar dados financeiros
-        const financialData = await financialService.getAll();
-        const salesData = await salesService.getAll();
-        const expensesData = await expensesService.getAll();
-        
-        // Converter para o formato de transações
-        const financialTransactions = mapFinancialToTransactions(financialData);
-        const salesTransactions = mapSalesToTransactions(salesData);
-        const expensesTransactions = mapExpensesToTransactions(expensesData);
-        
-        // Combinar todos os dados
-        const allTransactions = [
-          ...financialTransactions,
-          ...salesTransactions,
-          ...expensesTransactions
-        ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        
-        setTransactions(allTransactions);
+
+        const response = await financialService.getAll();
+        setData(response);
       } catch (err) {
         console.error('Erro ao buscar dados da API:', err);
-        setError('Falha ao carregar dados. Usando dados de exemplo.');
-        
+        setError('Falha ao carregar dados.');
+
         // Dados de exemplo para fallback
-        const today = new Date();
-        const todayStr = today.toISOString();
-        const yesterdayStr = subDays(today, 1).toISOString();
-        const lastMonthSameDayStr = subMonths(today, 1).toISOString();
-        
-        const fallbackData = [
-          { id: '1', date: todayStr, description: 'Venda Produto A', value: 1500, type: 'inflow' } as const,
-          { id: '2', date: todayStr, description: 'Pagamento Fornecedor', value: 800, type: 'outflow' } as const,
-          { id: '3', date: todayStr, description: 'Venda Serviço B', value: 2000, type: 'inflow' } as const,
-          { id: '11', date: lastMonthSameDayStr, description: 'Venda Produto A', value: 1200, type: 'inflow' } as const,
-          { id: '12', date: lastMonthSameDayStr, description: 'Pagamento Fornecedor', value: 700, type: 'outflow' } as const,
-          { id: '13', date: lastMonthSameDayStr, description: 'Venda Serviço B', value: 1800, type: 'inflow' } as const,
-          { id: '4', date: yesterdayStr, description: 'Despesas Operacionais', value: 600, type: 'outflow' } as const,
-          { id: '5', date: yesterdayStr, description: 'Venda Produto C', value: 1200, type: 'inflow' } as const,
-        ];
-        
-        setTransactions(fallbackData);
+        setData({
+          mensagem: "Dados do banco recebidos!",
+          receitaTotal: 0,
+          despesaTotal: 0,
+          receitaMesAnterior: 0,
+          despesaMesAnterior: 0
+        });
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     fetchData();
   }, []); // Executar apenas uma vez na montagem do componente
 
-  const filteredTransactions = useMemo(() => {
-    const today = new Date();
-    const yesterday = subDays(today, 1);
-    const last7Days = subDays(today, 7);
-    const currentMonthStart = startOfMonth(today);
-    const currentMonthEnd = endOfMonth(today);
-    const lastMonthStart = startOfMonth(subMonths(today, 1));
-    const lastMonthEnd = endOfMonth(subMonths(today, 1));
-
-    return transactions.filter(transaction => {
-      const transactionDate = parseISO(transaction.date);
-      switch (dateFilter) {
-        case 'today':
-          return isSameDay(transactionDate, today);
-        case 'yesterday':
-          return isSameDay(transactionDate, yesterday);
-        case 'last7days':
-          return isWithinInterval(transactionDate, { start: last7Days, end: today });
-        case 'currentMonth':
-          return isWithinInterval(transactionDate, { start: currentMonthStart, end: currentMonthEnd });
-        case 'lastMonth':
-          return isWithinInterval(transactionDate, { start: lastMonthStart, end: lastMonthEnd });
-        default:
-          return true;
-      }
-    });
-  }, [dateFilter, transactions]);
-
-  const lastMonthSameDay = useMemo(() => {
-    const lastMonth = subMonths(new Date(), 1);
-    return transactions.filter(transaction => 
-      isSameDay(parseISO(transaction.date), lastMonth)
-    );
-  }, [transactions]);
-
   const totals = useMemo(() => {
-    const inflow = filteredTransactions
-      .filter(t => t.type === 'inflow')
-      .reduce((sum, t) => sum + t.value, 0);
-    const outflow = filteredTransactions
-      .filter(t => t.type === 'outflow')
-      .reduce((sum, t) => sum + t.value, 0);
-    
-    // Evitar divisão por zero usando valores padrão
-    const lastMonthInflow = lastMonthSameDay
-      .filter(t => t.type === 'inflow')
-      .reduce((sum, t) => sum + t.value, 0);
-    const lastMonthOutflow = lastMonthSameDay
-      .filter(t => t.type === 'outflow')
-      .reduce((sum, t) => sum + t.value, 0);
+    if (!data) return {
+      inflow: 0,
+      outflow: 0,
+      result: 0,
+      comparison: {
+        inflow: 0,
+        outflow: 0,
+        result: 0
+      }
+    };
+
+    const inflow = data.receitaTotal;
+    const outflow = data.despesaTotal;
+    const lastMonthInflow = data.receitaMesAnterior;
+    const lastMonthOutflow = data.despesaMesAnterior;
 
     return {
       inflow,
@@ -160,10 +67,32 @@ export const useTransactions = (dateFilter: DateFilter) => {
       comparison: {
         inflow: lastMonthInflow ? ((inflow - lastMonthInflow) / lastMonthInflow) * 100 : 0,
         outflow: lastMonthOutflow ? ((outflow - lastMonthOutflow) / lastMonthOutflow) * 100 : 0,
-        result: (lastMonthInflow - lastMonthOutflow) ? ((inflow - outflow - (lastMonthInflow - lastMonthOutflow)) / Math.abs(lastMonthInflow - lastMonthOutflow)) * 100 : 0
+        result: (lastMonthInflow - lastMonthOutflow) ?
+          ((inflow - outflow - (lastMonthInflow - lastMonthOutflow)) / Math.abs(lastMonthInflow - lastMonthOutflow)) * 100 : 0
       }
     };
-  }, [filteredTransactions, lastMonthSameDay]);
+  }, [data]);
 
-  return { filteredTransactions, totals, lastMonthSameDay, isLoading, error };
+  // Simulando dados do mês anterior para manter a interface consistente
+  const lastMonthSameDay = useMemo(() => {
+    if (!data) return [];
+    return [
+      {
+        id: 'last-month-inflow',
+        date: new Date().toISOString(),
+        description: 'Receita Mês Anterior',
+        value: data.receitaMesAnterior,
+        type: 'inflow' as const
+      },
+      {
+        id: 'last-month-outflow',
+        date: new Date().toISOString(),
+        description: 'Despesa Mês Anterior',
+        value: data.despesaMesAnterior,
+        type: 'outflow' as const
+      }
+    ];
+  }, [data]);
+
+  return { totals, lastMonthSameDay, isLoading, error };
 };
