@@ -14,7 +14,246 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      budgets: {
+        Row: {
+          budget_number: string
+          client_name: string
+          created_at: string | null
+          description: string
+          id: string
+          status: string
+          total_value: number
+          valid_until: string
+        }
+        Insert: {
+          budget_number: string
+          client_name: string
+          created_at?: string | null
+          description: string
+          id?: string
+          status: string
+          total_value: number
+          valid_until: string
+        }
+        Update: {
+          budget_number?: string
+          client_name?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          status?: string
+          total_value?: number
+          valid_until?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string | null
+          description: string
+          due_date: string
+          id: string
+          payment_method: string | null
+          status: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string | null
+          description: string
+          due_date: string
+          id?: string
+          payment_method?: string | null
+          status: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string | null
+          description?: string
+          due_date?: string
+          id?: string
+          payment_method?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      financial_overview: {
+        Row: {
+          balance: number
+          created_at: string | null
+          id: string
+          inflow: number
+          month: number
+          outflow: number
+          period_date: string
+          year: number
+        }
+        Insert: {
+          balance?: number
+          created_at?: string | null
+          id?: string
+          inflow?: number
+          month: number
+          outflow?: number
+          period_date: string
+          year: number
+        }
+        Update: {
+          balance?: number
+          created_at?: string | null
+          id?: string
+          inflow?: number
+          month?: number
+          outflow?: number
+          period_date?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          created_at: string | null
+          customer_name: string
+          due_date: string
+          id: string
+          order_number: string
+          product_name: string
+          quantity: number
+          status: string
+          total_value: number
+        }
+        Insert: {
+          created_at?: string | null
+          customer_name: string
+          due_date: string
+          id?: string
+          order_number: string
+          product_name: string
+          quantity: number
+          status: string
+          total_value: number
+        }
+        Update: {
+          created_at?: string | null
+          customer_name?: string
+          due_date?: string
+          id?: string
+          order_number?: string
+          product_name?: string
+          quantity?: number
+          status?: string
+          total_value?: number
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string
+          created_at: string | null
+          id: string
+          name: string
+          stock: number
+          unit_price: number
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          id?: string
+          name: string
+          stock?: number
+          unit_price: number
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          id?: string
+          name?: string
+          stock?: number
+          unit_price?: number
+        }
+        Relationships: []
+      }
+      sales: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          payment_method: string
+          product_name: string
+          quantity: number
+          seller: string
+          status: string
+          total_value: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          id?: string
+          payment_method: string
+          product_name: string
+          quantity: number
+          seller: string
+          status?: string
+          total_value: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          payment_method?: string
+          product_name?: string
+          quantity?: number
+          seller?: string
+          status?: string
+          total_value?: number
+          unit_price?: number
+        }
+        Relationships: []
+      }
+      service_orders: {
+        Row: {
+          client_name: string
+          created_at: string | null
+          due_date: string
+          estimated_value: number | null
+          id: string
+          order_number: string
+          priority: string
+          service_type: string
+          status: string
+          technician: string
+        }
+        Insert: {
+          client_name: string
+          created_at?: string | null
+          due_date: string
+          estimated_value?: number | null
+          id?: string
+          order_number: string
+          priority: string
+          service_type: string
+          status: string
+          technician: string
+        }
+        Update: {
+          client_name?: string
+          created_at?: string | null
+          due_date?: string
+          estimated_value?: number | null
+          id?: string
+          order_number?: string
+          priority?: string
+          service_type?: string
+          status?: string
+          technician?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
