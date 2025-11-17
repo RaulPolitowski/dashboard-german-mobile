@@ -5,21 +5,23 @@ import { financialService, salesService, expensesService } from '../../../servic
 
 // Funções para converter dados da API para o formato de transações
 const mapFinancialToTransactions = (financialData: any[]): Transaction[] => {
-  return financialData.map(item => ({
+  const inflowTransactions = financialData.map(item => ({
     id: item.id.toString(),
     date: item.date || new Date().toISOString(),
     description: `Registro Financeiro - ${item.month}/${item.year}`,
     value: parseFloat(item.inflow) || 0,
     type: 'inflow' as const
-  })).concat(
-    financialData.map(item => ({
-      id: `out-${item.id}`,
-      date: item.date || new Date().toISOString(),
-      description: `Despesas - ${item.month}/${item.year}`,
-      value: parseFloat(item.outflow) || 0,
-      type: 'outflow' as const
-    }))
-  );
+  }));
+  
+  const outflowTransactions = financialData.map(item => ({
+    id: `out-${item.id}`,
+    date: item.date || new Date().toISOString(),
+    description: `Despesas - ${item.month}/${item.year}`,
+    value: parseFloat(item.outflow) || 0,
+    type: 'outflow' as const
+  }));
+  
+  return [...inflowTransactions, ...outflowTransactions];
 };
 
 const mapSalesToTransactions = (salesData: any[]): Transaction[] => {
