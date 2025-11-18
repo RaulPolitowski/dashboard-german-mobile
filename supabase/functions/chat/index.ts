@@ -16,11 +16,15 @@ const tools = [
     type: "function",
     function: {
       name: "get_sales_data",
-      description: "Busca dados de vendas. Use para responder perguntas sobre vendas, produtos vendidos, valores de vendas.",
+      description: "Busca dados de vendas. Use para responder perguntas sobre vendas, produtos vendidos, valores de vendas. Aceita filtros de data.",
       parameters: {
         type: "object",
         properties: {
-          limit: { type: "number", description: "Número máximo de registros (padrão 10)" }
+          limit: { type: "number", description: "Número máximo de registros (padrão 10)" },
+          start_date: { type: "string", description: "Data inicial no formato YYYY-MM-DD (opcional)" },
+          end_date: { type: "string", description: "Data final no formato YYYY-MM-DD (opcional)" },
+          month: { type: "number", description: "Filtrar por mês (1-12, opcional)" },
+          year: { type: "number", description: "Filtrar por ano (opcional)" }
         }
       }
     }
@@ -96,13 +100,28 @@ async function executeFunction(name: string, args: any) {
   try {
     switch (name) {
       case "get_sales_data": {
-        const { data, error } = await supabase
-          .from('sales')
-          .select('*')
-          .order('date', { ascending: false })
-          .limit(args.limit || 10);
+        let query = supabase.from('sales').select('*').order('date', { ascending: false });
+        
+        if (args.start_date) query = query.gte('date', args.start_date);
+        if (args.end_date) query = query.lte('date', args.end_date);
+        
+        if (args.month && args.year) {
+          const startDate = `${args.year}-${String(args.month).padStart(2, '0')}-01`;
+          const endDate = new Date(args.year, args.month, 0).toISOString().split('T')[0];
+          query = query.gte('date', startDate).lte('date', endDate);
+        } else if (args.year) {
+          query = query.gte('date', `${args.year}-01-01`).lte('date', `${args.year}-12-31`);
+        }
+        
+        query = query.limit(args.limit || 100);
+        const { data, error } = await query;
         if (error) throw error;
-        return JSON.stringify(data);
+        
+        return JSON.stringify({
+          total_records: data.length,
+          total_value: data.reduce((sum, sale) => sum + Number(sale.total_value), 0),
+          sales: data
+        });
       }
       
       case "get_orders_data": {
