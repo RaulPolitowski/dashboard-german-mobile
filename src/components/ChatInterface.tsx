@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Loader2, Send } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Loader2, Send, Bot, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -12,6 +12,7 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -133,60 +134,86 @@ const ChatInterface = () => {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto p-4 bg-card">
-      <h2 className="text-2xl font-bold mb-4 text-foreground">AI Chat Assistant</h2>
-      
-      <ScrollArea className="h-[400px] mb-4 pr-4" ref={scrollRef}>
-        <div className="space-y-4">
-          {messages.length === 0 && (
-            <div className="text-center text-muted-foreground py-8">
-              Start a conversation with the AI assistant
+    <>
+      {/* Floating Button */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <Button
+            size="lg"
+            className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 animate-fade-in"
+          >
+            <Bot className="h-6 w-6" />
+          </Button>
+        </DialogTrigger>
+        
+        <DialogContent className="sm:max-w-[600px] h-[600px] flex flex-col p-0">
+          <DialogHeader className="px-6 py-4 border-b">
+            <DialogTitle className="flex items-center gap-2 text-xl">
+              <Bot className="h-5 w-5 text-primary" />
+              Assistente Financeiro
+            </DialogTitle>
+          </DialogHeader>
+          
+          <ScrollArea className="flex-1 px-6 py-4" ref={scrollRef}>
+            <div className="space-y-4">
+              {messages.length === 0 ? (
+                <div className="text-center text-muted-foreground py-8">
+                  <Bot className="h-12 w-12 mx-auto mb-3 text-primary/50" />
+                  <p className="text-sm">Olá! Sou seu assistente financeiro.</p>
+                  <p className="text-sm">Pergunte sobre vendas, pedidos, orçamentos ou despesas.</p>
+                </div>
+              ) : (
+                messages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                        msg.role === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted"
+                      }`}
+                    >
+                      <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+              
+              {isLoading && (
+                <div className="flex justify-start animate-fade-in">
+                  <div className="bg-muted rounded-lg px-4 py-2 flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-sm">Pensando...</span>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-          {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                  msg.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-foreground'
-                }`}
-              >
-                <p className="whitespace-pre-wrap">{msg.content}</p>
-              </div>
-            </div>
-          ))}
-          {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
-            <div className="flex justify-start">
-              <div className="bg-muted rounded-lg px-4 py-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
-              </div>
-            </div>
-          )}
-        </div>
-      </ScrollArea>
+          </ScrollArea>
 
-      <div className="flex gap-2">
-        <Input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Type your message..."
-          disabled={isLoading}
-          className="flex-1"
-        />
-        <Button onClick={handleSend} disabled={isLoading || !input.trim()}>
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Send className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
-    </Card>
+          <div className="px-6 py-4 border-t">
+            <div className="flex gap-2">
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Faça uma pergunta..."
+                disabled={isLoading}
+                className="flex-1"
+              />
+              <Button onClick={handleSend} disabled={isLoading || !input.trim()} size="icon">
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
